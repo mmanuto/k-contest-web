@@ -1,0 +1,39 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import * as Constants from '../../constants';
+
+@Injectable()
+export class MembershipService {
+    constructor(public http:HttpClient) { }
+
+    getFederationsList(){
+        return this.http.post(Constants.BASEAPPURL + "athletes/getFederations", {});
+    }
+
+    getCategoria(request){
+        return this.http.post(Constants.BASEAPPURL + "athletes/getCategoria", request);
+        
+    }
+
+    getElencoProve(request){
+        return this.http.post(Constants.BASEAPPURL + "athletes/getElencoProve", request);
+    }
+
+    getAthleteList(request){
+        return this.http.post(Constants.BASEAPPURL + "athletes/getAthleteList", request);
+    }
+
+
+    getListaIscritti(request){
+        return this.http.post(Constants.BASEAPPURL + "athletes/getIscritti", request);
+    }
+
+    saveAtleta(request){
+        return this.http.post(Constants.BASEAPPURL + "athletes/saveAtleta", request);
+    }
+
+    deteleAtleta(request){
+        console.log(request);
+        return this.http.post(Constants.BASEAPPURL + "athletes/deleteInscription", request);
+    }
+} 

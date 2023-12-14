@@ -1,0 +1,318 @@
+<div class="row mb-4">
+    <div class="col">
+        <div *ngIf="competition" widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted m-4">
+                <div style="display: flex;
+                        flex-direction: row;
+                        align-items: center;">
+                    <img *ngIf="competition.logo" class="ml-3 mr-3" [src]="imgUrl + competition.logo" style="max-width: 100px; max-height: 100px;">
+                    <h1 class="ml-3">{{competition.nome_gara}}</h1>
+                </div>
+
+            </div>
+            <div class="card-body pt-0 widget-body" style="width: 100%">
+                <p *ngIf="!iscrizioniChiuse && !pregara" class="card-text">
+                    Per procedere con le iscrizioni cliccare su <strong>Iscrizione atleti</strong> nel menù a sinistra.  
+                    Una volta concluse le iscrizioni, nella sezione 
+                    <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra verranno pubblicati i tabelloni di gara. <br/> 
+                    <b style="color:firebrick">Si ricorda che le iscrizioni chiudono il giorno {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}.
+                    Non saranno accettate iscrizioni o modifiche oltre tale data. </b>
+                </p>
+                <div class="row ml-1"> 
+                    <h3 class="card-title mt-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}}</h3>
+
+                </div>
+                <div *ngIf="iscrizioniChiuse && !classifiche" class="m-4">
+                    <h4>ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
+                    <p class="card-text"> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
+                        qualsiasi informazione contattare il responsabile di gara. <br> Appena disponibili verranno pubblicati i
+                        tabelloni di gara nella sezione <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra</p>
+                </div>
+                <!--<div *ngIf="classifiche" class="m-4">
+                    <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
+                        <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
+                </div>-->
+                <div *ngIf="pregara" class="m-4">
+                    <h4>ISCRIZIONI CHIUSE</h4>
+                    <p class="card-text"> Le iscrizioni non sono ancora aperte. Per qualsiasi informazione contattare
+                        il responsabile di gara. </p>
+                </div>
+               <div *ngIf="iscrizioniChiuse" class="row" style="width: 100%;">
+                    <div class="col-md-7 mt-4">
+
+                        <div *ngIf="classifiche" widget class="card border-0 box-shadow">
+                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
+                                <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
+                            </div>
+                            <div class="card-body pt-0 widget-body">
+        
+                                <table *ngIf="tabelloni && tabelloni.length != 0" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th class="ml-4">Specialità</th>
+                                            <th style="text-align: center">Visualizza</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr *ngFor="let item of tabelloni" class="col-xl-6 col-lg-6 mb-3">
+                                            <!-- <th scope="row">1</th> -->
+                                            <td class="ml-4">{{item.name}}</td>
+                                            <td style="text-align: center"><a target="blank" [href]="appUrl + item.docpath"
+                                                    class="documents text-primary">
+                                                    <i class="fa fa-file-text-o" style="font-size: 20px"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                           
+                        <div  *ngIf="!classifiche" widget class="card border-0 box-shadow">
+                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; text-align: center;">
+                                <h5 class="mb-0" style="color:white">TIMETABLE</h5>
+                            </div>
+                            <div class="card-body pt-0 widget-body">
+
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>CATEGORIA</th>
+                                            <th>ORA</th>
+                                            <th>TATAMI</th>
+                                            <th>CARTELLINO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr style="font-weight: 500;">
+                                            <td>BAMBINI A BIANCA</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 6 - Kata</td>
+                                            <td>
+                                                <i class="fa fa-address-card" style="color: lightskyblue; font-size: 28px;font-size: 20px;"></i> AZZURRO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>BAMBINI A GIALLA/ARANCIO</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 6 - Kata</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: gold; font-size: 28px;font-size: 20px;"></i> GIALLO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>BAMBINI B BIANCA</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 2 - Pall.</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: blueviolet; font-size: 28px;font-size: 20px;"></i> VIOLA
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>BAMBINI B GIALLA/ARANCIO</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 3 - Pall.</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: pink; font-size: 28px;font-size: 20px;"></i> ROSA
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>BAMBINI B VERDE/BLU/MARRONE</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 4 - Kata</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: limegreen; font-size: 28px;font-size: 20px;"></i> VERDE ACQUA
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>FANCIULLI BIANCA</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 5 - Kata</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: dodgerblue; font-size: 28px;font-size: 20px;"></i> BLU
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>FANCIULLI GIALLA/ARANCIO</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 1 - Per.</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: red; font-size: 28px;font-size: 20px;"></i> ROSSO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>FANCIULLI VERDE/BLU/MARRONE</td>
+                                            <td> 8.30</td>
+                                            <td>TATAMI 4 - Kata</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: green; font-size: 28px;font-size: 20px;"></i> VERDE SCURO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>RAGAZZI BIANCA</td>
+                                            <td> 9.30</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: lightskyblue; font-size: 28px;font-size: 20px;"></i> AZZURRO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>RAGAZZI GIALLA/ARANCIO</td>
+                                            <td> 9.30</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: fuchsia; font-size: 28px;font-size: 20px;"></i> FUCSIA
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>RAGAZZI VERDE/BLU/MARRONE</td>
+                                            <td> 9.00</td>
+                                            <td>TATAMI 6 - Kumite U12</td>
+                                            <td>                                                 
+                                                <i class="fa fa-address-card" style="color: gold; font-size: 28px;font-size: 20px;"></i> GIALLO
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>ESORDIENTI KATA</td>
+                                            <td> 11.00</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                               --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>ESORDIENTI KUMITE</td>
+                                            <td> 11.30</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>CADETTI KATA</td>
+                                            <td> 14.00</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>CADETTI KUMITE</td>
+                                            <td> 14.30</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>JUNIORES KATA + KUMITE</td>
+                                            <td> 16.00</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>SENIORES KATA + KUMITE</td>
+                                            <td> 17.30</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>MASTER KATA + KUMITE</td>
+                                            <td> 19.00</td>
+                                            <td>--</td>
+                                            <td>                                                 
+                                                --
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-4">
+                            <div class="card">
+                                <div class="card-body ml-4">
+                                    <div class="row ml-1"> 
+                                        <h4 class="card-title mt-3">  Informativa di gara</h4>
+                                        <a target="blank" [href]="imgUrl + competition.circolare" class="documents text-primary"> 
+                                            <h4 class="card-title mt-3"> <i class="fa fa-download"></i></h4>
+                                        </a>             
+                                    </div>
+                                    <div class="row ml-1"> 
+                                        <h4 class="card-title mt-3">Chiusura iscrizioni: {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}</h4>
+                                    </div>  
+                                    
+                                    <h4 class="card-title mt-3">Per informazioni</h4>
+                                    <p class="card-text"><strong>Organizzatore gara:</strong>
+                                        {{competition.responsabile}} <br /> Email: {{competition.email}} <br /> Tel:
+                                        {{competition.telephone}} </p>
+                                    <p class="card-text"><strong>Responsabile settore karate:</strong> Cecchinato
+                                        Giancarlo <br /> Tel: 338 7083332</p>
+                                    <p class="card-text"><strong>Coordinatore arbitri:</strong> Sorgato Michele <br />
+                                        Email: sorgato.michele73@gmail.com <br /> Tel: 335 6101226 </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> 
+                    <div class="col-xl-5 col-md-6 mt-4">
+                        <div class="card">
+                            <img class="card-img-top w-100" [src]="imgUrl + competition.locandina" alt="Card image cap">
+                            <!-- <div class="card-body"> 
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <a href="#" class="btn btn-outline-gray">Go somewhere</a>                              
+                            </div> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div *ngIf="!iscrizioniChiuse" class="row" style="width: 100%;">
+                    <div class="col-md-6">
+                        <div class="col-md-10 mb-4 mt-4">
+                            <div class="card">
+                                <div class="card-body ml-4">
+                                    <div class="row ml-1"> 
+                                        <h4 class="card-title mt-3">  Informativa di gara</h4>
+                                        <a target="blank" [href]="imgUrl + competition.circolare" class="documents text-primary"> 
+                                            <h4 class="card-title mt-3"> <i class="fa fa-download"></i></h4>
+                                        </a>             
+                                    </div>
+                                    <div class="row ml-1"> 
+                                        <h4 class="card-title mt-3">Chiusura iscrizioni: {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}</h4>
+                                    </div>  
+                                    
+                                    <h4 class="card-title mt-3">Per informazioni</h4>
+                                    <p class="card-text"><strong>Organizzatore gara:</strong>
+                                        {{competition.responsabile}} <br /> Email: {{competition.email}} <br /> Tel:
+                                        {{competition.telephone}} </p>
+                                    <p class="card-text"><strong>Responsabile settore karate:</strong> Cecchinato
+                                        Giancarlo <br /> Tel: 338 7083332</p>
+                                    <p class="card-text"><strong>Coordinatore arbitri:</strong> Sorgato Michele <br />
+                                        Email: sorgato.michele73@gmail.com <br /> Tel: 335 6101226 </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xl-5 col-md-6 mt-4">
+                        <div class="card">
+                            <img class="card-img-top w-100" [src]="imgUrl + competition.locandina" alt="Card image cap">
+                            <!-- <div class="card-body"> 
+                                <h5 class="card-title">Card title</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                                <a href="#" class="btn btn-outline-gray">Go somewhere</a>                              
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

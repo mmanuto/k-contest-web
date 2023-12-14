@@ -1,0 +1,329 @@
+<div class="d-flex justify-content-center w-100 h-100 sfondo">
+    <div class="text-right w-100 mt-2" style="margin-right: 30px; font-size: 15px;">
+        <i class="fa fa-user-o mr-3" style="color: aliceblue; cursor:pointer;" routerLink='/login'> Admin</i>
+        <i class="fa fa-edit" style="color: aliceblue; cursor:pointer; font-size: 17px;" routerLink='/request'>
+            Inserisci la tua gara</i>
+    </div>
+    <div class="col-md-9 justify-content-center w-150 register-container2 row">
+        <div class="card border-0 box-shadow rounded-0" style="width: 100% !important">
+            <div class="d-flex justify-content-center align-items-center border-0">
+                <!-- <i class="fa fa-registered" aria-hidden="true"></i> -->
+                <img class="logo-csen" src="assets/img/logo/LogoCSEN.png" alt="">
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div widget class="card border-0 w-100-p">
+                        <h2 class="text-center mt-3">Iscrizioni Gare</h2>
+                        <div *ngIf="!confirmed" class="card-body widget-body">
+
+
+                            <div *ngFor="let step of steps" [hidden]="!step.active" class="col">
+                                <div class="row mb-4 ml-3">
+                                    <div class="col-md-5 col-sm-6 col-12 text-center row">
+                                        <h3 class="step-name"> <i class="fa {{ step.icon }} mr-2"
+                                                aria-hidden="true"></i>
+                                            {{step.name}}</h3>
+                                    </div>
+                                </div>
+                                <!-- COMPETITIONS -->
+                                <form *ngIf="step.name=='Gare in corso'" [formGroup]="accountForm" class="row bg-light pt-2 w-100-p">
+                                    <div class="col-12 mb-4">
+                                        <p class="mt-3 mb-3" style="font-size:15px;">Selezionare la gara a cui si
+                                            intende partecipare e cliccare sul pulsante procedi. Per consultare la
+                                            circolare di gara cliccare sulla locandina</p>
+                                    </div>
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                            <div class="card-body pt-0 widget-body">
+                                                <div class="row">
+
+                                                    <!-- RADIO -->
+                                                    <div class="row-md-100">
+                                                        <div class="form-group d-flex flex-wrap" style="padding-left:50px;">
+                                                            <div *ngFor="let item of openCompetitions" class="col-md-4 custom-control custom-radio">
+                                                                <input type="radio" [value]="item.id"
+                                                                    formControlName="competitionId" name="competitionId"
+                                                                    class=" custom-control-input radio-primary" [id]="item.id">
+                                                                <label class="row custom-control-label ml-3" style="font-weight: bold;"
+                                                                    [for]="item.id">{{item.nome_gara}}</label>
+                                                                <a data-toggle="modal" (click)="openModal(flyer, imgUrl + item.locandina, imgUrl + item.circolare)">
+                                                                    <img class="card-img ml-2 mt-3 mr-3" [src]="imgUrl + item.locandina"
+                                                                        style="cursor:pointer; width: 50%">
+                                                                </a>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                 <!-- REGISTER -->
+                                <form *ngIf="step.name=='Dati società'" [formGroup]="personalForm"
+                                    class="form-horizontal bg-light pt-2 mt-3 w-100-p">
+                                    <div class="row col-12 ml-4">
+
+                                        <p class="mt-3 mb-3 col-12 text-center" style="font-size:15px;">Inserisci il CF/P.IVA usati in fase di registrazione e clicca su <b>ACCEDI</b>. 
+                                            Se è la prima volta che accedi a questo portale compila tutti i dati e clicca su <b>PROCEDI</b></p>
+
+                                            <div class="form-group row text-sm-right col-md-12 mt-3">
+                                                <label class="col-md-3 form-control-label mt-1">CF/P.IVA Società</label>
+                                                <div class="col-md-6 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input formControlName="login_cf" class="form-control" type="text"
+                                                        data-hj-whitelist>
+                                                </div>
+                                                <div class=" mt-3 mb-3 col-12 text-center">
+                                                    <button class="btn btn-primary" (click)="recuperaDati()">
+                                                        Accedi</button>
+                                                </div>
+                                                </div>
+                                                
+
+                                            <p class="mt-3 mb-3 col-12 text-center" style="font-size:15px;">Tutti i campi sono obbligatori. I
+                                                dati inseriti serviranno per gli accessi successivi.</p>
+                                        
+                                            <div class="form-group row text-sm-right col-md-12"
+                                                [ngClass]="{'has-danger' : step.hasError && personalForm.get('name').hasError('required'), 'has-success' : !personalForm.get('name').hasError('required') }">
+                                                <label class="col-md-3 form-control-label mt-1">Nome Responsabile</label>
+                                                <div class="col-md-6 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-user-o"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input formControlName="name" class="form-control"
+                                                        [ngClass]="{'form-control-danger' :  personalForm.get('name').hasError('required'), 'form-control-success' :  !personalForm.get('name').hasError('required') }"
+                                                        type="text" data-hj-whitelist>
+                                                </div>
+                                                <small class="text-danger"
+                                                    *ngIf="step.hasError && personalForm.get('name').hasError('required')">è
+                                                    richiesto un nome</small>
+                                            </div>
+
+                                            <div class="form-group row text-sm-right col-md-12"
+                                                [ngClass]="{'has-danger' : step.hasError && personalForm.get('society').hasError('required'), 'has-success' : !personalForm.get('society').hasError('required') }">
+                                                <label class="col-md-3 form-control-label mt-1">Società</label>
+                                                <div class="col-md-6 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input formControlName="society" class="form-control"
+                                                        [ngClass]="{'form-control-danger' :  personalForm.get('society').hasError('required'), 'form-control-success' :  !personalForm.get('society').hasError('required') }"
+                                                        type="text" data-hj-whitelist>
+                                                </div>
+                                                <small class="text-danger"
+                                                    *ngIf="step.hasError && personalForm.get('society').hasError('required')">First
+                                                    Name is required</small>
+                                            </div>
+                                            <div class="form-group row text-sm-right col-md-12">
+                                                <label class="col-md-3 form-control-label mt-1">CF/P.IVA Società</label>
+                                                <div class="col-md-6 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input formControlName="cod_fiscale" class="form-control" type="text"
+                                                        data-hj-whitelist>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row text-sm-right col-md-12"
+                                                [ngClass]="{'has-danger' : (step.hasError && personalForm.get('email').hasError('required')) || (step.hasError && personalForm.get('email').hasError('email')), 
+                                                                    'has-success' : !personalForm.get('email').hasError('required') && !personalForm.get('email').hasError('email')}">
+                                                <label class="col-md-3 form-control-label mt-1">Email</label>
+                                                <div class="col-md-6 input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-envelope"></i>
+                                                        </span>
+                                                    </div>
+                                                <input formControlName="email" class="form-control"
+                                                    [ngClass]="{'form-control-danger' : (step.hasError && personalForm.get('email').hasError('required')) || (step.hasError && personalForm.get('email').hasError('email')), 
+                                                                                                    'form-control-success' :  !personalForm.get('email').hasError('required') && !personalForm.get('email').hasError('email')}"
+                                                    type="text" data-hj-whitelist>
+                                            </div>
+                                            <small class="text-danger"
+                                                *ngIf="step.hasError && personalForm.get('email').hasError('required')">è
+                                                richiesta un'email</small>
+                                            <small class="text-danger"
+                                                *ngIf="step.hasError && personalForm.get('email').hasError('email')">Invalid
+                                                email address</small>
+                                        </div>
+
+                                        <div class="form-group row text-sm-right col-md-12"
+                                            [ngClass]="{'has-danger' : step.hasError && personalForm.get('phone').hasError('required'), 'has-success' : !personalForm.get('phone').hasError('required') }">
+                                            <label class="col-md-3 form-control-label mt-1">Telefono</label>
+                                            <div class="col-md-6 input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fa fa-phone"></i>
+                                                    </span>
+                                                </div>
+                                                <input formControlName="phone" class="form-control"
+                                                    [ngClass]="{'form-control-danger' :  personalForm.get('phone').hasError('required'), 'form-control-success' :  !personalForm.get('phone').hasError('required') }"
+                                                    type="number" data-hj-whitelist>
+                                            </div>
+                                            <small class="text-danger"
+                                                *ngIf="step.hasError && personalForm.get('phone').hasError('required')">E'
+                                                richiesto un numero di telefono</small>
+                                        </div>
+
+                                        <div class="form-group row text-sm-right mt-3 col-md-12"
+                                            [ngClass]="{'has-danger' : step.hasError && personalForm.get('coach').hasError('required'), 'has-success' : !personalForm.get('coach').hasError('required') }">
+                                            <label class="col-md-3 form-control-label mt-1">Coach</label>
+                                            <div class="col-md-6 input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fa fa-user"></i>
+                                                    </span>
+                                                </div>
+                                                <input formControlName="coach" class="form-control"
+                                                    [ngClass]="{'form-control-danger' :  personalForm.get('coach').hasError('required'), 'form-control-success' :  !personalForm.get('coach').hasError('required') }"
+                                                    type="text" data-hj-whitelist>
+                                            </div>
+                                            <small class="text-danger"
+                                                *ngIf="step.hasError && personalForm.get('coach').hasError('required')">E'
+                                                richiesto il nome di un coach</small>
+                                        </div>
+                                    
+                                      
+                                    </div>
+                                </form>
+
+                                <div *ngIf="step.name=='Conferma'" class="row bg-light pt-2">
+                                    <div class="col-12">
+                                        <p class="mt-3 mb-4" style="font-size:15px;">Il codice fiscale servirà per gli
+                                            accessi successivi, consigliamo quindi di accertarsi che sia corretto. Se
+                                            questo è
+                                            il vostro primo accesso, a breve riceverete una emai di riepilogo dei dati
+                                            inseriti</p>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Gara</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.competitionName}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Nome</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.responsabile}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Società</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.nome_societa}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Codice Fiscale</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.CF}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Email</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.mail}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Telefono</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.telefono}}</i>
+                                    </div>
+                                    <div class="col-2">
+                                        <strong class="text-truncate">Coach</strong>
+                                    </div>
+                                    <div class="col-10">
+                                        <i>{{details.club.coach}} &nbsp;</i>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <button *ngIf="!steps[0].active" class="btn btn-primary pull-left" (click)="prev()">
+                                        <i class="fa fa-chevron-left arrow"></i>&nbsp; Indietro</button>
+                                    <button *ngIf="!steps[steps.length-1].active" class="btn btn-primary pull-right"
+                                        (click)="next()">Prosegui &nbsp;
+                                        <i class="fa fa-chevron-right arrow"></i>
+                                    </button>
+                                    <button *ngIf="steps[steps.length-1].active" class="btn btn-primary pull-right"
+                                        (click)="confirm()">Conferma &nbsp;
+                                        <i class="fa fa-check arrow"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+    <button id="openAdv" #openAdv type="button" class="btn btn-primary" [hidden]="true"
+        (click)="openModalAdv(modalAdvise)" data-toggle="modal" data-target="#modalAdvise"></button>
+</div>
+<ng-template #flyer>
+    <div class="modal-body ">
+
+        <div class="modal-body">
+            <img class="card-img w-100 mb-4" [src]="urlLocandina" alt="Card image">
+            <a *ngIf="urlCircolare != ''" target="blank" [href]="urlCircolare" class="mt-4"><button type="button"
+                    class="btn btn-primary"><i class="fa fa-download"> <span class="documents">Scarica la circolare di
+                            gara</span></i></button></a>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="closeModal()">CHIUDI</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #modalAdvise>
+
+    <div class="row">
+        <div class="col-12 vertical-tabs">
+            <div widget class="card border-0 box-shadow">
+
+                    <div class="card-header border-0 text-muted modal-header state modal-info">
+                            <!--  <h5 class="mb-0">INSERISCI ATLETA</h5> -->
+                            <h4 class="modal-title" style=" color:white" id="modal-info-label">ACCESSO NEGATO!!</h4>
+                        </div>
+                <div class="modal-body">
+
+                    Gentile utente, per l'iscrizione alla manifestazione selezionata la invitiamo a contattare il coordinatore Arbitri regionale e responsabile iscrizioni Sorgato Michele 
+                    Tel: 3356101226
+                    Mail: sorgato.michele73@gmail.com
+                    Grazie
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" (click)="closeModalAdv()"
+                        data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,266 @@
+<h2 class="mb-4">Gare in corso</h2>
+<!-- <p class="text-muted">A card is a flexible and extensible content container. It includes options for headers and footers, a wide variety of content, contextual background colors, and powerful display options. Cards require a small amount of markup and classes to provide you with as much control as possible. These classes and markup are flexible though and can typically be remixed and extended with ease. For example, if your card has no flush content like images, feel free to put the <code>.card-body</code> class on the <code>.card</code> element to consolidate your markup.</p> -->
+
+<div *ngFor="let item of competitions" class="row mb-4">
+    <div class="col">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted">
+                <div class="row">
+                <img *ngIf="item.logo" class="ml-2 mr-2" [src]="imgUrl + item.logo" style="width: 35px; height: 35px">
+                <h4 class="mb-0">{{item.nome_gara}}</h4>
+            </div>
+                <div class="widget-controls"> 
+                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a> 
+                </div>        
+            </div>
+            <div class="card-body pt-0 widget-body"> 
+                <!-- <p class="fs-13 text-gray">Cards support a wide variety of content, including images, text, list groups, links, and more. Mix and match multiple content types to create the card you need.</p> -->
+           
+                <div class="col-md-12 mb-4">
+                        <div class="mt-4 w-100-p row">
+
+                                <!-- <div class="row">
+                                    <h4 class="mt-3 ml-3" style="margin-bottom: 25px !important;">
+                                        <i class="fa fa-user"></i> Informazioni personali</h4>
+                                </div> -->
+                                <div class="col-md-6">
+                                    
+                                    <div class="row " >
+                                            <h6 class="card-title mr-3">Responsabile: </h6>
+                                            <p class="card-text">{{item.responsabile}}</p>
+                                        <!-- <label class="form-control-label">Nome e Cognome Responsabile</label>
+                                        <span class="form-control validation-field" type="text" >{{item.responsabile}}</span> -->
+                                    </div>
+                                    <div class="row">
+                                            <h6 class="card-title mr-3">Società: </h6>
+                                            <p class="card-text">{{item.club_name}}</p>
+                                        <!-- <label class="form-control-label">Società</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                                      
+                                    </div>
+                                    <div class="row">
+                                            <h6 class="card-title mr-3">Email:</h6>
+                                            <p class="card-text">{{item.email}} </p>
+                                        <!-- <label class="form-control-label">Società</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                                      
+                                    </div>
+                                    <div class="row">
+                                            <h6 class="card-title mr-3">Telefono:</h6>
+                                            <p class="card-text">{{item.telephone}}</p>
+                                        <!-- <label class="form-control-label">Società</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                                      
+                                    </div>
+                                    <div class="row">
+                                            <h6 class="card-title mr-3">Nr Atleti stimato</h6>
+                                            <p class="card-text ">{{item.nr_atleti}}</p>
+                                        <!-- <label class="form-control-label">Società</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                                      
+                                    </div>
+                                    <div class="row">
+                                            <h6 class="card-title mr-3">Data gara: </h6>
+                                            <p class="card-text">{{item.data_gara | date: 'dd/MM/yyyy' }} </p>
+                                        <!-- <label class="form-control-label">Società</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                                      
+                                    </div>
+                                    <div class="row">
+                                        <h6 class="card-title mt-2">Data chiusura iscrizioni</h6>
+                                        <input class="form-control col-md-4 ml-3" type="date" [(ngModel)]="item.chiusura_iscrizioni">
+                                        <div style="float: right;">
+                                            <button class="btn btn-primary pull-right" >Cambia</button>
+                                        </div>
+                                  
+                                </div>
+                                     
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5 class="card-title mt-2">Richieste Aggiuntive</h5>
+                                    <div class="row mt-3">
+                                    <div class="form-group ml-3 col-md-2">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input checkbox-primary" id="arbitri" [checked]="item.richieste.referee" disabled>
+                                            <label class="custom-control-label" for="arbitri">Arbitri</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox">
+                                                <input [checked]="item.richieste.competitionManagement" type="checkbox" class="custom-control-input checkbox-primary" id="gestioneGara" disabled>
+                                                <label class="custom-control-label" for="gestioneGara">Gestione gara</label>
+                                            </div>
+                                    </div>
+                                
+                                    <div class="form-group col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            <input [checked]="item.richieste.tabsManagement" type="checkbox" class="custom-control-input checkbox-primary" id="creazioneTabelloni" disabled>
+                                            <label class="custom-control-label" for="creazioneTabelloni">Creazione Tabelloni</label>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <h5 class="card-title mt-2">Allegati</h5>
+                                <div class="col mt-3">
+                                        <i class="fa fa-file-image-o"><a *ngIf="item.circolare" target="blank" [href]="imgUrl + item.circolare" class="documents text-primary"> Circolare di Gara</a></i><br/>
+                                        <i class="fa fa-file-image-o"><a *ngIf="item.locandina" [href]="imgUrl + item.locandina" class="documents text-primary">  Locandina</a></i>
+                                </div>
+
+                                <div class="row" style="margin-top: 55px;">
+                                    <div class="col-md-4 ">
+                                    <h5 class="card-title ">Carica tabelloni</h5>
+                                </div>
+                                    <div class="form-group col-md-3">
+                                        <div class="input-group file-upload">
+                                            <input type="file" id="tabFiles" (change)="editTabelloni($event)" #tabFiles class="file-upload-btn" />
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <button class="btn btn-primary pull-right mr-3" (click)="uploadTabelloni(item.nome_gara)">Carica Tabelloni</button>
+                                </div>
+                                
+                                <!-- <div class="row">
+            
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label">Email</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-envelope"></i>
+                                                </span>
+                                            </div>
+                                            <input class="form-control validation-field" type="text" [value]="item.email">
+                                        </div>
+
+                                    </div>
+            
+                                    <div class="form-group col-md-4">
+                                        <label class="form-control-label">Nr. Telefono</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-phone"></i>
+                                                </span>
+                                            </div>
+                                            <input class="form-control validation-field" type="number" [value]="item.telephone">
+                                        </div>
+                                        
+                                    </div>
+                                </div> -->
+            
+                               <!--  <div class="row">
+                                    <h4 class="ml-3" style="margin-bottom: 25px !important; margin-top: 25px !important;">
+                                        <i class="fa fa-trophy"></i> Informazioni Gara</h4>
+                                </div> -->
+            
+                                <div class="row mt-3">
+                                        
+                                       
+                                       
+                                    <!-- <div class="form-group col-md-5">
+                                        <label class="form-control-label">Nome Gara</label>
+                                        <input class="form-control validation-field" type="text" [value]="item.nome_gara">
+                                        
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-control-label">Data Gara</label>
+                                        <input class="form-control validation-field" type="date" [value]="item.data_gara">
+                                        
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-control-label">Data chiusura iscrizioni</label>
+                                        <input class="form-control validation-field" type="date" value="{{item.chiusura_iscrizioni}}">
+                                       
+                                    </div> -->
+                                </div>
+                                <div class="row">
+            
+                                   <!--  <div class="form-group col-md-2">
+                                        <label class="form-control-label">Nr. Atleti stimato</label>
+                                        <input class="form-control validation-field" type="number" value="{{item.nr_atleti}}">
+                                    </div> -->
+                         
+            
+                                    <!-- <div class="form-group col-md-3">
+                                        <label class="form-control-label">Logo</label>
+                                        <div class="input-group file-upload">
+                                            <input type="file" id="logo" (change)="logoChange($event)" #inputLogo class="file-upload-btn" />
+                                            <input type="text" class="form-control" />
+                                            <i class="fa fa-times delete-file" (click)="removeLogo()" *ngIf="requestForm.get('logo') != null"></i>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-upload"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-control-label">Locandina</label>
+                                        <div class="input-group file-upload">
+                                            <input type="file" (change)="locandinaChange($event)" #inputLoc class="file-upload-btn" />
+                                            <input type="text" class="form-control" placeholder="Scegli un file..." value="{{locandina}}">
+                                            <i class="fa fa-times delete-file" (click)="removeLocandina()" *ngIf="locandina"></i>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-upload"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="form-control-label">Circolare di gara</label>
+                                        <div class="input-group file-upload">
+                                            <input type="file" (change)="circolareChange($event)" #inputCirc class="file-upload-btn" />
+                                            <input type="text" class="form-control" placeholder="Scegli un file..." value="{{circolare}}">
+                                            <i class="fa fa-times delete-file" (click)="removeCircolare()" *ngIf="circolare"></i>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-primary" type="button">
+                                                    <i class="fa fa-upload"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div> -->
+            
+                                </div>
+            
+<!--                                 <div class="row ">
+                                    <h4 class="ml-3" style="margin-bottom: 25px !important; margin-top: 25px !important;">
+                                        <i class="fa fa-file-text"></i> Richieste Aggiuntive</h4>
+                                </div>
+                                <div class="row ">
+                                <div class="column col-md-5">
+                                <div class="row">
+                                    <div class="form-group ml-3 col-md-4">
+                                        <div class="custom-control custom-checkbox">
+                                            <input formControlName="referee" type="checkbox" class="custom-control-input checkbox-primary" id="arbitri" checked>
+                                            <label class="custom-control-label" for="arbitri">Arbitri</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                            <div class="custom-control custom-checkbox">
+                                                <input formControlName="competitionManagement" type="checkbox" class="custom-control-input checkbox-primary" id="gestioneGara" checked>
+                                                <label class="custom-control-label" for="gestioneGara">Gestione gara</label>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="form-group col-md-5">
+                                                <div class="custom-control custom-checkbox">
+                                                        <input formControlName="tabsManagement" type="checkbox" class="custom-control-input checkbox-primary" id="tabelloni" checked>
+                                                        <label class="custom-control-label" for="tabelloni">Creazione Tabelloni</label>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="column">
+                                            <p> CONTATTI: <br/> Responsabile regionale settore Karate Cecchinato Giancarlo: ....... <br/> Responsabile Arbitri Regionale Sorgato Michele: .......</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                <!-- <div class="form-group" style="float: right;">
+                                    <button class="btn btn-primary pull-right" type="submit">Attiva</button>
+                                </div> -->
+                                
+                            </div>

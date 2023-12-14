@@ -1,0 +1,54 @@
+/* .register-container{
+    position: absolute;
+    .card{
+        .card-header{
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            margin-top: -40px;
+            border-radius: 50%;
+            font-size: 36px;
+        }
+    } */
+
+    .register-container2{
+        position: absolute;
+        margin-top: 100px;
+        margin-bottom: 50px;
+    }
+    .logo-csen{
+        height: 150px;
+        margin-top: -70px;
+    }
+    
+        .step{
+        .step-content{
+            background: #b9b9b9;
+            height: 40px;
+            font-size: 1.5rem;
+            .step-name{
+                font-size: 14px;
+            }
+            &.confirmed{
+                background-color: #4BAE4F !important;
+            }
+        }
+    }
+    
+    .confirmed-content{
+        .fa-check{
+            font-size: 120px;        
+        }
+        .fa-print{
+            font-size: 24px;
+        }
+    }
+    
+    .documents{
+        margin-left: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        color: white;
+    }
+    

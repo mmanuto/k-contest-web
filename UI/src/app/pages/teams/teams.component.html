@@ -1,0 +1,145 @@
+<!-- <div class="d-flex justify-content-center w-150 h-100 sfondo" >
+    <div class="text-right w-100 mt-2" style="margin-right: 30px; font-size: 15px;">
+        <div class="col-xl-10 col-md-10 col-10 request-container">
+            <div class="card border-0 box-shadow rounded-0">
+                <div class="d-flex justify-content-center align-items-center border-0">
+                    <img class="logo-csen" src="assets/img/logo/LogoCSEN.png" alt="">
+                </div>
+                <div class="card-body text-center pb-1">
+                    <h2>Richiesta Utilizzo Servizio Iscrizioni Online</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+<h2>Creazione squadre</h2>
+
+<div class="row">
+
+    <div *ngIf="iscrizioniChiuse" class="ml-4" style="width:100%; text-align: center; margin-bottom: 50px; margin-bottom: 25px">
+        <h3>ISCRIZIONI CHIUSE</h3>
+        <p class="card-text"><b> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per qualsiasi
+                informazione contattare il responsabile di gara.</b></p>
+    </div>
+    <div *ngIf="!iscrizioniChiuse" class="col-lg-9 mb-4">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-body pt-0 widget-body">
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <div class="form-group">
+                                <label for="cintura" class="form-control-label">Cintura</label>
+                                <select class="form-control" [(ngModel)]="squadraCorrente.grado" (change)="getAtleti()">
+                                    <option *ngFor="let item of cinture" [value]="item.grado">{{item.grado}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <div class="form-group">
+                                <label for="cintura" class="form-control-label">Categoria</label>
+                                <select class="form-control" [(ngModel)]="squadraCorrente.categoria" (change)="getAtleti()">
+                                    <option *ngFor="let item of categorie" [value]="item.categoria">{{item.categoria}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="col-12 mt-4">
+                            <div class="form-group">
+                                <div *ngFor="let item of squadraCorrente.componenti" class="custom-control custom-checkbox checkbox-circle">
+                                    <input type="checkbox" class="custom-control-input checkbox-dark-gray" [id]="item.id"
+                                        [(ngModel)]="item.checked" (change)="checkNumber()">
+                                    <label class="custom-control-label" [for]="item.id">{{item.nome}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button  class="btn-custom btn btn-primary mx-auto" [disabled]="squadraCorrente.nComponenti != 3"
+                    (click)="saveSquadra()" style="float: right">Crea squadra</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-9 mb-4">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0">Lista Atleti</h5>
+                <p class="card-text mt-3" *ngIf="listaIscritti.length == 0">
+                        Nessun atleta iscritto alla specialità KATA A SQUADRE
+                </p>
+                <!-- <div class="widget-controls"> 
+                        <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
+                        <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
+                        <a data-widgster="close" href="#" class="transition"><i class="fa fa-times"></i></a>
+                    </div>   -->
+            </div>
+            <div *ngIf="listaIscritti.length != 0" class="card-body pt-0 widget-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <!-- <th>#</th> -->
+                            <th>Nome</th>
+                            <th>Data di nascita</th>
+                            <th>Cintura</th>
+                            <th>Categoria</th>
+                            <th>Selezionato</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        
+                        <tr *ngFor="let item of listaIscritti" class="col-xl-6 col-lg-6 mb-4">
+                            <!-- <th scope="row">1</th> -->
+                            <td>{{item.cognome}} {{item.nome}}</td>
+                            <td>{{item.data_nascita}}</td>
+                            <td>{{item.grado}}</td>
+                            <td>{{item.categoria}}</td>
+                            <td *ngIf="item.selected"><i class="fa fa-check" style="color: green;"></i></td>
+                            <td *ngIf="!item.selected"><i class="fa fa-close " style="color: red;"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9 mb-4">
+        <div widget class="card border-0 box-shadow">
+            <div class="card-header transparent border-0 text-muted">
+                <h5 class="mb-0">Squadre</h5>
+                <p class="card-text mt-3" *ngIf="listaSquadre.length == 0">
+                        Nessuna squadra registrata
+                </p>
+            </div>
+            
+            <div *ngIf="listaSquadre.length != 0" class="card-body pt-0 widget-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <!--  <th>#</th> -->
+                            <th>Componenti</th>
+                            <th>Cintura</th>
+                            <th>Categoria</th>
+                            <td>Azioni</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of listaSquadre" class="col-xl-6 col-lg-6 mb-4">
+                            <!-- <td>{{item.numero}}</td> -->
+                            <td>{{item.componentiSquadra}}</td>
+                            <td>{{item.grado}}</td>
+                            <td>{{item.categoria}}</td>
+                            <td>
+                                <a (click)="editSquadra(item)" href="javascript:void(0);" class="transition"><i class="fa fa-pencil"></i></a>
+                                <a (click)="deleteSquadra(item)" href="javascript:void(0);" class="transition"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

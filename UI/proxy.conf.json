@@ -1,0 +1,10 @@
+{
+  "/backend": {
+    "target": "https://localhost/k-contest-web/apiV2/",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/backend": ""
+    }
+  }
+}
