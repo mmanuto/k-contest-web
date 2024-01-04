@@ -137,15 +137,22 @@ class CompetitionsTable extends Table
             ->allowEmptyString('codiceTipoCategorie');
 
         $validator
-            ->boolean('stato')
-            ->requirePresence('stato', 'create')
+            ->scalar('stato')
+            ->maxLength('stato', 20)
             ->notEmptyString('stato');
 
         $validator
+            ->requirePresence('tabelloni', 'create')
             ->notEmptyString('tabelloni');
 
         $validator
+            ->requirePresence('classifiche', 'create')
             ->notEmptyString('classifiche');
+
+        $validator
+            ->scalar('reg_status')
+            ->maxLength('reg_status', 20)
+            ->notEmptyString('reg_status');
 
         return $validator;
     }

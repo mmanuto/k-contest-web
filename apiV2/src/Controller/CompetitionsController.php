@@ -8,7 +8,9 @@ use RestApi\Utility\JwtToken;
 use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
 use Cake\Mailer\Email;
+use Cake\Core\Configure;
 use ZipArchive;
+use Cake\I18n\FrozenTime;
 
 Type::build('date')->setLocaleFormat('yyyy-MM-dd');
 
@@ -225,13 +227,32 @@ class CompetitionsController extends ApiController
 
     public function getDatiGara()
     {
-
+        Configure::load('constants');
         $data = $this->request->getData();
         $competition = $this->Competitions->find()
             ->where([
                 'id' => $data[0]
             ])
             ->first();
+
+            //controllo data e chiusura iscrizioni
+        if($competition->reg_status == Configure::read('REG_OPEN') || 
+            $competition->reg_status == Configure::read('REG_NOT_YET_OPEN')){
+                $data_apertura = $competition->apertura_iscrizioni->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                $data_chiusura = $competition->chiusura_iscrizioni->i18nFormat('yyyy-MM-dd HH:mm:ss');
+                $today = FrozenTime::now()->i18nFormat('yyyy-MM-dd HH:mm:ss');
+
+                if($competition->reg_status == Configure::read('REG_NOT_YET_OPEN') && $data_apertura <= $today){
+                    $competition->reg_status = Configure::read('REG_OPEN');
+                    $this->Competitions->save($competition);
+
+                }else if($competition->reg_status == Configure::read('REG_OPEN') && $data_chiusura <= $today){
+                    $competition->reg_status = Configure::read('REG_CLOSED_TIME');
+                    $this->Competitions->save($competition);
+                }
+
+
+        }
 
         $this->apiResponse['data'] = $competition;
         $this->apiResponse['success'] = true;

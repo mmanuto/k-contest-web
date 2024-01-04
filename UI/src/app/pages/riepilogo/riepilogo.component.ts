@@ -6,7 +6,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { HomeService } from '../home/home.service';
 import { Router } from '@angular/router';
-
+import * as Constants from '../../constants';
 
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -31,8 +31,9 @@ export class RiepilogoComponent {
   public modalRef: NgbModalRef;
   datePipe = new DatePipe("en-US");
   public note = '';
-  public iscrizioniChiuse: boolean;
+  public iscrizioniStatus: string;
   public atletiSpaiati: boolean = false;
+  public CONST = Constants;
 
   constructor(
     public toastrService: ToastrService,
@@ -44,7 +45,7 @@ export class RiepilogoComponent {
   ) {
 
     this.datiSocieta = this.storageService.get('currentUser');
-    this.iscrizioniChiuse = false;
+    this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
     this.datiGara = this.storageService.get('currentCompetition');
     this.datiGara.richieste = JSON.parse(this.datiGara.richieste);
   }
@@ -58,22 +59,15 @@ export class RiepilogoComponent {
 
   ngOnInit() {
 
-    /*this.homeService.getDatiGara(this.datiGara.id).subscribe((response:any) => {
+    this.homeService.getDatiGara(this.datiGara.id).subscribe((response:any) => {
       this.datiGara = response.result.data;
       
       console.log(this.datiGara);
       this.storageService.set('currentCompetition', this.datiGara);
 
-      let today = new Date();
-      let dataChiusura = new Date(this.datiGara.chiusura_iscrizioni);
-      dataChiusura.setDate(dataChiusura.getDate() + 1);
-      console.log(dataChiusura);
-
-      if (today > dataChiusura) {
-          this.storageService.set('iscrizioniChiuse', true);
-          this.iscrizioniChiuse = true;
-      } 
-    });*/
+      this.iscrizioniStatus = this.datiGara.reg_status;
+      this.storageService.set('iscrizioniStatus', this.iscrizioniStatus);
+    });
 
     this.riepilogoService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.datiGara.id }).subscribe((response: any) => {
       console.log(response);

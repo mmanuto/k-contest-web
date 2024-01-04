@@ -5,8 +5,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HomeService } from './home.service';
 import * as Constants from '../../constants';
-import { listFiles } from 'list-files-in-dir';
-//import * as fs from 'fs'
+
 @Component({
   selector: 'home',
   templateUrl: './home.component.html',
@@ -22,41 +21,34 @@ export class HomeComponent implements OnInit {
   public modalRefIscrizioni: NgbModalRef;
   public currentClub: any;
   public imgUrl: string = Constants.IMAGES_WEBROOT;
-  public iscrizioniChiuse: boolean;
-  public pregara: boolean = false;
-  public classifiche: boolean = false;
+  public iscrizioniStatus: string;
+  public competitionStatus: string;
+  public athletestNumber:number = 0;
+  public athletestMaxNumber:number = 0;
+  public CONST = Constants;
   public tabelloni;
   public appUrl;
-  public athletestNumber;
 
   constructor(protected localStorageService: LocalStorageService, public modalService: NgbModal, public homeService: HomeService) {
-    this.iscrizioniChiuse = false
-    ;
-    this.pregara = this.localStorageService.get('pregara');
-    this.classifiche = this.localStorageService.get('classifiche');
+    this.iscrizioniStatus = Constants.REG_OPEN; //imposto le iscrizioni sempre aperte
+    this.competitionStatus = Constants.COMP_DOING; //imposto la gara sempre aperta
     this.competition = this.localStorageService.get('currentCompetition');
-    this.appUrl = Constants.BASEAPPURL;
+    this.currentClub = this.localStorageService.get('currentUser');
   }
 
   ngOnInit() {
-
-    this.currentClub = this.localStorageService.get('currentUser');
-
     
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
       this.competition = response.result.data;
-      this.classifiche = this.competition.classifiche == 1 ? true : false;
       this.localStorageService.set('currentCompetition', this.competition);
-      let today = new Date();
-      let dataChiusura = new Date(this.competition.chiusura_iscrizioni);
-      dataChiusura.setDate(dataChiusura.getDate() + 1);
-      console.log(dataChiusura);
+      this.iscrizioniStatus = this.competition.reg_status;
+      this.localStorageService.set('iscrizioniStatus', this.iscrizioniStatus);
+      this.competitionStatus = this.competition.status;
+      this.athletestMaxNumber = this.competition.nr_atleti;
+      this.localStorageService.set('athletestMaxNumber', this.athletestMaxNumber);
 
-      if (today > dataChiusura) {
-          this.localStorageService.set('iscrizioniChiuse', true);
-          this.iscrizioniChiuse = true;
-      } 
-      if (this.iscrizioniChiuse) {
+
+      if (this.iscrizioniStatus != Constants.REG_OPEN) {
 
         this.homeService.getTabelloni(this.competition.nome_gara).subscribe((response: any) => {
           this.tabelloni = response.result.data;
@@ -72,10 +64,6 @@ export class HomeComponent implements OnInit {
     this.homeService.getTotaleIscrizioni({competition_id: this.competition.id }).subscribe((response: any) => {
       this.athletestNumber = response.result.data;
     });
-
-    
-
-
     
   }
 

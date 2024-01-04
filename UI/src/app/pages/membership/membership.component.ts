@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewEncapsulation} from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { MembershipService } from './membership.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { HomeService } from '../home/home.service';
-import { data } from 'autoprefixer';
+import * as Constants from '../../constants';
  
 @Component({
   selector: 'app-membership',
@@ -36,9 +36,10 @@ export class MembershipComponent implements OnInit {
   public erroreCategoria = false;
   public errorePeso = false;
   public datiGara: any;
-  public iscrizioniChiuse: boolean;
+  public iscrizioniStatus: string;
   public federationsList = [];
   public enableTessera = false;
+  public CONST = Constants;
 
   config = {
     search:true,
@@ -62,7 +63,7 @@ export class MembershipComponent implements OnInit {
     public homeService: HomeService) {
 
       //TODO: da inserire chiamata per controllo in tempo reale
-      this.iscrizioniChiuse = this.storageService.get('iscrizioniChiuse');
+      this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
 
       /*elementi iscrizione*/
       this.steps = [
@@ -214,13 +215,13 @@ export class MembershipComponent implements OnInit {
     if (this.steps[0].active) {
       if (athleteForm.valid && this.categoria != "") {
         this.erroreCategoria = false;
-        let request = { anno: this.athleteForm.value.birthdate_year, grado: this.athleteForm.value.cintura, category_code: this.datiGara.codiceTipoCategorie };
+        let request = { anno: this.athleteForm.value.birthdate_year, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, category_code: this.datiGara.codiceTipoCategorie };
         this.membershipService.getElencoProve(request).subscribe((response: any) => {
 
           if (response.result.success) {
             this.prove = [];
             for (let prova of response.result.data) {
-              this.prove.push({ label: prova.specialita, checked: false });
+              this.prove.push({ label: prova.name, code: prova.code, checked: false });
             }
           }
           console.log(response);
@@ -316,11 +317,17 @@ export class MembershipComponent implements OnInit {
         let elencoProve = {
           'categoryCode': this.datiGara.codiceTipoCategorie,
           'competition_id': this.datiGara.id,
-          'specialita': []
+          'specialita': [],
+          'codes': []
         }
         for (let prova of this.prove) {
           if (prova.checked) {
-            elencoProve.specialita.push(prova.label);
+            if(prova.code && prova.code != ''){
+              elencoProve.codes.push(prova.code);
+            }else{
+              elencoProve.specialita.push(prova.label);
+            }
+           
           }
         }
 

@@ -224,12 +224,78 @@ class AthletesController extends ApiController
     // =========================================== ELENCO PROVE PER ISCRIZIONE ===============================================
     public function getElencoProve()
     {
+        $this->loadModel('CategoryCodes');
+        $this->loadModel('Belts');
         $data = $this->request->getData();
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT distinct specialita FROM category_codes WHERE codiceTipoCategorie =" . $data['category_code'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
+        $resultProve = [];
 
-        $result = $stmt->fetchAll('assoc');
-        $this->apiResponse['data'] = $result;
+        if($data['anno'] >= 2013){
+            $stmt = $conn->execute("SELECT distinct specialita FROM category_codes WHERE codiceTipoCategorie =" . $data['category_code'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
+
+            $result = $stmt->fetchAll('assoc');
+            foreach ($result as $prova) {
+                $resultProve[] = ['name' => $prova['specialita'], 'code' => ''];
+            }
+        }else{
+           
+            $stmt = $conn->execute("SELECT distinct specialita FROM category_codes WHERE codiceTipoCategorie =" . $data['category_code'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max AND specialita <> 'Kata'");
+            $result = $stmt->fetchAll('assoc');
+            $beltList = $this->Belts->find()->toArray();
+
+            foreach ($result as $prova) {
+                $resultProve[] = ['name' => $prova['specialita'], 'code' => ''];
+            }
+
+            $kataCategory = $this->CategoryCodes->find()
+                ->where([
+                    'codiceTipoCategorie' => $data['category_code'],
+                    'sesso LIKE ' => '%'.$data['sesso'].'%',
+                    'grado LIKE ' => '%'.$data['grado'].'%',
+                    'anno_min <=' => $data['anno'],
+                    'anno_max >=' => $data['anno'],
+                    'specialita' => 'Kata'
+                ])->first();
+
+           
+            $kataCategoryList = $this->CategoryCodes->find()
+                ->where([
+                    'codiceTipoCategorie' => $data['category_code'],
+                    'sesso LIKE ' => '%'.$data['sesso'].'%',
+                    'specialita' => 'Kata',
+                    'id >=' => $kataCategory->id
+                ])->toArray();
+            
+            
+            $minimalBeltGroup = 0;
+            foreach ($beltList as $belt) {
+               if($kataCategory->grado == $belt->category){
+                $minimalBeltGroup = $belt->group_increment;
+                break;
+               }
+            }
+             
+            
+            foreach ($kataCategoryList as $item) {
+                $beltGroup = 0;
+                foreach ($beltList as $belt) {
+                    if($item->grado == $belt->category){
+                        $beltGroup = $belt->group_increment;
+                        break;
+                    }
+                 }
+
+                 if($beltGroup >= $minimalBeltGroup){
+                    $name = $item->specialita.' - '.$item->categoria.' - '.$item->sesso.' - '.$item->grado;
+                    $resultProve[] = ['name' => $name, 'code' => $item->id];
+                 }
+            }
+
+                        
+        }
+
+        
+        $this->apiResponse['data'] = $resultProve;
         $this->apiResponse['success'] = true;
     }
 
@@ -292,13 +358,21 @@ class AthletesController extends ApiController
             foreach ($prove['specialita'] as $prova) {
                 foreach ($result as $record) {
                     if ($record['specialita'] == $prova) {
-                        $inscription = $this->AthletesInscriptions->newEntity();
+                        $inscription = $this->AthletesInscriptions->newEmptyEntity();
                         $inscription->athlete_id = $savedAtlhete->id;
                         $inscription->category_code_id = $record['id'];
                         $inscription->competition_id = $prove['competition_id'];
                         $this->AthletesInscriptions->save($inscription);
                     }
                 }
+            }
+
+            foreach ($prove['codes'] as $code) {
+                $inscription = $this->AthletesInscriptions->newEmptyEntity();
+                $inscription->athlete_id = $savedAtlhete->id;
+                $inscription->category_code_id = $code;
+                $inscription->competition_id = $prove['competition_id'];
+                $this->AthletesInscriptions->save($inscription);
             }
 
             $this->apiResponse['success'] = true;

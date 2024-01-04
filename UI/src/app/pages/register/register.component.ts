@@ -152,7 +152,7 @@ export class RegisterComponent {
 
     public confirm() {
 
-        if(this.personalForm.value.cod_fiscale == 94535440153){
+        if(this.personalForm.value.cod_fiscale == '94535440153' || this.personalForm.value.cod_fiscale == '04833350269'){
             this.openAdv.nativeElement.click();
             return;
         }
@@ -217,7 +217,7 @@ export class RegisterComponent {
     public recuperaDati() {
 
 
-        if(this.personalForm.value.login_cf == 94535440153){
+        if(this.personalForm.value.login_cf == '94535440153' || this.personalForm.value.login_cf == '04833350269'){
             this.openAdv.nativeElement.click();
             return;
         }

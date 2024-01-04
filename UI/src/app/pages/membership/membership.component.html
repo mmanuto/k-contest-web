@@ -1,20 +1,20 @@
 <div class="row mb-1">
     <div class="col mb-4">
 
-        <div *ngIf="iscrizioniChiuse" class="ml-4 mb-4" style="width:100%; text-align: center">
+        <div *ngIf="iscrizioniStatus != CONST.REG_OPEN" class="ml-4 mb-4" style="width:100%; text-align: center">
             <h3>ISCRIZIONI CHIUSE</h3>
             <p class="card-text"><b> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
                     qualsiasi
                     informazione contattare il responsabile di gara.</b></p>
         </div>
-        <button class="btn btn-primary btn-lg btn-custom box-shadow mr-3" *ngIf="!iscrizioniChiuse"
+        <button class="btn btn-primary btn-lg btn-custom box-shadow mr-3" *ngIf="iscrizioniStatus == CONST.REG_OPEN"
             (click)="openModal(modalContent, null)">
             <i class="fa fa-user-plus mr-2"></i>
             Nuovo Iscritto
         </button>
-        <button *ngIf="type=='list'" (click)="toggle('grid')" class="btn btn-primary btn-lg btn-custom box-shadow">
+        <!--<button *ngIf="type=='list'" (click)="toggle('grid')" class="btn btn-primary btn-lg btn-custom box-shadow">
             <i class="fa fa-th mr-2">
-            </i>Visualizza griglia</button>
+            </i>Visualizza griglia</button>-->
         <button *ngIf="type=='grid'" (click)="toggle('list')" class="btn btn-primary btn-lg btn-custom box-shadow">
             <i class="fa fa-list mr-2">
             </i>Visualizza lista</button>
@@ -34,7 +34,7 @@
                         <h5 class="mb-0" style="color: #202F40;">
                             {{user.nome}}
                         </h5>
-                        <div *ngIf="!iscrizioniChiuse" class="widget-controls">
+                        <div *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="widget-controls">
                             <!-- bottoncini sopra -->
                             <a (click)="openModal(modalContent, user)" class="transition" data-toggle="tooltip"
                                 data-placement="top" title="Modifica iscritto"><i class="fa fa-pencil"
@@ -122,7 +122,7 @@
                             <i *ngIf="user.settings.isDeleted" class="fa fa-user mr-2 text-danger" placement="bottom" [ngbTooltip]="'deleted'"></i>
                         </td>
                         <td class="align-middle text-truncate">{{user.settings.joinedDate | date:"dd MMMM, yyyy 'at' HH:mm"}}</td>-->
-                        <td *ngIf="!iscrizioniChiuse" class="align-middle">
+                        <td *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="align-middle">
                             <div class="btn-group" role="group">
                                 <button class="btn btn-secondary btn-sm" (click)="openModal(modalContent, user)"
                                     data-toggle="tooltip" data-placement="top" title="Modifica atleta"><i
@@ -229,8 +229,6 @@
                                                 class="fa fa-user-o"></i></span></div>
                                     <input formControlName="n_tessera" class="form-control" type="text">
                                 </div>
-                                <!-- <small class="text-danger" *ngIf="step.hasError && athleteForm.get('username').hasError('required')">Campo
-                                    obbligatorio</small> -->
                             </div>
 
 

@@ -23,9 +23,10 @@ use Cake\ORM\Entity;
  * @property int $nr_atleti
  * @property string $richieste
  * @property int|null $codiceTipoCategorie
- * @property bool $stato
+ * @property string $stato
  * @property int $tabelloni
  * @property int $classifiche
+ * @property string $reg_status
  *
  * @property \App\Model\Entity\AthletesInscription[] $athletes_inscriptions
  * @property \App\Model\Entity\ClubInscription[] $club_inscriptions
@@ -60,6 +61,7 @@ class Competition extends Entity
         'stato' => true,
         'tabelloni' => true,
         'classifiche' => true,
+        'reg_status' => true,
         'athletes_inscriptions' => true,
         'club_inscriptions' => true,
         'teams' => true,

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { ToastrService } from 'ngx-toastr';
 import { TeamsService } from './teams.service';
+import * as Constants from '../../constants';
 
 
 @Component({
@@ -16,9 +17,9 @@ export class TeamsComponent implements OnInit {
   public squadre: any[];
   public cinture: any[];
   public categorie: any[];
-  public iscrizioniChiuse: boolean;
+  public iscrizioniStatus: string;
   public currentCompetition: any;
-  //public showCintureCategorie: boolean = false;
+  public CONST = Constants;
 
   //================= da controllare ====================
   public squadraCorrente: Squadra;
@@ -35,7 +36,7 @@ export class TeamsComponent implements OnInit {
   ) {
 
     this.datiSocieta = this.storageService.get('currentUser');
-    this.iscrizioniChiuse = this.storageService.get('iscrizioniChiuse');
+    this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
     this.currentCompetition = this.storageService.get('currentCompetition');
 
     this.squadraCorrente = {
