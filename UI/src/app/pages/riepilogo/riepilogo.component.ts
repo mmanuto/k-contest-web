@@ -64,6 +64,7 @@ export class RiepilogoComponent {
       
       console.log(this.datiGara);
       this.storageService.set('currentCompetition', this.datiGara);
+      this.datiGara.richieste = JSON.parse(this.datiGara.richieste);
 
       this.iscrizioniStatus = this.datiGara.reg_status;
       this.storageService.set('iscrizioniStatus', this.iscrizioniStatus);
