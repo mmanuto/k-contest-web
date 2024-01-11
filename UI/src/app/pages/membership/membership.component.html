@@ -7,6 +7,11 @@
                     qualsiasi
                     informazione contattare il responsabile di gara.</b></p>
         </div>
+
+        <div class="row ml-1"> 
+            <h3 *ngIf="athletestNumber > 0" class="card-title mb-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
+
+        </div>
         <button class="btn btn-primary btn-lg btn-custom box-shadow mr-3" *ngIf="iscrizioniStatus == CONST.REG_OPEN"
             (click)="openModal(modalContent, null)">
             <i class="fa fa-user-plus mr-2"></i>

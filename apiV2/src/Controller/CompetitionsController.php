@@ -9,7 +9,6 @@ use Cake\Database\Type;
 use Cake\Datasource\ConnectionManager;
 use Cake\Mailer\Email;
 use Cake\Core\Configure;
-use ZipArchive;
 use Cake\I18n\FrozenTime;
 
 Type::build('date')->setLocaleFormat('yyyy-MM-dd');
@@ -23,107 +22,15 @@ Type::build('date')->setLocaleFormat('yyyy-MM-dd');
  */
 class CompetitionsController extends ApiController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $competitions = $this->paginate($this->Competitions);
-
-        $this->set(compact('competitions'));
-    }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Competition id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $competition = $this->Competitions->get($id, [
-            'contain' => ['AthletesInscriptions', 'ClubInscriptions', 'Teams'],
-        ]);
-
-        $this->set(compact('competition'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $competition = $this->Competitions->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $competition = $this->Competitions->patchEntity($competition, $this->request->getData());
-            if ($this->Competitions->save($competition)) {
-                $this->Flash->success(__('The competition has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The competition could not be saved. Please, try again.'));
-        }
-        $this->set(compact('competition'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Competition id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $competition = $this->Competitions->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $competition = $this->Competitions->patchEntity($competition, $this->request->getData());
-            if ($this->Competitions->save($competition)) {
-                $this->Flash->success(__('The competition has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The competition could not be saved. Please, try again.'));
-        }
-        $this->set(compact('competition'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Competition id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $competition = $this->Competitions->get($id);
-        if ($this->Competitions->delete($competition)) {
-            $this->Flash->success(__('The competition has been deleted.'));
-        } else {
-            $this->Flash->error(__('The competition could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
-
-
-    //============================================================================================================================================================                                                                                                                                                              
+    
+//============================================================================================================================================================                                                                                                                                                              
 //   REQUEST                                                                                                                                                                                                                                                                                                                     
 //========================================================================================================================================================================================================================================================================================================================
 
     public function saveRequest()
     {
         $data = $this->request->getData();
-        $competition = $this->Competitions->newEntity();
+        $competition = $this->Competitions->newEmptyEntity();
 
 
         $richieste = array(
@@ -169,9 +76,8 @@ class CompetitionsController extends ApiController
 
         }
 
-        /* print_r($record); */
         $competition = $this->Competitions->patchEntity($competition, $record);
-        /*  print_r($competition); */
+
         if ($this->Competitions->save($competition)) {
 
             $dataGara = explode('-', $data['competitionDate']);
@@ -192,7 +98,7 @@ class CompetitionsController extends ApiController
         }
     }
 
-    //===========================================================================================================================================================                                                                                                                            
+//===========================================================================================================================================================                                                                                                                            
 // GET                                                                                                                                                                                                                                     
 //===========================================================================================================================================================
 
@@ -259,7 +165,7 @@ class CompetitionsController extends ApiController
     }
 
 
-    //==========================================================================================================================================================                                                                                                                                                           
+//==========================================================================================================================================================                                                                                                                                                           
 // UPDATE                                                                                                                                                                                                                                                                                                           
 //==========================================================================================================================================================
 
@@ -288,9 +194,8 @@ class CompetitionsController extends ApiController
             }
         }
 
-        /*  print_r($competition); */
         $competition = $this->Competitions->patchEntity($competition, $dataCompetition);
-        /* print_r($competition); */
+
         if ($this->Competitions->save($competition)) {
             $this->apiResponse['success'] = true;
         } else {
@@ -322,14 +227,13 @@ class CompetitionsController extends ApiController
         $array = array_map('str_getcsv', $lines);
         array_shift($array);
         foreach ($array as $riga) {
-            //print_r($riga);
+
             $recordTemp = $this->buildRecord($riga[0], $codiceCategoria);
             if ($recordTemp != null) {
                 $dataRecords[] = $recordTemp;
             }
 
         }
-        //print_r($dataRecords);
 
         $categories = $this->CategoryCodes->newEntities($dataRecords);
 
@@ -348,7 +252,6 @@ class CompetitionsController extends ApiController
     {
 
         $data = explode(';', $line);
-        //print_r($data);
 
         if ($data[0] != "") {
             $record = array(
@@ -372,64 +275,6 @@ class CompetitionsController extends ApiController
         }
 
     }
-
-    //========================================================================================================================================================================================================================================================================================================================================
-    //                                                                                                                                                                                                                                                                                                                                        
-    //  ######    ###    #####   #####  ##      ##       #####   ##     ##  ##                                                                                                                                                                                                                                                              
-    //    ##     ## ##   ##  ##  ##     ##      ##      ##   ##  ####   ##  ##                                                                                                                                                                                                                                                              
-    //    ##    ##   ##  #####   #####  ##      ##      ##   ##  ##  ## ##  ##                                                                                                                                                                                                                                                              
-    //    ##    #######  ##  ##  ##     ##      ##      ##   ##  ##    ###  ##                                                                                                                                                                                                                                                              
-    //    ##    ##   ##  #####   #####  ######  ######   #####   ##     ##  ##                                                                                                                                                                                                                                                              
-    //                                                                                                                                                                                                                                                                                                                                        
-    //========================================================================================================================================================================================================================================================================================================================================
-
-
-    public function uploadTabelloni()
-    {
-
-        $data = $this->request->getData();
-
-        //print_r($data);
-
-        if ($data["zipFile"]["filename"]) {
-            $filename = $data["zipFile"]["filename"];
-            $source = $data["zipFile"]["value"];
-            $type = $data["zipFile"]["filetype"];
-
-            $name = explode(".", $filename);
-            $accepted_types = array('application/zip', 'application/x-zip-compressed', 'multipart/x-zip', 'application/x-compressed');
-            foreach ($accepted_types as $mime_type) {
-                if ($mime_type == $type) {
-                    $okay = true;
-                    break;
-                }
-            }
-
-            $continue = strtolower($name[1]) == 'zip' ? true : false;
-            if (!$continue) {
-                $message = "The file you are trying to upload is not a .zip file. Please try again.";
-            }
-
-            $target_path = $data["nomeGara"] . "/" . $filename;  // change this to the correct site path
-            //if(move_uploaded_file($source, $target_path)) {
-            if (file_put_contents($target_path, base64_decode($source))) {
-                $zip = new ZipArchive();
-                $x = $zip->open($target_path);
-                if ($x === true) {
-                    $zip->extractTo($data["nomeGara"] . "/" . "tabelloni/"); // change this to the correct site path
-                    $zip->close();
-
-                    unlink($target_path);
-                }
-                $message = "Your .zip file was uploaded and unpacked.";
-            } else {
-                $message = "There was a problem with the upload. Please try again.";
-            }
-
-            //print_r($message);
-        }
-    }
-
 
     public function getClassifiche()
     {
@@ -649,6 +494,36 @@ class CompetitionsController extends ApiController
 	    $this->apiResponse['success'] = true;
 
     }
+
+    //==============================================================================================================================================
+    // CHIUSURA ISCRIZIONI
+    //==============================================================================================================================================
+
+    /**
+     * Aggiornamento stato iscrizioni e invio automatico email a tutte le società iscritte
+     */
+    public function closeRegistrations(){
+        $this->loadModel('ClubInscriptions');
+
+        $data = $this->request->getData();
+
+        $competition = $this->Competitions->get($data['competition_id'], [
+            'contain' => []
+        ]);
+
+        $competition->reg_status = $data['reg_status'];
+
+        if ($this->Competitions->save($competition)) {            
+
+            $this->apiResponse['data'] = $competition;
+            $this->apiResponse['success'] = true;
+            
+        } else {
+            $this->apiResponse['success'] = false;
+        }
+    }
+
+   
 
 
 }

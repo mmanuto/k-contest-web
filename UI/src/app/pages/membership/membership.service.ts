@@ -36,4 +36,8 @@ export class MembershipService {
         console.log(request);
         return this.http.post(Constants.BASEAPPURL + "athletes/deleteInscription", request);
     }
+
+    closeRegistrations(request){
+        return this.http.post(Constants.BASEAPPURL + "competitions/closeRegistrations", request);
+    }
 } 

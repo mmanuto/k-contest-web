@@ -32,7 +32,6 @@ export class MembershipComponent implements OnInit {
   public prove: any[];
   public show = false;
   public categoria = "";
-  //public annoNascita = "";
   public erroreCategoria = false;
   public errorePeso = false;
   public datiGara: any;
@@ -40,6 +39,8 @@ export class MembershipComponent implements OnInit {
   public federationsList = [];
   public enableTessera = false;
   public CONST = Constants;
+  public athletestNumber:number = 0;
+  public athletestMaxNumber:number = 0;
 
   config = {
     search:true,
@@ -64,6 +65,7 @@ export class MembershipComponent implements OnInit {
 
       //TODO: da inserire chiamata per controllo in tempo reale
       this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
+      this.athletestMaxNumber = this.storageService.get('athletestMaxNumber');
 
       /*elementi iscrizione*/
       this.steps = [
@@ -135,12 +137,22 @@ export class MembershipComponent implements OnInit {
           }
         }
       }
-    })
+    });
+
+    //TODO: da togliere e inserire commonservices
+    this.homeService.getTotaleIscrizioni({competition_id: this.datiGara.id }).subscribe((response: any) => {
+      this.athletestNumber = response.result.data;
+
+      if(this.athletestNumber == this.athletestMaxNumber){
+        this.iscrizioniStatus = this.CONST.REG_CLOSED_FULL;
+        this.membershipService.closeRegistrations({competition_id: this.datiGara.id, reg_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
+        });
+      }
+    });
 
   }
 
   selectionChanged(event){
-    console.log(event.value);
     this.atleta = event.value;
 
     let birthdate = this.atleta.data_nascita.split('/');

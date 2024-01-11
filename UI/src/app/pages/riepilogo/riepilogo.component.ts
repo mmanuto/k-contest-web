@@ -78,7 +78,7 @@ export class RiepilogoComponent {
         for (let item of response.result.data) {
           let index = this.listaIscritti.findIndex(x => x.id === item.athlete_id);
           if (index >= 0) {
-            this.listaIscritti[index].prove += ' - ' + item.specialita;
+            this.listaIscritti[index].prove += ' - ' + item.specialita + ' ' + item.categoria + ' ' + item.grado;
             this.listaIscritti[index].codiciProve.push(item.codice);
           } else {
             let iscritto = {
@@ -192,23 +192,17 @@ export class RiepilogoComponent {
 
   }
 
-  //===========================
-  //                           
-  //  #####   ####    #####  
-  //  ##  ##  ##  ##  ##     
-  //  #####   ##  ##  #####  
-  //  ##      ##  ##  ##     
-  //  ##      ####    ##     
-  //                           
-  //===========================
+  //=============================================================================
+  // PDF
+  //=============================================================================
 
-  //crea pdf per societa iscritte
+  //crea pdf con elenco iscritti
   creaPdfIscrizioni() {
 
     let doc = new jsPDF({
       orientation: 'landscape'
     });
-    doc.setFontSize(10);
+    doc.setFontSize(12);
 
     var columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Sesso", "Cod. Fiscale", "Tessera CSEN", "Peso", "Grado", "Categoria", "Prove"];
     var rows = [];
@@ -232,13 +226,19 @@ export class RiepilogoComponent {
     }
     var nome = 'ELENCO ATLETI ' + this.datiSocieta.nome_societa;
 
+    doc.text(nome, 15, 10);
+
+    doc.setFontSize(10);
     autoTable(doc, {
+      margin: { top: 15 },
       head: [columns],
       body: rows
     });
 
     return btoa(doc.output());
   }
+
+  //crea PDF  con autocertificazione certificati medici
 
   creaPdfCertificati() {
     var doc = new jsPDF("p", "mm", "a4");

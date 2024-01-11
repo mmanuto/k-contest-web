@@ -257,13 +257,18 @@ class AthletesController extends ApiController
                     'specialita' => 'Kata'
                 ])->first();
 
-           
+            $resultProve[] = [
+                'name' =>  $kataCategory->specialita.' - '.$kataCategory->categoria.' - '.$kataCategory->sesso.' - '.$kataCategory->grado, 
+                'code' => $kataCategory->id];
+
+                
             $kataCategoryList = $this->CategoryCodes->find()
                 ->where([
                     'codiceTipoCategorie' => $data['category_code'],
                     'sesso LIKE ' => '%'.$data['sesso'].'%',
                     'specialita' => 'Kata',
-                    'id >=' => $kataCategory->id
+                    'categoria NOT LIKE' => 'MASTER'.'%',
+                    'id >' => $kataCategory->id
                 ])->toArray();
             
             
@@ -427,8 +432,8 @@ class AthletesController extends ApiController
         $filename = $competition['nome_gara'] . "/iscrizioni_" . $datiSocieta['nome_societa'] . ".pdf";
         $filenameCertificati = $competition['nome_gara'] . "/autodichiarazione_" . $datiSocieta['nome_societa'] . ".pdf";
 
-        $mediaupload_success = file_put_contents($filename, $dataPdf);
-        $mediaupload_success = file_put_contents($filenameCertificati, $autodichiarazionePdf);
+        file_put_contents($filename, $dataPdf);
+        file_put_contents($filenameCertificati, $autodichiarazionePdf);
 
 
         //-----------------------------  EXCEL  -------------------------------------
