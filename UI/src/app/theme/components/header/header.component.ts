@@ -26,9 +26,12 @@ export class HeaderComponent implements OnInit {
   public showInfoContent:boolean = false;
   public settings: Settings;
   public menuItems:Array<any>;
+  public currentUser;
+
   constructor(public appSettings:AppSettings, public menuService:MenuService, public router: Router, public storageService: LocalStorageService) {
       this.settings = this.appSettings.settings;
       this.menuItems = this.menuService.getHorizontalMenuItems();
+      this.currentUser = this.storageService.get('currentUser');
   }
   
   ngOnInit() {
