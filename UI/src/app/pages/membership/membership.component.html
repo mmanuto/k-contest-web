@@ -12,7 +12,7 @@
             <h3 *ngIf="athletestNumber > 0" class="card-title mb-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
         </div>
-        <button class="btn btn-primary btn-lg btn-custom box-shadow mr-3"
+        <button *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="btn btn-primary btn-lg btn-custom box-shadow mr-3"
             (click)="openModal(modalContent, null)">
             <i class="fa fa-user-plus mr-2"></i>
             Nuovo Iscritto
@@ -127,7 +127,7 @@
                             <i *ngIf="user.settings.isDeleted" class="fa fa-user mr-2 text-danger" placement="bottom" [ngbTooltip]="'deleted'"></i>
                         </td>
                         <td class="align-middle text-truncate">{{user.settings.joinedDate | date:"dd MMMM, yyyy 'at' HH:mm"}}</td>-->
-                        <td class="align-middle">
+                        <td class="align-middle" *ngIf="iscrizioniStatus == CONST.REG_OPEN">
                             <div class="btn-group" role="group">
                                 <button class="btn btn-secondary btn-sm" (click)="openModal(modalContent, user)"
                                     data-toggle="tooltip" data-placement="top" title="Modifica atleta"><i
