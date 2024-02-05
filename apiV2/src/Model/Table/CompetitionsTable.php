@@ -45,6 +45,9 @@ class CompetitionsTable extends Table
         $this->setDisplayField('responsabile');
         $this->setPrimaryKey('id');
 
+        $this->hasMany('AthleteInscriptions', [
+            'foreignKey' => 'competition_id',
+        ]);
         $this->hasMany('AthletesInscriptions', [
             'foreignKey' => 'competition_id',
         ]);
@@ -137,22 +140,19 @@ class CompetitionsTable extends Table
             ->allowEmptyString('codiceTipoCategorie');
 
         $validator
-            ->scalar('stato')
-            ->maxLength('stato', 20)
-            ->notEmptyString('stato');
+            ->scalar('comp_status')
+            ->maxLength('comp_status', 30)
+            ->requirePresence('comp_status', 'create')
+            ->notEmptyString('comp_status');
 
         $validator
-            ->requirePresence('tabelloni', 'create')
-            ->notEmptyString('tabelloni');
+            ->notEmptyString('flag_tabs');
 
         $validator
-            ->requirePresence('classifiche', 'create')
-            ->notEmptyString('classifiche');
+            ->notEmptyString('flag_classifications');
 
         $validator
-            ->scalar('reg_status')
-            ->maxLength('reg_status', 20)
-            ->notEmptyString('reg_status');
+            ->notEmptyString('flag_timetable');
 
         return $validator;
     }

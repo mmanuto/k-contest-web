@@ -1,9 +1,9 @@
 <div class="row mb-1">
     <div class="col mb-4">
 
-        <div *ngIf="iscrizioniStatus != CONST.REG_OPEN" class="ml-4 mb-4" style="width:100%; text-align: center">
+        <div *ngIf="competition.comp_status != CONST.REG_OPEN" class="ml-4 mb-4" style="width:100%; text-align: center">
             <h3>ISCRIZIONI CHIUSE</h3>
-            <p class="card-text"><b> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
+            <p class="card-text"><b> Al momento non nè possibile effettuare modifiche o aggiungere nuovi iscritti. Per
                     qualsiasi
                     informazione contattare il responsabile di gara.</b></p>
         </div>
@@ -12,7 +12,7 @@
             <h3 *ngIf="athletestNumber > 0" class="card-title mb-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
         </div>
-        <button *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="btn btn-primary btn-lg btn-custom box-shadow mr-3"
+        <button *ngIf="competition.comp_status == CONST.REG_OPEN" class="btn btn-primary btn-lg btn-custom box-shadow mr-3"
             (click)="openModal(modalContent, null)">
             <i class="fa fa-user-plus mr-2"></i>
             Nuovo Iscritto
@@ -39,7 +39,7 @@
                         <h5 class="mb-0" style="color: #202F40;">
                             {{user.nome}}
                         </h5>
-                        <div *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="widget-controls">
+                        <div *ngIf="competition.comp_status == CONST.REG_OPEN" class="widget-controls">
                             <!-- bottoncini sopra -->
                             <a (click)="openModal(modalContent, user)" class="transition" data-toggle="tooltip"
                                 data-placement="top" title="Modifica iscritto"><i class="fa fa-pencil"
@@ -127,7 +127,7 @@
                             <i *ngIf="user.settings.isDeleted" class="fa fa-user mr-2 text-danger" placement="bottom" [ngbTooltip]="'deleted'"></i>
                         </td>
                         <td class="align-middle text-truncate">{{user.settings.joinedDate | date:"dd MMMM, yyyy 'at' HH:mm"}}</td>-->
-                        <td class="align-middle" *ngIf="iscrizioniStatus == CONST.REG_OPEN">
+                        <td class="align-middle" *ngIf="competition.comp_status == CONST.REG_OPEN">
                             <div class="btn-group" role="group">
                                 <button class="btn btn-secondary btn-sm" (click)="openModal(modalContent, user)"
                                     data-toggle="tooltip" data-placement="top" title="Modifica atleta"><i

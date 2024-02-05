@@ -11,7 +11,7 @@
 
             </div>
             <div class="card-body pt-0 widget-body" style="width: 100%">
-                <p *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="card-text">
+                <p *ngIf="competition.comp_status == CONST.REG_OPEN" class="card-text">
                     Per procedere con le iscrizioni cliccare su <strong>Iscrizione atleti</strong> nel menù a sinistra.  
                     Una volta concluse le iscrizioni, nella sezione 
                     <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra verranno pubblicati i tabelloni di gara. <br/> 
@@ -22,9 +22,9 @@
                     <h3 *ngIf="athletestNumber > 0" class="card-title mt-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
                 </div>
-                <div *ngIf="(iscrizioniStatus == CONST.REG_CLOSED_FULL || iscrizioniStatus == CONST.REG_CLOSED_TIME) && competitionStatus == CONST.COMP_DOING" class="m-4">
-                    <h4 *ngIf="iscrizioniStatus == CONST.REG_CLOSED_FULL">ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
-                    <h4 *ngIf="iscrizioniStatus == CONST.REG_CLOSED_TIME">ISCRIZIONI CHIUSE</h4>
+                <div *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME" class="m-4">
+                    <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL">ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
+                    <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_TIME">ISCRIZIONI CHIUSE</h4>
                     <p class="card-text"> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
                         qualsiasi informazione contattare il responsabile di gara. <br> Appena disponibili verranno pubblicati i
                         tabelloni di gara nella sezione <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra</p>
@@ -34,15 +34,15 @@
                     <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
                         <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
                 </div>-->
-                <div *ngIf="iscrizioniStatus == CONST.REG_NOT_YET_OPEN" class="m-4">
+                <div *ngIf="competition.comp_status == CONST.PUBLISHED" class="m-4">
                     <h4>ISCRIZIONI CHIUSE</h4>
                     <p class="card-text"> Le iscrizioni non sono ancora aperte. Per qualsiasi informazione contattare
                         il responsabile di gara. </p>
                 </div>
-               <div *ngIf="iscrizioniStatus == CONST.REG_CLOSED_FULL || iscrizioniStatus == CONST.REG_CLOSED_TIME" class="row" style="width: 100%;">
+               <div *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME" class="row" style="width: 100%;">
                     <div class="col-md-7 mt-4">
 
-                        <div *ngIf="competitionStatus == CONST.COMP_CL" widget class="card border-0 box-shadow">
+                        <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
                             <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
                                 <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                            
-                        <div  *ngIf="competitionStatus == CONST.COMP_TABS" widget class="card border-0 box-shadow">
+                        <div  *ngIf="competition.flag_timetable" widget class="card border-0 box-shadow">
                             <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; text-align: center;">
                                 <h5 class="mb-0" style="color:white">TIMETABLE</h5>
                             </div>
@@ -288,7 +288,7 @@
                     </div>
 
                 </div>
-                <div *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="row" style="width: 100%;">
+                <div *ngIf="competition.comp_status == CONST.REG_OPEN" class="row" style="width: 100%;">
                     <div class="col-md-6">
                         <div class="col-md-10 mb-4 mt-4">
                             <div class="card">

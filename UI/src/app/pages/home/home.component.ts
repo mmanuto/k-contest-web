@@ -21,8 +21,6 @@ export class HomeComponent implements OnInit {
   public modalRefIscrizioni: NgbModalRef;
   public currentClub: any;
   public imgUrl: string = Constants.IMAGES_WEBROOT;
-  public iscrizioniStatus: string;
-  public competitionStatus: string;
   public athletestNumber:number = 0;
   public athletestMaxNumber:number = 0;
   public CONST = Constants;
@@ -30,8 +28,6 @@ export class HomeComponent implements OnInit {
   public appUrl;
 
   constructor(protected localStorageService: LocalStorageService, public modalService: NgbModal, public homeService: HomeService) {
-    this.iscrizioniStatus = Constants.REG_OPEN; //imposto le iscrizioni sempre aperte
-    this.competitionStatus = Constants.COMP_DOING; //imposto la gara sempre aperta
     this.competition = this.localStorageService.get('currentCompetition');
     this.currentClub = this.localStorageService.get('currentUser');
   }
@@ -41,14 +37,13 @@ export class HomeComponent implements OnInit {
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
       this.competition = response.result.data;
       this.localStorageService.set('currentCompetition', this.competition);
-      this.iscrizioniStatus = this.competition.reg_status;
-      this.localStorageService.set('iscrizioniStatus', this.iscrizioniStatus);
-      this.competitionStatus = this.competition.status;
+      this.localStorageService.set('iscrizioniStatus', this.competition.comp_status);
       this.athletestMaxNumber = this.competition.nr_atleti;
       this.localStorageService.set('athletestMaxNumber', this.athletestMaxNumber);
 
 
-      if (this.iscrizioniStatus != Constants.REG_OPEN) {
+      //se sono state pubblicate le classifiche, recupero i files corrispondenti
+      if (this.competition.flag_classifications) {
 
         this.homeService.getTabelloni(this.competition.nome_gara).subscribe((response: any) => {
           this.tabelloni = response.result.data;

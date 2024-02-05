@@ -34,8 +34,7 @@ export class MembershipComponent implements OnInit {
   public categoria = "";
   public erroreCategoria = false;
   public errorePeso = false;
-  public datiGara: any;
-  public iscrizioniStatus: string;
+  public competition: any;
   public federationsList = [];
   public enableTessera = false;
   public CONST = Constants;
@@ -64,7 +63,6 @@ export class MembershipComponent implements OnInit {
     public homeService: HomeService) {
 
       //TODO: da inserire chiamata per controllo in tempo reale
-      this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
       this.athletestMaxNumber = this.storageService.get('athletestMaxNumber');
 
       /*elementi iscrizione*/
@@ -97,7 +95,7 @@ export class MembershipComponent implements OnInit {
   ngOnInit() {
 
     this.datiSocieta = this.storageService.get('currentUser');
-    this.datiGara = this.storageService.get('currentCompetition');
+    this.competition = this.storageService.get('currentCompetition');
     this.membershipService.getFederationsList().subscribe((response: any) => {
       if (response.result.success) {
         this.federationsList = response.result.data;
@@ -112,7 +110,7 @@ export class MembershipComponent implements OnInit {
         element.nominativo = element.cognome + ' ' + element.nome;
       });
     })
-    this.membershipService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.datiGara.id }).subscribe((response: any) => {
+    this.membershipService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.competition.id }).subscribe((response: any) => {
       //console.log(response);
       let listaIscritti = response.result.data;
       this.iscritti = [];
@@ -140,12 +138,12 @@ export class MembershipComponent implements OnInit {
     });
 
     //TODO: da togliere e inserire commonservices
-    this.homeService.getTotaleIscrizioni({competition_id: this.datiGara.id }).subscribe((response: any) => {
+    this.homeService.getTotaleIscrizioni({competition_id: this.competition.id }).subscribe((response: any) => {
       this.athletestNumber = response.result.data;
 
       if(this.athletestNumber == this.athletestMaxNumber){
-        this.iscrizioniStatus = this.CONST.REG_CLOSED_FULL;
-        this.membershipService.closeRegistrations({competition_id: this.datiGara.id, reg_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
+        this.competition.comp_status = this.CONST.REG_CLOSED_FULL;
+        this.membershipService.closeRegistrations({competition_id: this.competition.id, comp_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
         });
       }
     });
@@ -178,7 +176,7 @@ export class MembershipComponent implements OnInit {
 
     let params = {
       'anno': this.athleteForm.value.birthdate_year,
-      'categoryCode': this.datiGara.codiceTipoCategorie
+      'categoryCode': this.competition.codiceTipoCategorie
     }
 
     this.membershipService.getCategoria(params).subscribe((response: any) => {
@@ -227,7 +225,7 @@ export class MembershipComponent implements OnInit {
     if (this.steps[0].active) {
       if (athleteForm.valid && this.categoria != "") {
         this.erroreCategoria = false;
-        let request = { anno: this.athleteForm.value.birthdate_year, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, category_code: this.datiGara.codiceTipoCategorie };
+        let request = { anno: this.athleteForm.value.birthdate_year, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, category_code: this.competition.codiceTipoCategorie };
         this.membershipService.getElencoProve(request).subscribe((response: any) => {
 
           if (response.result.success) {
@@ -327,8 +325,8 @@ export class MembershipComponent implements OnInit {
         this.atleta.peso = this.weightForm.value.peso;
 
         let elencoProve = {
-          'categoryCode': this.datiGara.codiceTipoCategorie,
-          'competition_id': this.datiGara.id,
+          'categoryCode': this.competition.codiceTipoCategorie,
+          'competition_id': this.competition.id,
           'specialita': [],
           'codes': []
         }
@@ -462,7 +460,7 @@ export class MembershipComponent implements OnInit {
   }
 
   public deleteUser(user) {
-    this.membershipService.deteleAtleta({ 'athlete_id': user.id, 'competition_id': this.datiGara.id }).subscribe((response: any) => {
+    this.membershipService.deteleAtleta({ 'athlete_id': user.id, 'competition_id': this.competition.id }).subscribe((response: any) => {
       console.log(response);
       if (response.result.success) {
         location.reload();

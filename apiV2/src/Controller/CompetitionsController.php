@@ -118,10 +118,11 @@ class CompetitionsController extends ApiController
 
     public function getCompetitions()
     {
+        Configure::load('constants');
 
         $competition = $this->Competitions->find()
             ->where([
-                'stato' => 1,
+                'OR' => [['comp_status' => Configure::read('PUBLISHED')], ['comp_status' => Configure::read('REG_OPEN')]],
                 'DATE(data_gara) >=' => date('Y-m-d', mktime(0, 0, 0, intval(date("m")), intval(date("d") - 20), intval(date("Y"))))
             ])
             ->toArray();
@@ -142,18 +143,18 @@ class CompetitionsController extends ApiController
             ->first();
 
             //controllo data e chiusura iscrizioni
-        if($competition->reg_status == Configure::read('REG_OPEN') || 
-            $competition->reg_status == Configure::read('REG_NOT_YET_OPEN')){
+        if($competition->comp_status == Configure::read('REG_OPEN') || 
+            $competition->comp_status == Configure::read('PUBLISHED')){
                 $data_apertura = $competition->apertura_iscrizioni->i18nFormat('yyyy-MM-dd HH:mm:ss');
                 $data_chiusura = $competition->chiusura_iscrizioni->i18nFormat('yyyy-MM-dd HH:mm:ss');
                 $today = FrozenTime::now()->i18nFormat('yyyy-MM-dd HH:mm:ss');
 
-                if($competition->reg_status == Configure::read('REG_NOT_YET_OPEN') && $data_apertura <= $today){
-                    $competition->reg_status = Configure::read('REG_OPEN');
+                if($competition->comp_status == Configure::read('PUBLISHED') && $data_apertura <= $today){
+                    $competition->comp_status = Configure::read('REG_OPEN');
                     $this->Competitions->save($competition);
 
-                }else if($competition->reg_status == Configure::read('REG_OPEN') && $data_chiusura <= $today){
-                    $competition->reg_status = Configure::read('REG_CLOSED_TIME');
+                }else if($competition->comp_status == Configure::read('REG_OPEN') && $data_chiusura <= $today){
+                    $competition->comp_status = Configure::read('REG_CLOSED_TIME');
                     $this->Competitions->save($competition);
                 }
 
@@ -511,7 +512,7 @@ class CompetitionsController extends ApiController
             'contain' => []
         ]);
 
-        $competition->reg_status = $data['reg_status'];
+        $competition->comp_status = $data['comp_status'];
 
         if ($this->Competitions->save($competition)) {            
 

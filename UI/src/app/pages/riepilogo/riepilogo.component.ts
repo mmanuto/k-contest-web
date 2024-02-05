@@ -27,11 +27,10 @@ export class RiepilogoComponent {
   public listaSquadre = [];
   public datiSocieta;
   public dichiarazione: boolean = false;
-  public datiGara;
+  public competition;
   public modalRef: NgbModalRef;
   datePipe = new DatePipe("en-US");
   public note = '';
-  public iscrizioniStatus: string;
   public atletiSpaiati: boolean = false;
   public CONST = Constants;
 
@@ -45,9 +44,8 @@ export class RiepilogoComponent {
   ) {
 
     this.datiSocieta = this.storageService.get('currentUser');
-    this.iscrizioniStatus = this.storageService.get('iscrizioniStatus');
-    this.datiGara = this.storageService.get('currentCompetition');
-    this.datiGara.richieste = JSON.parse(this.datiGara.richieste);
+    this.competition = this.storageService.get('currentCompetition');
+    this.competition.richieste = JSON.parse(this.competition.richieste);
   }
 
 
@@ -59,18 +57,13 @@ export class RiepilogoComponent {
 
   ngOnInit() {
 
-    this.homeService.getDatiGara(this.datiGara.id).subscribe((response:any) => {
-      this.datiGara = response.result.data;
+    this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
+      this.competition = response.result.data;
       
-      console.log(this.datiGara);
-      this.storageService.set('currentCompetition', this.datiGara);
-      this.datiGara.richieste = JSON.parse(this.datiGara.richieste);
-
-      this.iscrizioniStatus = this.datiGara.reg_status;
-      this.storageService.set('iscrizioniStatus', this.iscrizioniStatus);
+      this.storageService.set('currentCompetition', this.competition);
     });
 
-    this.riepilogoService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.datiGara.id }).subscribe((response: any) => {
+    this.riepilogoService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.competition.id }).subscribe((response: any) => {
       console.log(response);
       let iscritti = response.result.data;
       this.listaIscritti = [];
@@ -101,7 +94,7 @@ export class RiepilogoComponent {
       console.log(this.listaIscritti);
     });
 
-    this.riepilogoService.getListaSquadre({ 'competition_id': this.datiGara.id, 'club_id': this.datiSocieta.id }).subscribe((response: any) => {
+    this.riepilogoService.getListaSquadre({ 'competition_id': this.competition.id, 'club_id': this.datiSocieta.id }).subscribe((response: any) => {
       this.listaSquadre = [];
       if (response.result.success) {
         for (let team of response.result.data) {
@@ -146,13 +139,7 @@ export class RiepilogoComponent {
 
 
   //=========================================
-  //                                         
-  //  ##  ##     ##  ##   ##  ##   #####   
-  //  ##  ####   ##  ##   ##  ##  ##   ##  
-  //  ##  ##  ## ##  ##   ##  ##  ##   ##  
-  //  ##  ##    ###   ## ##   ##  ##   ##  
-  //  ##  ##     ##    ###    ##   #####   
-  //                                         
+  // INVIO DATI                                                                                
   //=========================================
 //TODO: tutto da rivedere!! EXCEL + PDF
 
@@ -163,19 +150,20 @@ export class RiepilogoComponent {
     let autodichiarazione = this.creaPdfCertificati();
 
     let data;
-    console.log(this.datiGara);
-    if (this.datiGara.richieste.tabsManagement) {
+    data = this.creaExcelCsen();
+
+  /*  if (this.datiGara.richieste.tabsManagement) {
       data = this.creaExcelCsen();
       console.log(data);
     } else {
       data = this.creaExcelSocieta();
       console.log(data);
-    }
+    }*/
 
 
     var params = {
       'datiSocieta': this.datiSocieta,
-      'competition':this.datiGara,
+      'competition':this.competition,
       'pdf': pdf,
       'autodichiarazione': autodichiarazione,
       'datiCsv': data,
@@ -260,7 +248,7 @@ export class RiepilogoComponent {
     doc.setFontSize(17);
 
     doc.text('MODULO CERTIFICATI MEDICI', 55, 75);
-    doc.text('MANIFESTAZIONE: ' + this.datiGara.nome_gara, 15, 110);
+    doc.text('MANIFESTAZIONE: ' + this.competition.nome_gara, 15, 110);
 
     doc.setFontSize(15);
 
