@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompetitionsComponent } from './competitions.component';
 import {CompetitionService } from './competition.service';
 import { DirectivesModule } from '../../theme/directives/directives.module';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 export const routes: Routes = [
   { path: '', component: CompetitionsComponent, pathMatch: 'full' }
@@ -19,6 +20,7 @@ export const routes: Routes = [
     RouterModule.forChild(routes),
     FormsModule,
     ReactiveFormsModule,
+    Ng2SmartTableModule
   ],
   declarations: [
     CompetitionsComponent

@@ -185,7 +185,7 @@ class TeamsController extends ApiController
                 'contain' => []
             ]);
         } else {
-            $squadra = $this->Teams->newEntity();
+            $squadra = $this->Teams->newEmptyEntity();
         }
 
 

@@ -40,13 +40,11 @@ export class LoginComponent {
             if (response.result.success) {
 
                 //Salvo in sessione l'utente e il token
-                this.localStorageService.set('authToken', response.result.token);
                 this.localStorageService.set('currentUser', response.result.data);
                 this.localStorageService.set('userType', 0);
-                this.localStorageService.set('pregara', false);
 
                 //reindirizzo alla pagina del profilo
-                this.router.navigate(['/pendingCompetitions']);
+                this.router.navigate(['/competitions']);
             } else {
                 this.toastrService.error('CREDENZIALI ERRATE',);
             }

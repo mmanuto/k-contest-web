@@ -93,13 +93,15 @@ class AthletesInscriptionsTable extends Table
             ->notEmptyString('modificato');
 
         $validator
-            ->requirePresence('accorpato', 'create')
-            ->notEmptyString('accorpato');
+            ->notEmptyString('accorpamento');
+
+        $validator
+            ->notEmptyString('deleted');
 
         $validator
             ->scalar('old_category')
             ->maxLength('old_category', 15)
-            ->notEmptyString('old_category');
+            ->allowEmptyString('old_category');
 
         return $validator;
     }

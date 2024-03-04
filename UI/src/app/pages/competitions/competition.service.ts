@@ -14,7 +14,7 @@ export class CompetitionService
 
     getCompetitions()
      {
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getCompetitions', {});
+         return this.http.post(Constants.BASEAPPURL + 'competitions/getAllCompetitions', {});
                  
     }
 

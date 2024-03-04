@@ -1,0 +1,53 @@
+<div class="row mb-4">
+    <div class="col">
+                <div class="card-header transparent border-0 text-muted">
+                    <h5 class="mb-0"></h5>
+                             
+                </div>
+                <div class="card border-0">
+                    <p class="fs-13 text-gray"></p> 
+                    <div class="row w-100-p"> 
+                    
+                        <div class="col-lg-4 mb-4">              
+                            <div class="card text-center">
+                                <div class="card-body box-shadow">
+                                    <h4 class="card-title">Gestione dati</h4>
+                                    <p class="card-text">una volta modificati i dati relativi a tabelloni, orari e classifiche possono essere visualizzati sul sito tramite gli appositi pulsanti</p>
+                                        <button class="btn btn-primary mr-3">Pubblica Tabelloni</button>
+                                        <button class="btn btn-primary mr-3">Pubblica Timetable</button>
+                                        <button class="btn btn-primary mr-3">Pubblica Classifiche</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mb-4">              
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h4 class="card-title">Download file</h4>
+                                    <p class="card-text">una volta modificati i dati relativi a tabelloni, orari e classifiche possono essere visualizzati sul sito tramite gli appositi pulsanti</p>
+                                        <button class="btn btn-primary mr-3">Csv accorpamenti</button>
+                                        <button class="btn btn-primary mr-3">csv combinata</button>
+                                        <button class="btn btn-primary mr-3">csv kumite</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 mb-4">              
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h4 class="card-title">Genera Tabelloni</h4>
+                                    <p class="card-text">Genera tabelloni e frontespizi in formato PDF</p>
+                                    <button type="button" (click)="generaSinteticoCategoria()" class="btn btn-primary">Genera Sintetico</button>
+                                    <button type="button" (click)="generaFrontespizi()" class="btn btn-primary ml-4">Genera Frontespizi</button>
+                                   <!-- <button type="button" (click)="generaSinteticoCategoria(true)" class="btn btn-primary ml-4">Genera Kumite peso</button> -->
+                                    <button type="button" (click)="generaTabKumite()" class="btn btn-primary ml-4">Genera Kumite</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                           
+
+                </div>
+
+    </div>
+</div>
+

@@ -16,8 +16,9 @@ use Cake\ORM\Entity;
  * @property int|null $n_iscrizione
  * @property int $inviato
  * @property int $modificato
- * @property int $accorpato
- * @property string $old_category
+ * @property int $accorpamento
+ * @property int $deleted
+ * @property string|null $old_category
  *
  * @property \App\Model\Entity\Athlete $athlete
  * @property \App\Model\Entity\CategoryCode $category_code
@@ -42,7 +43,8 @@ class AthletesInscription extends Entity
         'n_iscrizione' => true,
         'inviato' => true,
         'modificato' => true,
-        'accorpato' => true,
+        'accorpamento' => true,
+        'deleted' => true,
         'old_category' => true,
         'athlete' => true,
         'category_code' => true,

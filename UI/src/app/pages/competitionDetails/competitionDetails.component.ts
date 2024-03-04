@@ -1,27 +1,42 @@
 import { Component, ViewEncapsulation, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { PendingCompetitionService } from './pendingCompetition.service';
+import { CompetitionDetailsService } from './competitionDetails.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import * as Constants from '../../constants';
+import { ActivatedRoute } from '@angular/router';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 @Component({
-  selector: 'pendingCompetitions',
-  templateUrl: './pendingCompetitions.component.html',
-  styleUrls: ['./pendingCompetitions.scss'],
+  selector: 'competitionDetails',
+  templateUrl: './competitionDetails.component.html',
+  styleUrls: ['./competitionDetails.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
-export class PendingCompetitionsComponent implements OnInit {
+export class CompetitionDetailsComponent implements OnInit {
   datePipe = new DatePipe("en-US");
   categorie = null;
   circolareNew = null;
   public imgUrl:string = Constants.IMAGES_WEBROOT;
- /*  @ViewChild('inputCat') inputCat: ElementRef;
-  @ViewChild('inputCirc') inputCirc: ElementRef; */
+  public competitionId;
+  public currentCompetition = null;
 
 competitions: any[];
-  constructor(private pendingCompetitionService: PendingCompetitionService) {
+  constructor(private competitionDetailsService: CompetitionDetailsService, 
+    route: ActivatedRoute, 
+    protected localStorageService: LocalStorageService) {
+    route.params.subscribe((params) => {
+      console.log(params.id);
+      this.competitionId = params.id;
+      this.currentCompetition = this.localStorageService.get('currentCompetition');
+    });
   }
+
+  ngOnInit(): void {
+    this.currentCompetition = this.localStorageService.get('currentCompetition');
+  }
+
+  /*
 
   ngOnInit() {
     
@@ -80,4 +95,5 @@ editCircolare(event) {
     });
   }
 
+  */
 }

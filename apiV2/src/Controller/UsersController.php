@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use RestApi\Controller\ApiController;
 
 /**
  * Users Controller
@@ -9,7 +10,7 @@ namespace App\Controller;
  * @property \App\Model\Table\UsersTable $Users
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class UsersController extends AppController
+class UsersController extends ApiController
 {
     /**
      * Index method
@@ -102,4 +103,50 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function login(){
+
+        $data = $this->request->getData();
+    
+        $user = $this->Users->find()
+            ->where([
+                'username' => $data['username'],
+                'password' => md5($data['password'])
+            ])
+            ->first();
+    
+        if (empty($user)) {
+            $this->apiResponse['success'] = false;
+            $this->apiResponse['error'] = 'Username o password errati';
+    
+            return;
+        }else{
+            $this->apiResponse['data'] = $user;
+            $this->apiResponse['success'] = true;
+            $this->apiResponse['message'] = 'Logged in successfully.';   
+        }
+            
+    }
+
+
+        public function updateUserData(){
+            $data = $this->request->data;
+            /* print_r("dati: ");
+            print_r($data); */
+            if(isset($data['password'])){
+                $data['password'] = md5($data['password']);
+            }
+
+            $user = $this->Users->get($data['id'], [
+                'contain' => []
+            ]);
+                $user = $this->Users->patchEntity($user, $data);
+                if ($this->Users->save($user)) {
+                    $this->apiResponse['success'] = true;
+                }else{
+                    $this->apiResponse['success'] = false;
+                }
+                
+        }
+
 }

@@ -1,15 +1,16 @@
 import { Menu } from './menu.model';
 
 export const verticalMenuItems = [ 
-    new Menu (45, 'Home', '/home', null, 'file-o', null, false, 0, 1, true),
-    new Menu (2, 'Gare in sospeso', '/pendingCompetitions', null, 'file-text-o', null, false, 0, 0, true),
-    new Menu (4, 'Gare in corso', '/competitions', null, 'file-text-o', null, false, 0, 0, true),
+    new Menu (7, 'Elenco Gare', '/competitions', null, 'file-text-o', null, false, 0, 0, true),
+    new Menu (8, 'Anagrafica Atleti', '/competitions', null, 'users', null, false, 0, 0, true),
+    new Menu (9, 'Anagrafica Società', '/settings', null, 'users', null, false, 0, 0, true),
     new Menu (10, 'Impostazioni', '/settings', null, 'file-text-o', null, false, 0, 0, true),
-    new Menu (3, 'Iscrizione atleti', '/membership', null, 'users', null, false, 0, 1, false),
-    new Menu (7, 'Gestione squadre', '/teams', null, 'users', null, false, 0, 1, false),
-    new Menu (8, 'Riepilogo', '/riepilogo', null, 'file-text-o', null, false, 0, 1, false),
-    new Menu (9, 'Area personale', '/personal', null, 'user', null, false, 0, 1, false),
-    new Menu (11, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, 1, false)
+    new Menu (1, 'Home', '/home', null, 'file-o', null, false, 0, 1, true),
+    new Menu (2, 'Iscrizione atleti', '/membership', null, 'users', null, false, 0, 1, false),
+    new Menu (3, 'Gestione squadre', '/teams', null, 'users', null, false, 0, 1, false),
+    new Menu (4, 'Riepilogo', '/riepilogo', null, 'file-text-o', null, false, 0, 1, false),
+    new Menu (5, 'Area personale', '/personal', null, 'user', null, false, 0, 1, false),
+    new Menu (6, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, 1, false)
 
     /*new Menu (1, 'ADMIN_NAV.DASHBOARD', '/', null, 'tachometer', null, false, 0),
     new Menu (2, 'ADMIN_NAV.MEMBERSHIP', '/membership', null, 'users', null, false, 0), 

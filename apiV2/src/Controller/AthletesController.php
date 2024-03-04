@@ -491,4 +491,24 @@ class AthletesController extends ApiController
 
         $this->apiResponse['success'] = true;
     }
+
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ ADMIN
+    // -----------------------------------------------------------------------------------------------------
+
+    //================= TUTTI GLI ATLETI A SISTEMA ====================================================
+    public function getTotalAthleteList()
+    {
+
+        $athleteList = $this->Athletes->find('all')->contain(['Clubs'])->toArray();
+        if ($athleteList) {
+            $this->apiResponse['success'] = true;
+            $this->apiResponse['data'] = $athleteList;
+        } else {
+            $this->apiResponse['success'] = false;
+            $this->apiResponse['message'] = 'Non risultano atleti associati a qusta societa';
+        }
+    }
+
 }

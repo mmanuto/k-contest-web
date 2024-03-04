@@ -240,7 +240,7 @@ class ClubsController extends ApiController
     // @ MODIFICA DATI SOCIETA'
     // -----------------------------------------------------------------------------------------------------
 
-    public function UpdateData()
+    public function updateData()
     {
 
         $request = $this->request->getData();
@@ -254,15 +254,6 @@ class ClubsController extends ApiController
             $this->apiResponse['success'] = false;
         }
     }
-
-
-
-
-
-
-
-
-
 
     public function provaRecupero()
     {
@@ -305,5 +296,19 @@ class ClubsController extends ApiController
             ])
             ->order(['clubs.id' => 'ASC']);
         print_r($query);
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ ADMIN
+    // -----------------------------------------------------------------------------------------------------
+
+    //================= ELENCO TUTTE LE SOCIETA' ====================================================
+    public function getClubs(){
+
+        $clubList = $this->Clubs->find()->toArray();
+        $this->apiResponse['success'] = true;
+        $this->apiResponse['data'] = $clubList;
+
     }
 }

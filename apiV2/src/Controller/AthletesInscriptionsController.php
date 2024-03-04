@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use RestApi\Controller\ApiController;
+use Cake\Core\Configure;
 
 /**
  * AthletesInscriptions Controller
@@ -120,7 +121,8 @@ class AthletesInscriptionsController extends ApiController
         $athleteList = $this->AthletesInscriptions->find()
         ->where([
             'category_code_id' => $request['categorycode_id'],
-            'competition_id' => $request['competition_id']
+            'competition_id' => $request['competition_id'],
+            'deleted' => 0
         ])
         ->contain(['Athletes' => ['Clubs'], 'CategoryCodes'])
         ->order(['Clubs.id', 'Athletes.id'])
@@ -160,5 +162,136 @@ class AthletesInscriptionsController extends ApiController
         $this->apiResponse['success'] = true;
 
         
+    }
+
+    public function getModifiedInscriptions(){
+
+        $list = $this->AthletesInscriptions->find()
+        ->where([
+            'modificato' => 1
+        ])->toArray();
+
+        $this->apiResponse['data'] = $list;
+        $this->apiResponse['success'] = true;
+    }
+
+    // =========================================================================================================================================
+    // @ ADMIN
+    // ===========================================================================================================================================
+
+
+    //-------------------------------------------- Elenco atleti in competizione -----------------------------------------------------------------
+    public function getAthleteList(){
+        $request = $this->request->getData();
+
+        $athleteList = $this->AthletesInscriptions->find()
+        ->where(['competition_id' => $request['competition_id']])
+        ->contain(['Athletes' => ['Clubs'], 'CategoryCodes'])
+        ->order(['Clubs.id', 'Athletes.id'])
+        ->toArray();
+
+        $this->apiResponse['data'] =  $athleteList;
+	    $this->apiResponse['success'] = true;
+    }
+
+    //-------------------------------------------- Elimina iscrizione -----------------------------------------------------------------
+
+    //TODO: controllare se va gestitita la divisione maschile/Femminile
+    public function deleteInscription()
+    {
+ 
+        $request = $this->request->getData();
+        
+        $athleteInscription = $this->AthletesInscriptions->get($request['id']);
+        $athleteInscription['deleted'] = 1;
+    
+        if ($this->AthletesInscriptions->save($athleteInscription)) {
+
+            $this->apiResponse['success'] = true;
+        } else {
+            $this->apiResponse['success'] = false;
+        }
+
+        
+    }
+
+    //-------------------------------------------- Modifica iscrizione -----------------------------------------------------------------
+
+    public function updateCategory(){
+        $data = $this->request->getData();
+        $athleteInscription = $this->AthletesInscriptions->get($data['id']);
+        $athleteInscription['old_category'] = $athleteInscription['category_code_id'];
+        $athleteInscription['category_code_id'] = $data['categorycode_id'];
+        $athleteInscription['accorpamento'] = $data['accorpamento'] ? 1 : 0;
+        $athleteInscription['modificato'] = 1;
+
+        if ($this->AthletesInscriptions->save($athleteInscription)) {
+
+            $this->apiResponse['success'] = true;
+        } else {
+            $this->apiResponse['success'] = false;
+        }
+    }
+
+    //-------------------------------------------- Dividi categoria -----------------------------------------------------------------
+    public function splitCategory(){
+        
+        $this->loadModel('CategoryCodes');
+        $data = $this->request->getData();
+
+
+        $splittedCategories = $this->CategoryCodes->find()
+            ->where([
+                'OR' => [['codice' => $data['codice'].'-M'], ['codice' => $data['codice'].'-F']]
+            ])->toArray();
+
+        
+        if(sizeof($splittedCategories) >0){
+
+            foreach ($splittedCategories as $categoryItem) {
+                if($categoryItem->sesso == 'M'){
+                    $categoryMale = $categoryItem;
+                }else if($categoryItem->sesso == 'F'){
+                    $categoryFemale = $categoryItem;
+                }
+            }
+
+        }else{
+            $categoryMale = $this->CategoryCodes->newEmptyEntity();
+            $categoryMale = $this->CategoryCodes->patchEntity($categoryMale, $data);
+    
+            $categoryFemale = $this->CategoryCodes->newEmptyEntity();
+            $categoryFemale = $this->CategoryCodes->patchEntity($categoryFemale, $data);
+    
+            $categoryMale->codice = $data['codice'].'-M';
+            $categoryMale->sesso = 'M';
+            $categoryMale = $this->CategoryCodes->save($categoryMale);
+            
+            $categoryFemale->codice = $data['codice'].'-F';
+            $categoryFemale->sesso = 'F';
+            $categoryFemale = $this->CategoryCodes->save($categoryFemale);
+        }
+
+        $athleteList = $this->AthletesInscriptions->find()
+            ->where([
+                'category_code_id' => $data['id']
+            ])
+            ->contain(['Athletes'])->toArray();
+
+
+        foreach ($athleteList as $athlete) {
+            if($athlete->athlete->sesso == 'F'){
+                $athlete->old_category = $athlete->category_code_id;
+                $athlete->category_code_id = $categoryFemale->id;
+            }else if($athlete->athlete->sesso == 'M'){
+                $athlete->old_category = $athlete->category_code_id;
+                $athlete->category_code_id = $categoryMale->id;             
+            }
+
+            print_r($athlete);
+            $this->AthletesInscriptions->save($athlete);
+        }
+        
+
     }
 }

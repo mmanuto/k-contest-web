@@ -1,6 +1,124 @@
-<h2 class="mb-4">Gare in sospeso</h2>
-<!-- <p class="text-muted">A card is a flexible and extensible content container. It includes options for headers and footers, a wide variety of content, contextual background colors, and powerful display options. Cards require a small amount of markup and classes to provide you with as much control as possible. These classes and markup are flexible though and can typically be remixed and extended with ease. For example, if your card has no flush content like images, feel free to put the <code>.card-body</code> class on the <code>.card</code> element to consolidate your markup.</p> -->
 
+<div *ngIf="currentCompetition" widget class="card border-0 box-shadow">
+    <h2 class="m-4">{{currentCompetition.nome_gara}}</h2>
+
+    <div class="card-body pt-0 widget-body">
+        <div class="col-md-12 mb-4 ml-4 row">
+            <div class="col-md-6">
+                                    
+                <div class="row " >
+                        <h6 class="card-title mr-3">Responsabile: </h6>
+                        <p class="card-text">{{currentCompetition.responsabile}}</p>
+                    <!-- <label class="form-control-label">Nome e Cognome Responsabile</label>
+                    <span class="form-control validation-field" type="text" >{{item.responsabile}}</span> -->
+                </div>
+                <div class="row">
+                        <h6 class="card-title mr-3">Società: </h6>
+                        <p class="card-text">{{currentCompetition.club_name}}</p>
+                    <!-- <label class="form-control-label">Società</label>
+                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                  
+                </div>
+                <div class="row">
+                        <h6 class="card-title mr-3">Email:</h6>
+                        <p class="card-text">{{currentCompetition.email}} </p>
+                    <!-- <label class="form-control-label">Società</label>
+                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                  
+                </div>
+                <div class="row">
+                        <h6 class="card-title mr-3">Telefono:</h6>
+                        <p class="card-text">{{currentCompetition.telephone}}</p>
+                    <!-- <label class="form-control-label">Società</label>
+                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                  
+                </div>
+                <div class="row">
+                        <h6 class="card-title mr-3">Nr Atleti stimato</h6>
+                        <p class="card-text ">{{currentCompetition.nr_atleti}}</p>
+                    <!-- <label class="form-control-label">Società</label>
+                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                  
+                </div>
+                <div class="row">
+                        <h6 class="card-title mr-3">Data gara: </h6>
+                        <p class="card-text">{{currentCompetition.data_gara | date: 'dd/MM/yyyy' }} </p>
+                    <!-- <label class="form-control-label">Società</label>
+                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
+                  
+                </div>
+                <div class="row">
+                    <h6 class="card-title mt-2">Data chiusura iscrizioni</h6>
+                    <p class="card-text">{{currentCompetition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }} </p>
+                                 
+                </div>
+                 
+            </div>
+
+            <div class="col-md-6">
+               
+                <h5 class="card-title mt-2">Allegati</h5>
+                <div class="col mt-3">
+                        <i class="fa fa-file-image-o"><a *ngIf="currentCompetition.circolare" target="blank" [href]="imgUrl + currentCompetition.circolare" class="documents text-primary"> Circolare di Gara</a></i><br/>
+                        <i class="fa fa-file-image-o"><a *ngIf="currentCompetition.locandina" [href]="imgUrl + currentCompetition.locandina" class="documents text-primary">  Locandina</a></i>
+                </div>
+
+                
+            </div>
+        </div>
+
+    </div>
+
+    <div class="clearfix">            
+        <ul class="nav nav-tabs custom top tabs-nav">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#actions">Panoramica</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#athletes">Atleti</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#categories">Categorie</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#clubs">Società</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#timetable">Timetable</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#blacklist">Blacklist</a>
+            </li>
+                        
+        </ul>
+    </div>
+
+    <div class="tab-content top">
+        <div class="tab-pane active" id="actions">
+            <admin-panel [competitionData] = "currentCompetition"></admin-panel>
+        </div>
+        <div class="tab-pane" id="athletes">
+            <athletes-panel [competitionData] = "currentCompetition"></athletes-panel>
+        </div>
+        <div class="tab-pane" id="categories">
+            <categories-panel [competitionData] = "currentCompetition"></categories-panel>
+        </div>
+        <div class="tab-pane" id="clubs">
+            
+        </div>
+        <div class="tab-pane" id="timetable">
+            
+        </div>
+        <div class="tab-pane" id="Blacklist">
+            
+        </div>
+    </div>
+
+</div>
+
+
+<!-- <p class="text-muted">A card is a flexible and extensible content container. It includes options for headers and footers, a wide variety of content, contextual background colors, and powerful display options. Cards require a small amount of markup and classes to provide you with as much control as possible. These classes and markup are flexible though and can typically be remixed and extended with ease. For example, if your card has no flush content like images, feel free to put the <code>.card-body</code> class on the <code>.card</code> element to consolidate your markup.</p> -->
+<!--
 <div *ngFor="let item of competitions; let i = index" class="row mb-4">
     <div class="col">
         <div widget class="card border-0 box-shadow">
@@ -18,8 +136,6 @@
                 </div>
             </div>
             <div class="card-body pt-0 widget-body">
-                <!-- <p class="fs-13 text-gray">Cards support a wide variety of content, including images, text, list groups, links, and more. Mix and match multiple content types to create the card you need.</p> -->
-
                 <div class="col-md-12 mb-4">
                     <div class="mt-4 w-100-p row">
 
@@ -123,4 +239,4 @@
                         <button class="btn btn-primary pull-right mr-3" (click)="updateDatiGara(item)">Salva</button>
                     </div>
 
-                </div>
+                </div> -->

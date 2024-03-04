@@ -102,19 +102,28 @@ class CompetitionsController extends ApiController
 // GET                                                                                                                                                                                                                                     
 //===========================================================================================================================================================
 
-    public function getPendingCompetitions()
-    {
+public function getAllCompetitions()
+{
+    $data = $this->request->getData();
+    $conn = ConnectionManager::get('default');
 
-        $competition = $this->Competitions->find()
-            ->where([
-                'stato' => 0
-            ])
-            ->toArray();
+    $competitions = $this->Competitions->find()
+        ->toArray();
 
-        $this->apiResponse['data'] = $competition;
-        $this->apiResponse['success'] = true;
+    foreach ($competitions as $competitionItem) {
+        
+        $query = $conn->execute("SELECT COUNT(DISTINCT athletes_inscriptions.athlete_id) AS n_athletes FROM athletes_inscriptions
+                        WHERE competition_id = " . $competitionItem->id);
 
+        $result = $query->fetchAll('assoc');
+
+        $competitionItem['inscriptions'] = $result[0]['n_athletes'];
     }
+
+    $this->apiResponse['data'] = $competitions;
+    $this->apiResponse['success'] = true;
+
+}
 
     public function getCompetitions()
     {
@@ -122,7 +131,7 @@ class CompetitionsController extends ApiController
 
         $competition = $this->Competitions->find()
             ->where([
-                'OR' => [['comp_status' => Configure::read('PUBLISHED')], ['comp_status' => Configure::read('REG_OPEN')]],
+                'comp_status NOT IN' => [Configure::read('PENDING'), Configure::read('ARCHIVED')],
                 'DATE(data_gara) >=' => date('Y-m-d', mktime(0, 0, 0, intval(date("m")), intval(date("d") - 20), intval(date("Y"))))
             ])
             ->toArray();
@@ -408,6 +417,20 @@ class CompetitionsController extends ApiController
         $result = $stmt2->fetchAll('assoc');
 
         $this->apiResponse['data'] = $result[0]['n_athletes'];
+        $this->apiResponse['success'] = true;
+
+    }
+
+    public function getTotaleCategorie()
+    {
+        $data = $this->request->getData();
+        $conn = ConnectionManager::get('default');
+        $stmt = $conn->execute("SELECT COUNT(DISTINCT athletes_inscriptions.category_code_id) AS n_categories FROM athletes_inscriptions
+                                WHERE competition_id = " . $data['competition_id']);
+
+        $result = $stmt->fetchAll('assoc');
+
+        $this->apiResponse['data'] = $result[0]['n_categories'];
         $this->apiResponse['success'] = true;
 
     }

@@ -1,0 +1,479 @@
+import { Component, Input, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import { UntypedFormBuilder, FormGroup} from '@angular/forms';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { MenuService } from '../../theme/components/menu/menu.service';
+import { TranslateService } from '@ngx-translate/core';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import {interval,Subscription} from 'rxjs';
+import * as Constants from '../../constants';
+
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import * as Dataset from '../competitorsInCategories/datasets';
+import { InMemoryDatabase } from '../competitorsInCategories/storage/memory';
+import { BracketsManager } from 'brackets-manager';
+import html2canvas from 'html2canvas';
+import { LocalStorageService } from 'angular-2-local-storage';
+import { CompetitionDetailsService } from '../competitionDetails/competitionDetails.service';
+ 
+declare global {
+  interface JQuery {
+    (any): JQuery;
+    bracket(options: any): JQuery;
+  }
+}
+
+const TOURNAMENT_ID = 0;
+
+function getNearestPowerOfTwo(input: number): number {
+  return Math.pow(2, Math.ceil(Math.log2(input)));
+}
+
+async function process(dataset: Dataset) {
+  const db = new InMemoryDatabase();
+  const manager = new BracketsManager(db);
+
+  db.setData({
+    participant: dataset.roster.map((player) => ({
+      ...player,
+      tournament_id: TOURNAMENT_ID,
+    })),
+    stage: [],
+    group: [],
+    round: [],
+    match: [],
+    match_game: [],
+  });
+
+  await manager.create({
+    name: dataset.title,
+    tournamentId: TOURNAMENT_ID,
+    type: dataset.type,
+    seeding: dataset.roster.map((player) => player.name),
+    settings: {
+      seedOrdering: ['natural'],
+      size: getNearestPowerOfTwo(dataset.roster.length),
+    },
+  });
+
+  const data = await manager.get.stageData(0);
+
+  return {
+    stages: data.stage,
+    matches: data.match,
+    matchGames: data.match_game,
+    participants: data.participant,
+    data: data
+  };
+}
+@Component({
+  selector: 'categories-panel',
+  templateUrl: './categories.component.html',
+  styleUrls: ['./categories.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  providers: [ MenuService ]
+})
+export class CategoriesComponent implements OnInit {
+  @Input() competitionData?: any;
+  @ViewChild('primaryModal') public primaryModal: ModalDirective;
+
+  public searchText: string;
+  public p:any;
+  public type:string = 'list';
+  
+
+  categories: any[];
+  athleteList: any[];
+  public totaleIscrizioni = null;
+  public totaleCategorie = null;
+  selectedCategory: any = null;
+  mySubscription: Subscription;
+  constants = Constants;
+  alertsDismiss: any = [];
+  message: string = '';
+  public kumiteMatches:any[] = [];
+  public minimalData = {};
+  public secondGirone = {};
+  public thirdGirone = {};
+  public dettaglio = false;
+  public modalRef: NgbModalRef;
+  
+  constructor(public fb:UntypedFormBuilder, 
+              public toastrService: ToastrService,
+              public translateService: TranslateService,
+              private competitionDetailsService: CompetitionDetailsService,
+              public menuService:MenuService, 
+              public modalService: NgbModal,
+              public localStorageService: LocalStorageService) {
+
+  }
+
+  ngOnInit() {
+
+    this.competitionDetailsService.getTotaleIscrizioni({competition_id : this.competitionData.id}).subscribe((response: any) => {
+      this.totaleIscrizioni = response.result.data;
+    });
+
+    this.competitionDetailsService.getTotaleCategorie({competition_id : this.competitionData.id}).subscribe((response: any) => {
+      this.totaleCategorie = response.result.data;
+    });
+
+    this.competitionDetailsService.getCategories({competition_id : this.competitionData.id}).subscribe((response: any) => {
+      this.categories = response.result.data;
+      console.log(this.categories);
+    });
+
+  }
+
+
+  //====================================================================================================
+  // Dividi categoria
+  //====================================================================================================
+
+  splitCategory(category){
+    console.log(category);
+    if (window.confirm(`Proseguendo con l'operazione, la categoria ${category.specialita} - ${category.categoria} - ${category.grado} ${category.sesso} verrà divisa in Maschile e Femminile. Continuare?`)){
+      this.competitionDetailsService.splitCategory(category).subscribe((response: any) => {
+
+      });
+      
+    }
+  }
+
+     
+  //====================================================================================================
+  // Lista atleti
+  //====================================================================================================
+  
+  /**
+   * Sintetico categoria
+   * @param category 
+   */
+  openCategory(category,listModal){
+    this.competitionDetailsService.getAthletesByCategory({categorycode_id: category.id, competition_id : this.competitionData.id}).subscribe((response: any) => {
+      this.athleteList = response.result.data;
+      this.selectedCategory = category;
+    });
+    this.modalRef = this.modalService.open(listModal, { container: '.app', backdrop: 'static', size: 'lg' });
+  }
+
+  public closeModal() {
+    this.modalRef.close();
+  }
+
+  /**
+   * Tabellone kumite
+   * @param category 
+   */
+  openKumiteBrackets(category){
+    this.dettaglio = true;
+    this.selectedCategory = category;
+    this.competitionDetailsService.getAthletesByCategory({categorycode_id: category.id, competition_id : this.competitionData.id}).subscribe((response: any) => {
+      this.athleteList = response.result.data;
+      this.kumiteMatches = [];
+      
+
+      if(this.athleteList.length == 3){
+        let firstMatch = [this.athleteList[0]['athlete']['cognome'] + ' ' + this.athleteList[0]['athlete']['nome'] + ' - ' + this.athleteList[0]['athlete']['club']['nome_societa'],
+          this.athleteList[1]['athlete']['cognome'] + ' ' + this.athleteList[1]['athlete']['nome'] + ' - ' + this.athleteList[1]['athlete']['club']['nome_societa']
+        ];
+        let firstResult = [null, null];
+
+        let secondMatch = [
+          this.athleteList[0]['athlete']['cognome'] + ' ' + this.athleteList[0]['athlete']['nome'] + ' - ' + this.athleteList[0]['athlete']['club']['nome_societa'],
+          this.athleteList[2]['athlete']['cognome'] + ' ' + this.athleteList[2]['athlete']['nome'] + ' - ' + this.athleteList[2]['athlete']['club']['nome_societa']
+        ];
+        let secondResult = [null, null];
+
+        let thirdMatch = [
+          this.athleteList[1]['athlete']['cognome'] + ' ' + this.athleteList[1]['athlete']['nome'] + ' - ' + this.athleteList[1]['athlete']['club']['nome_societa'],
+          this.athleteList[2]['athlete']['cognome'] + ' ' + this.athleteList[2]['athlete']['nome'] + ' - ' + this.athleteList[2]['athlete']['club']['nome_societa']
+        ];  
+        
+        let thirdResult = [null, null];
+        
+
+        console.log(firstMatch);
+        console.log(secondMatch);
+        console.log(thirdMatch);
+
+        this.minimalData = {
+          teams: [firstMatch],
+          results: firstResult
+        }
+
+        this.secondGirone = {
+          teams: [secondMatch],
+          results: secondResult
+        }
+
+        this.thirdGirone = {
+          teams: [thirdMatch],
+          results: thirdResult
+        }  
+
+        function render_fn(container, data, score, state) {
+          switch(state) {
+            case "empty-bye":
+              container.append("--")
+              return;
+            case "empty-tbd":
+              container.append("Upcoming")
+              return;
+         
+            case "entry-no-score":
+            case "entry-default-win":
+            case "entry-complete":
+              container.append(data)
+              return;
+          }
+        }
+
+        jQuery('#minimal').show();
+        jQuery('#girone-2').show();
+
+        jQuery('#girone-3').show();
+
+        jQuery('#minimal').bracket({
+          teamWidth: 250,
+          scoreWidth: 45,
+          matchMargin: 70,
+          roundMargin: 70,
+          init: this.minimalData,
+          decorator:{edit:edit_fn, render: render_fn},
+        });
+
+        function edit_fn(container, data, doneCb) {
+          
+          doneCb(data);
+        }
+        
+
+        jQuery('#girone-2').bracket({
+          teamWidth: 250,
+          scoreWidth: 45,
+          matchMargin: 70,
+          roundMargin: 70,
+          init: this.secondGirone,
+          save: function(){},
+          decorator:{edit:edit_fn, render: render_fn},
+        });
+
+        jQuery('#girone-3').bracket({
+          teamWidth: 250,
+          scoreWidth: 45,
+          matchMargin: 70,
+          roundMargin: 70,
+          init: this.thirdGirone,
+          save: function(){},
+          decorator:{edit:edit_fn, render: render_fn},
+        });
+
+      }else{
+        let position = 1;
+        let dataset:Tabset = null;
+        
+        console.log(this.athleteList.length);
+        switch (true) {
+          case (this.athleteList.length == 2):
+            dataset = Dataset.dataset2;
+            break;
+          case (this.athleteList.length == 4):
+            dataset = Dataset.dataset4;
+            break;
+          case (this.athleteList.length <= 8):
+            dataset = Dataset.dataset8;
+            break;
+          case (this.athleteList.length <= 16):
+            dataset = Dataset.dataset16;
+            break;
+          case (this.athleteList.length <= 32):
+            dataset = Dataset.dataset32;
+            break;
+          default:
+            console.log('ERROREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
+            break;
+        }
+  
+        while (position <= dataset.number) {
+          let index = position-1;
+          if(this.athleteList[index]){
+            this.kumiteMatches.push({
+              position: position, 
+              id: this.athleteList[index].id, 
+              name: this.athleteList[index].athlete.cognome + ' ' + this.athleteList[index].athlete.nome, 
+              club:this.athleteList[index].athlete.club.nome_societa
+            })
+          }else{
+            this.kumiteMatches.push({
+              position: position, 
+              id: null, 
+              name: null, 
+              club: null
+            })
+          }
+          
+          position++;
+        }
+  
+        this.kumiteMatches = this.sortMarkets(this.kumiteMatches, dataset.positions);
+  
+        const datasetTemp: Dataset = {
+          title: 'Kumite',
+          type: 'single_elimination',
+          roster: this.kumiteMatches,
+        };
+      
+        this.dettaglio = true;
+
+        process(datasetTemp).then((data) =>
+          {
+              let teams = [];
+              let results = [];
+              results.push([]);
+  
+              data.matches.forEach(match => {
+  
+                if(match.round_id == 0){
+
+                  let opponent1 = null;
+                  let opponent2 = null;
+                  let result = [null,null];
+    
+                  if(match.opponent1 && match.opponent1.id){
+                    let firstAthlete = this.kumiteMatches.find(x => x.id == match.opponent1.id);
+                    opponent1 = firstAthlete.name + " </br> <p style= 'font-size:11px; font-style: italic;'>" + firstAthlete.club +"</p>";
+                  }
+    
+                  if(match.opponent2 && match.opponent2.id){
+                    let firstAthlete = this.kumiteMatches.find(x => x.id == match.opponent2.id);
+                    opponent2 = firstAthlete.name + " </br> <p style= 'font-size:11px; font-style: italic;'>" + firstAthlete.club +"</p>";
+                  }
+    
+                  teams.push([opponent1, opponent2]);
+                  results[0].push(result);
+
+                }       
+                
+              });
+              console.log(teams);
+  
+              function render_fn(container, data, score, state) {
+                switch(state) {
+                  case "empty-bye":
+                    container.append("--")
+                    return;
+                  case "empty-tbd":
+                    container.append("--")
+                    return;
+               
+                  case "entry-no-score":
+                  case "entry-default-win":
+                  case "entry-complete":
+                    container.append(data)
+                    return;
+                }
+              }
+  
+              function edit_fn(container, data, doneCb) {
+                return;
+              }
+  
+              var customData = {
+                teams : teams,
+                results : []
+              }
+
+              jQuery('#minimal').bracket({
+                teamWidth: 200,
+                teamHeight: 50,
+                scoreWidth: 45,
+                matchMargin: 70,
+                roundMargin: 70,
+                disableHighlight: true,
+                skipConsolationRound: true,
+                init: customData,
+                decorator:{edit: edit_fn, render: render_fn}
+            })
+  
+          }
+        );
+      }
+
+    });
+  }
+
+  sortMarkets(array, sortArray){
+    return [...array].sort(
+      (a, b) => sortArray.indexOf(a.position) - sortArray.indexOf(b.position)
+    )
+  }
+
+  backTocategory(){
+    this.dettaglio = false;
+  }
+
+
+  //====================================================================================================
+  // Visualizza classifica
+  //====================================================================================================
+
+  public openClassification(category_id){
+
+  }
+
+  //====================================================================================================
+  // Stampa pdf
+  //====================================================================================================
+  public async generatePdf(category){
+
+    let tabelloni = new jsPDF("p", "mm", "a4");
+    let nomeGara = 'Trofeo Gattamelata';
+    
+    let lMargin = 15; //left margin in mm
+    let pdfInMM = 210;  // width of A4 in mm
+    let pageCenter = pdfInMM / 2;
+
+    let img = new Image();
+    img.src = "assets/img/logo/LogoCSEN.png";
+    
+    let imgData = this.getBase64Image(img);
+    
+    tabelloni.setFont("times");
+    tabelloni.addImage(imgData, 'PNG', lMargin, 13, 28, 28);
+    tabelloni.addImage(imgData, 'PNG', 155, 13, 28, 28);
+
+    tabelloni.setFontSize(22);
+    tabelloni.text(nomeGara, pageCenter, 35, {align: 'center'});
+    tabelloni.setFontSize(18);
+    let categoria = this.selectedCategory.specialita + ' ' + this.selectedCategory.categoria 
+    
+    let categoria2 = this.selectedCategory.grado + this.selectedCategory.cat_peso + '- ' + this.selectedCategory.sesso;
+    tabelloni.text(categoria, pageCenter, 70, {align: 'center'});
+    tabelloni.text(categoria2, pageCenter, 75, {align: 'center'});
+    let element = document.getElementById('kumite');
+    const canvas = await html2canvas(element, {scale: 3});
+    const imgDataKumite = canvas.toDataURL('image/png');
+
+    const imgWidth = 190; // mm (A4 width)
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    tabelloni.addImage(imgDataKumite, 'PNG', 15, 100, imgWidth, imgHeight);
+    
+    tabelloni.save('Kumite.pdf');
+
+      
+  }
+
+  getBase64Image(img: HTMLImageElement) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL("image/png");
+  }
+
+
+}
