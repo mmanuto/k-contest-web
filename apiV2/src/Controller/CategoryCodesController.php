@@ -146,10 +146,12 @@ class CategoryCodesController extends ApiController
     public function getCategoriesWithAthletes(){
         $this->loadModel('AthletesInscriptions');
         
+        $request = $this->request->getData();
         $conn = ConnectionManager::get('default');
         $stmt = $conn->execute("SELECT category_codes.*, COUNT(athletes_inscriptions.id) AS n_athletes FROM athletes_inscriptions 
-                                JOIN category_codes ON category_codes.id = athletes_inscriptions.categorycode_id 
-                                WHERE category_codes.codiceTipoCategorie = 3 AND athletes_inscriptions.deleted = 0
+                                JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id 
+                                WHERE category_codes.codiceTipoCategorie = 3 AND athletes_inscriptions.deleted = 0 
+                                AND athletes_inscriptions.competition_id = ".$request['competition_id']."
                                 GROUP BY category_codes.id");
 
         $categories = $stmt->fetchAll('assoc');

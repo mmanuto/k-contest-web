@@ -13,9 +13,9 @@
                                 <div class="card-body box-shadow">
                                     <h4 class="card-title">Gestione dati</h4>
                                     <p class="card-text">una volta modificati i dati relativi a tabelloni, orari e classifiche possono essere visualizzati sul sito tramite gli appositi pulsanti</p>
-                                        <button class="btn btn-primary mr-3">Pubblica Tabelloni</button>
-                                        <button class="btn btn-primary mr-3">Pubblica Timetable</button>
-                                        <button class="btn btn-primary mr-3">Pubblica Classifiche</button>
+                                        <button class="btn btn-primary mr-3" (click)="toggleFlags('TABS')">Pubblica Tabelloni</button>
+                                        <button class="btn btn-primary mr-3" (click)="toggleFlags('TIMETABLE')">Pubblica Timetable</button>
+                                        <button class="btn btn-primary mr-3" (click)="toggleFlags('CLASSIFICATIONS')">Pubblica Classifiche</button>
                                 </div>
                             </div>
                         </div>

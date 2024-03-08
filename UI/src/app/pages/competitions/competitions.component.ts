@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import * as Constants from '../../constants';
 import { Router } from '@angular/router';
+import { LocalStorageService } from 'angular-2-local-storage';
 
 @Component({
   selector: 'competitions',
@@ -121,6 +122,7 @@ export class CompetitionsComponent implements OnInit {
 competitions: any[];
   constructor(private competitionService: CompetitionService, 
     public fb:FormBuilder,
+    protected localStorageService: LocalStorageService,
     router:Router) {
       this.router = router;
   }
@@ -162,7 +164,11 @@ competitions: any[];
   }
 
   public onCustom(event) {
-    this.router.navigate(['/competitionDetails/' + event.data.id]);
+    this.competitionService.getDatiGara(event.data.id).subscribe((response:any) => {
+      this.localStorageService.set('currentCompetition', response.result.data);
+      this.router.navigate(['/competitionDetails/' + event.data.id]);
+    });
+    
   }
 
   //TODO: Test this function

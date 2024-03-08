@@ -25,4 +25,10 @@ export class CompetitionService
                  
     }
 
+    getDatiGara(idGara)
+    {
+        return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', idGara);
+                
+   }
+
 }

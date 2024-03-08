@@ -83,6 +83,21 @@ export class AdminPanleComponent {
       this.competitionData = this.localStorageService.get('currentCompetition');
     }
 
+  
+  // ======================================================================== FLAGS ==================================================================================
+
+  toggleFlags(flag){
+
+    let request = {
+      competition_id: this.competitionData.id,
+      flag: flag
+    };
+
+    this.competitionDetailsService.toggleFlags(request).subscribe((response: any) => {
+
+    });
+  }
+
   // ======================================================================== FRONTESPIZI =========================================================================
 
   generaFrontespizi(){
@@ -116,7 +131,7 @@ export class AdminPanleComponent {
 
   generaSinteticoCategoria(kumite = false){
 
-    this.competitionDetailsService.getCategoriesWithAthletes().subscribe((response:any) => {
+    this.competitionDetailsService.getCategoriesWithAthletes({competition_id : this.competitionData.id}).subscribe((response:any) => {
       let categories = response.result.data;
 
       this.tabelloni = new jsPDF("p", "mm", "a4");

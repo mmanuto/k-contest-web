@@ -329,7 +329,7 @@ class AthletesController extends ApiController
                     'cod_fiscale' => $athltete['cod_fiscale']
                 ])->first();
             if (!$newAtlhete) {
-                $newAtlhete = $this->Athletes->newEntity();
+                $newAtlhete = $this->Athletes->newEmptyEntity();
             }
         }
         $newAtlhete = $this->Athletes->patchEntity($newAtlhete, $athltete);
@@ -413,7 +413,7 @@ class AthletesController extends ApiController
     // -----------------------------------------------------------------------------------------------------
 
 
-    public function inviaDati()
+   public function inviaDati()
     {
 
         $this->loadModel('Competitions');
@@ -457,16 +457,12 @@ class AthletesController extends ApiController
 
         $destinatariExcel = array($user['email']);
 
-        if (!$competition['richieste']['tabsManagement']) {
-            array_push($destinatariExcel, $competition['email']);
-        }
-
         $testoMail = "Nuova iscrizione effettuata da " . $datiSocieta['nome_societa'];
-        $Email = new Email();
+        $Email = new Mailer();
         $Email->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])
             ->setBcc($destinatariExcel)
             ->setSubject('Nuova iscrizione ' . $datiSocieta['nome_societa'] . ' - ' . $competition['nome_gara'])
-            ->setAttachments($filenameCsv)
+            ->setAttachments([$filenameCsv])
             ->deliver($testoMail);
 
 

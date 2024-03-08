@@ -547,6 +547,35 @@ public function getAllCompetitions()
         }
     }
 
+    public function toggleFlags(){
+        $data = $this->request->getData();
+
+        $competition = $this->Competitions->get($data['competition_id']);
+
+        switch ($data['flag']) {
+            case 'TABS':
+                $competition->flag_tabs = 1;
+                break;
+            case 'TIMETABLE':
+                $competition->flag_timetable = 1;
+                break;
+            case 'CLASSIFICATIONS':
+                $competition->flag_classifications = 1;
+                break;
+            default:
+                break;
+        }
+
+        if ($this->Competitions->save($competition)) {            
+
+            $this->apiResponse['data'] = $competition;
+            $this->apiResponse['success'] = true;
+            
+        } else {
+            $this->apiResponse['success'] = false;
+        }
+    }
+
    
 
 

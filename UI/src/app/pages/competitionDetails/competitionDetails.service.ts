@@ -21,12 +21,16 @@ export class CompetitionDetailsService
                  
     }
 
-    getCategoriesWithAthletes(){
-        return this.http.post(Constants.BASEAPPURL + 'categoryCodes/getCategoriesWithAthletes', {});
+    getCategoriesWithAthletes(request){
+        return this.http.post(Constants.BASEAPPURL + 'categoryCodes/getCategoriesWithAthletes', request);
     }
 
     getModifiedInscriptions(){
         return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getModifiedInscriptions', {});
+    }
+
+    toggleFlags(request){
+        return this.http.post(Constants.BASEAPPURL + 'competitions/toggleFlags', request);
     }
 
     //--------------------------------------------------- PRINT KUMITE ------------------------------------------------------------------
@@ -103,22 +107,12 @@ export class CompetitionDetailsService
         return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/splitCategory', request);
     }
 
-    /*
-    getPendingCompetitions(){
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getPendingCompetitions', {});
+    // ====================================================================================================
+    // @ CLUBS PANEL
+    // ====================================================================================================
+
+    getClubsWithAthletes(request){
+        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getClubsWithAthletes', request);
     }
-
-    updateDatiGara(competition, circolare, categorie){
-        let request = {competition: competition};
-        if(circolare != null){
-            request['circolare'] = circolare;
-        }
-        if(categorie != null){
-            request['categorie'] = categorie;
-        }
-
-        console.log(request);
-        return this.http.post(Constants.BASEAPPURL + 'competitions/updateDatiGara', request);
-    }*/
-
+    
 }

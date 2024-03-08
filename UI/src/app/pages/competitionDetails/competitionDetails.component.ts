@@ -33,7 +33,8 @@ competitions: any[];
   }
 
   ngOnInit(): void {
-    this.currentCompetition = this.localStorageService.get('currentCompetition');
+    
+
   }
 
   /*
