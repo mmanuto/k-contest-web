@@ -27,7 +27,7 @@ class AthletesTableTest extends TestCase
         'app.Athletes',
         'app.Clubs',
         'app.Federations',
-        'app.AthletesInscriptions',
+        'app.AthleteInscriptions',
     ];
 
     /**

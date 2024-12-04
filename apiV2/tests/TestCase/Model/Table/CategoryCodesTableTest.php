@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\CategoryCodesTable;
+use App\Model\Table\CategorycodesTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\CategoryCodesTable Test Case
+ * App\Model\Table\CategorycodesTable Test Case
  */
-class CategoryCodesTableTest extends TestCase
+class CategorycodesTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\CategoryCodesTable
+     * @var \App\Model\Table\CategorycodesTable
      */
-    protected $CategoryCodes;
+    protected $Categorycodes;
 
     /**
      * Fixtures
@@ -24,8 +24,8 @@ class CategoryCodesTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.CategoryCodes',
-        'app.AthletesInscriptions',
+        'app.Categorycodes',
+        'app.AthleteInscriptions',
     ];
 
     /**
@@ -36,8 +36,8 @@ class CategoryCodesTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('CategoryCodes') ? [] : ['className' => CategoryCodesTable::class];
-        $this->CategoryCodes = $this->getTableLocator()->get('CategoryCodes', $config);
+        $config = $this->getTableLocator()->exists('Categorycodes') ? [] : ['className' => CategorycodesTable::class];
+        $this->Categorycodes = $this->getTableLocator()->get('Categorycodes', $config);
     }
 
     /**
@@ -47,7 +47,7 @@ class CategoryCodesTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->CategoryCodes);
+        unset($this->Categorycodes);
 
         parent::tearDown();
     }
@@ -56,9 +56,20 @@ class CategoryCodesTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\CategoryCodesTable::validationDefault()
+     * @uses \App\Model\Table\CategorycodesTable::validationDefault()
      */
     public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     * @uses \App\Model\Table\CategorycodesTable::buildRules()
+     */
+    public function testBuildRules(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

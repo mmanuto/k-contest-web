@@ -1,0 +1,230 @@
+
+    <div class="card-body pt-0 widget-body">
+        <div class="row w-100 text-center mb-3 mt-2">
+            <h2 class="mb-2 mt-2 w-100 text-center">Aggiungi nuova competizione</h2>           
+        </div>
+
+        <form [formGroup]="requestForm" (ngSubmit)="onSubmit(requestForm.value)" class="text-left mt-5">
+
+            <div widget class="card mb-4 pt-3 pl-3 pb-3 border-0 box-shadow">
+                <div class="card-body pt-0 mt-3 ml-3 widget-body">
+                    <div class="row">
+                        <h4 class="mb-5">
+                            <i class="fa fa-user"></i> Informazioni personali</h4>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Nome e Cognome Responsabile</label>
+                            <input formControlName="name" class="form-control validation-field" type="text">
+                            <small class="text-danger" *ngIf="requestForm.get('name').touched">
+                                <span *ngIf="requestForm.get('name').hasError('required')">Campo obbligatorio</span>
+                            </small>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Società</label>
+                            <input formControlName="companyName" class="form-control validation-field" type="text">
+                            <small class="text-danger" *ngIf="requestForm.get('companyName').touched">
+                                <span *ngIf="requestForm.get('companyName').hasError('required')">Campo Obbligatorio</span>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Email</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="email" class="form-control validation-field" type="text">
+                            </div>
+                            <small class="text-danger" *ngIf="requestForm.get('email').touched">
+                                <span *ngIf="requestForm.get('email').hasError('required')">Campo obbligatorio</span>
+                                <span *ngIf="requestForm.get('email').hasError('invalidEmail')">Inserire una mail
+                                    valida</span>
+                            </small>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label class="form-control-label">Nr. Telefono</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-phone"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="telefono" class="form-control validation-field" type="number">
+                            </div>
+                            <small class="text-danger" *ngIf="requestForm.get('telefono').touched">
+                                <span *ngIf="requestForm.get('telefono').hasError('required')">Campo obbligatorio</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div widget class="card mb-4 pt-3 pl-3 pb-3 border-0 box-shadow">
+            <div class="card-body pt-0 mt-3 ml-3 widget-body">
+                <div class="row">
+                    <h4 class="mb-5">
+                        <i class="fa fa-trophy"></i> Informazioni Gara</h4>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label class="form-control-label">Nome Gara</label>
+                        <input formControlName="competitionName" class="form-control validation-field" type="text">
+                        <small class="text-danger" *ngIf="requestForm.get('competitionName').touched">
+                            <span *ngIf="requestForm.get('competitionName').hasError('required')">Campo
+                                obbligatorio</span>
+                        </small>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label">Data Gara</label>
+                        <input formControlName="competitionDate" placeholder="GG/MM/AAAA" class="form-control validation-field" type="text">
+                        <small class="text-danger" *ngIf="requestForm.get('competitionDate').touched">
+                            <span *ngIf="requestForm.get('competitionDate').hasError('required')">Campo Obbligatorio</span>
+                            <small class="text-danger" *ngIf="requestForm.get('competitionDate').hasError('pattern')">Formato errato</small>
+
+                        </small>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label">Data chiusura iscrizioni</label>
+                        <input formControlName="registrationClose" placeholder="GG/MM/AAAA" class="form-control validation-field" type="text">
+                        <small class="text-danger" *ngIf="requestForm.get('registrationClose').touched">
+                            <span *ngIf="requestForm.get('registrationClose').hasError('required')">Campo Obbligatorio</span>
+                            <small class="text-danger" *ngIf="requestForm.get('registrationClose').hasError('pattern')">Formato errato</small>
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="form-group col-md-2">
+                        <label class="form-control-label">Nr. Atleti stimato</label>
+                        <input formControlName="n_athletes" class="form-control validation-field" type="number">
+                        <small class="text-danger" *ngIf="requestForm.get('n_athletes').touched">
+                            <span *ngIf="requestForm.get('n_athletes').hasError('required')">Campo obbligatorio</span>
+                        </small>
+                    </div>
+
+
+                   
+
+                </div>
+            </div>
+        </div>
+        <div widget class="card pt-3 pl-3 pb-3 border-0 box-shadow">
+            <div class="card-body pt-0 mt-3 ml-3 widget-body">
+                <div class="row mt-3">
+                    <h4 class="ml-3" style="margin-bottom: 25px !important; margin-top: 30px !important;">
+                        <i class="fa fa-file-text"></i> Upload file e Richieste Aggiuntive</h4>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label">Logo</label>
+                        <div class="input-group file-upload">
+                            <input type="file" id="logo" (change)="logoChange($event)" #inputLogo class="file-upload-btn" />
+                            <input type="text" [(value)]="logo" class="form-control" />
+                            <i class="fa fa-times delete-file" (click)="removeLogo()" *ngIf="requestForm.get('logo') != null"></i>
+                            <span class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fa fa-upload"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label">Locandina</label>
+                        <div class="input-group file-upload">
+                            <input type="file" (change)="locandinaChange($event)" #inputLoc class="file-upload-btn" />
+                            <input type="text" [(value)]="locandina" class="form-control">
+                            <i class="fa fa-times delete-file" (click)="removeLocandina()" *ngIf="locandina"></i>
+                            <span class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fa fa-upload"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-control-label">Circolare di gara</label>
+                        <div class="input-group file-upload">
+                            <input type="file" (change)="circolareChange($event)" #inputCirc class="file-upload-btn" />
+                            <input type="text" [(value)]="circolare" class="form-control">
+                            <i class="fa fa-times delete-file" (click)="removeCircolare()" *ngIf="circolare"></i>
+                            <span class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fa fa-upload"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="column col-md-5">
+                        <div class="row">
+                            <div class="form-group ml-3 col-md-4">
+                                <div class="custom-control custom-checkbox">
+                                    <input formControlName="referee" type="checkbox" class="custom-control-input checkbox-primary"
+                                        id="arbitri" checked>
+                                    <label class="custom-control-label" for="arbitri">Arbitri</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-5">
+                                <div class="custom-control custom-checkbox">
+                                    <input formControlName="competitionManagement" type="checkbox" class="custom-control-input checkbox-primary"
+                                        id="gestioneGara" checked>
+                                    <label class="custom-control-label" for="gestioneGara">Gestione gara</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <div class="custom-control custom-checkbox">
+                                <input formControlName="tabsManagement" type="checkbox" class="custom-control-input checkbox-primary"
+                                    id="tabelloni" checked>
+                                <label class="custom-control-label" for="tabelloni">Creazione Tabelloni</label>
+                            </div>
+                            <!-- <label class="form-control-label">Creazione Tabelloni</label>
+                                <select formControlName="tabsManagement" class="form-control">
+                                    <option value="0">Organizzatore</option>
+                                    <option value="1">CSEN</option>
+                                </select> -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="float: right;">
+                    <button [disabled]="!requestForm.valid" class="btn btn-primary pull-right" (click)="openModal(modalContent)" type="submit">Invia
+                        Richiesta</button>
+                </div>
+                </div>
+                </div>
+        </form>
+    </div>
+
+
+<ng-template #modalContent>
+
+    <div class="row">
+        <div class="col-12 vertical-tabs">
+            <div widget class="card border-0 box-shadow">
+                <div class="card-header border-0 text-muted modal-header state modal-info">
+                    <!--  <h5 class="mb-0">INSERISCI ATLETA</h5> -->
+                    <h4 class="modal-title" style=" color:white" id="modal-info-label">RICHIESTA INVIATA</h4>
+                </div>
+                <div class="modal-body">
+
+                    Richiesta inviata con successo, a breve riceverà una mail riepilogativa con i dati inseriti.
+                    Entro qualche giorno riceverà una mail di conferma da parte dell'amministrazione per la corretta
+                    registrazione della manifestazione.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" (click)="closeModal()"
+                        data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

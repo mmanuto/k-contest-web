@@ -7,11 +7,15 @@ export class MembershipService {
     constructor(public http:HttpClient) { }
 
     getFederationsList(){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getFederations", {});
+        return this.http.post(Constants.BASEAPPURL + "federations/getFederations", {});
     }
 
-    getCategoria(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getCategoria", request);
+    getBeltList(){
+        return this.http.post(Constants.BASEAPPURL + "belts/getBeltList", {});
+    }
+
+    getAgeCategory(request){
+        return this.http.post(Constants.BASEAPPURL + "agecategories/getAgeCategory", request);
         
     }
 

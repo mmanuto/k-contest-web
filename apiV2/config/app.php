@@ -331,7 +331,7 @@ return [
             //'port' => 'nonstandard_port_number',
             'username' => 'root',
             'password' => '',
-            'database' => 'nblgsaee_iscrizioni',
+            'database' => 'kcontest-web',
             'encoding' => 'utf8',
 	    'flags' => [],
             'cacheMetadata' => true,

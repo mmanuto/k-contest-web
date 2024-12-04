@@ -9,7 +9,7 @@
                             <div class="form-group col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Email</label>
-                                    <input type="text" name="email" class="form-control" [(ngModel)]="user.email" required reverse="true">
+                                    <input type="text" name="email" class="form-control" [(ngModel)]="club.mail" required reverse="true">
                                 </div>
                             </div>
                             <!-- PROVA AUTOCORREZIONE EMAIL -->
@@ -35,35 +35,28 @@
                                             *ngIf="step.hasError && m.get('email').hasError('email')">Invalid
                                             email address</small>
                                     </div> -->
-                                    
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Ripeti email</label>
-                                    <input type="text" name="emailRipeate" class="form-control" [(ngModel)]="user.emailRipeate" required reverse="true">
-                                </div>
-                            </div>
                             <div class="form-group col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Nome società</label>
-                                    <input type="text" name="society" class="form-control" [(ngModel)]="user.society" required reverse="true">
+                                    <input type="text" name="society" class="form-control" [(ngModel)]="club.club_name" required reverse="true">
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Responsabile</label>
-                                    <input type="text" name="name" class="form-control" [(ngModel)]="user.name" required reverse="true">
+                                    <input type="text" name="name" class="form-control" [(ngModel)]="club.club_manager" required reverse="true">
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Telefono</label>
-                                    <input type="text" name="phone" class="form-control" [(ngModel)]="user.phone" required reverse="true">
+                                    <input type="text" name="phone" class="form-control" [(ngModel)]="club.telephone_n" required reverse="true">
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Coach</label>
-                                    <input type="text" name="coach" class="form-control" [(ngModel)]="user.Coach" required reverse="true">
+                                    <input type="text" name="coach" class="form-control" [(ngModel)]="club.coach" required reverse="true">
                                 </div>
                             </div>
                             <button class="btn-custom btn btn-primary mx-auto"  type="submit" [disabled]="m.form.invalid" style="float: right;" >Salva

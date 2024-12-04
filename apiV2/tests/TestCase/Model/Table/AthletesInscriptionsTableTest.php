@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\AthletesInscriptionsTable;
+use App\Model\Table\AthleteInscriptionsTable;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\AthletesInscriptionsTable Test Case
+ * App\Model\Table\AthleteInscriptionsTable Test Case
  */
-class AthletesInscriptionsTableTest extends TestCase
+class AthleteInscriptionsTableTest extends TestCase
 {
     /**
      * Test subject
      *
-     * @var \App\Model\Table\AthletesInscriptionsTable
+     * @var \App\Model\Table\AthleteInscriptionsTable
      */
-    protected $AthletesInscriptions;
+    protected $AthleteInscriptions;
 
     /**
      * Fixtures
@@ -24,9 +24,9 @@ class AthletesInscriptionsTableTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.AthletesInscriptions',
+        'app.AthleteInscriptions',
         'app.Athletes',
-        'app.CategoryCodes',
+        'app.Categorycodes',
         'app.Competitions',
     ];
 
@@ -38,8 +38,8 @@ class AthletesInscriptionsTableTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $config = $this->getTableLocator()->exists('AthletesInscriptions') ? [] : ['className' => AthletesInscriptionsTable::class];
-        $this->AthletesInscriptions = $this->getTableLocator()->get('AthletesInscriptions', $config);
+        $config = $this->getTableLocator()->exists('AthleteInscriptions') ? [] : ['className' => AthleteInscriptionsTable::class];
+        $this->AthleteInscriptions = $this->getTableLocator()->get('AthleteInscriptions', $config);
     }
 
     /**
@@ -49,7 +49,7 @@ class AthletesInscriptionsTableTest extends TestCase
      */
     protected function tearDown(): void
     {
-        unset($this->AthletesInscriptions);
+        unset($this->AthleteInscriptions);
 
         parent::tearDown();
     }
@@ -58,7 +58,7 @@ class AthletesInscriptionsTableTest extends TestCase
      * Test validationDefault method
      *
      * @return void
-     * @uses \App\Model\Table\AthletesInscriptionsTable::validationDefault()
+     * @uses \App\Model\Table\AthleteInscriptionsTable::validationDefault()
      */
     public function testValidationDefault(): void
     {
@@ -69,7 +69,7 @@ class AthletesInscriptionsTableTest extends TestCase
      * Test buildRules method
      *
      * @return void
-     * @uses \App\Model\Table\AthletesInscriptionsTable::buildRules()
+     * @uses \App\Model\Table\AthleteInscriptionsTable::buildRules()
      */
     public function testBuildRules(): void
     {

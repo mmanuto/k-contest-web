@@ -9,8 +9,8 @@ use Cake\ORM\Entity;
  * Team Entity
  *
  * @property int $id
- * @property int $club_id
- * @property int $competition_id
+ * @property string $club_id
+ * @property string $competition_id
  * @property string $componenti
  * @property string $categoria
  * @property string $grado

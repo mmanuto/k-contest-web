@@ -122,7 +122,7 @@ export class RegisterComponent {
 
         this.club.responsabile = this.personalForm.value.name;
         this.club.nome_societa = this.personalForm.value.society;
-        this.club.CF = this.personalForm.value.cod_fiscale;
+        this.club.fiscal_code = this.personalForm.value.cod_fiscale;
         this.club.mail = this.personalForm.value.email;
         this.club.telefono = this.personalForm.value.phone;
         this.club.coach = this.personalForm.value.coach;
@@ -221,14 +221,14 @@ export class RegisterComponent {
             this.openAdv.nativeElement.click();
             return;
         }
-        this.registerService.checkCf({ 'codice_fiscale': this.personalForm.value.login_cf }).subscribe((response: any) => {
+        this.registerService.checkFiscalCode({ 'codice_fiscale': this.personalForm.value.login_cf }).subscribe((response: any) => {
             //console.log(response.result.valore.id);
 
             //fare automaticamente il next e confirm (o solo il confirm?)
             if (response.result.success) {
                 this.club.responsabile = response.result.valore.responsabile;
                 this.club.nome_societa = response.result.valore.nome_societa;
-                this.club.CF = response.result.valore.CF;
+                this.club.fiscal_code = response.result.valore.fiscal_code;
                 this.club.mail = response.result.valore.mail;
                 this.club.telefono = response.result.valore.telefono;
                 this.club.coach = response.result.valore.coach;

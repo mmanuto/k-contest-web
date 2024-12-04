@@ -6,9 +6,9 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * CategoryCodesFixture
+ * CategorycodesFixture
  */
-class CategoryCodesFixture extends TestFixture
+class CategorycodesFixture extends TestFixture
 {
     /**
      * Init method
@@ -19,8 +19,7 @@ class CategoryCodesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
-                'codice' => 'Lorem ip',
+                'id' => '9faf7e64-fe24-4ed6-9eaa-c015a9842bbb',
                 'categoria' => 'Lorem ipsum dolor sit amet',
                 'anno_min' => 1,
                 'anno_max' => 1,

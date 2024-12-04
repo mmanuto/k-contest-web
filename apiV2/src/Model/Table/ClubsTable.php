@@ -7,6 +7,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Hidehalo\Nanoid\Client;
 
 /**
  * Clubs Model
@@ -57,6 +58,21 @@ class ClubsTable extends Table
     }
 
     /**
+     * Summary of beforeSave
+     * @param mixed $event
+     * @param mixed $entity
+     * @param mixed $options
+     * @return void
+     */
+    public function beforeSave($event, $entity, $options)
+    {
+        if ($entity->isNew() && !$entity->id) {
+            $client = new Client();
+            $entity->id = $client->generateId();
+        }
+    }
+
+    /**
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
@@ -65,22 +81,39 @@ class ClubsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->scalar('nome_societa')
-            ->maxLength('nome_societa', 500)
-            ->requirePresence('nome_societa', 'create')
-            ->notEmptyString('nome_societa');
+            ->scalar('club_code')
+            ->maxLength('club_code', 50)
+            ->requirePresence('club_code', 'create')
+            ->notEmptyString('club_code');
 
         $validator
-            ->scalar('responsabile')
-            ->maxLength('responsabile', 50)
-            ->requirePresence('responsabile', 'create')
-            ->notEmptyString('responsabile');
+            ->scalar('club_name')
+            ->maxLength('club_name', 500)
+            ->requirePresence('club_name', 'create')
+            ->notEmptyString('club_name');
 
         $validator
-            ->scalar('telefono')
-            ->maxLength('telefono', 20)
-            ->requirePresence('telefono', 'create')
-            ->notEmptyString('telefono');
+            ->scalar('fiscal_code')
+            ->maxLength('fiscal_code', 20)
+            ->requirePresence('fiscal_code', 'create')
+            ->notEmptyString('fiscal_code');
+
+        $validator
+            ->scalar('short_name')
+            ->maxLength('short_name', 20)
+            ->allowEmptyString('short_name');
+
+        $validator
+            ->scalar('club_manager')
+            ->maxLength('club_manager', 50)
+            ->requirePresence('club_manager', 'create')
+            ->notEmptyString('club_manager');
+
+        $validator
+            ->scalar('telephone_n')
+            ->maxLength('telephone_n', 20)
+            ->requirePresence('telephone_n', 'create')
+            ->notEmptyString('telephone_n');
 
         $validator
             ->scalar('mail')
@@ -95,11 +128,23 @@ class ClubsTable extends Table
             ->notEmptyString('coach');
 
         $validator
-            ->scalar('CF')
-            ->maxLength('CF', 20)
-            ->requirePresence('CF', 'create')
-            ->notEmptyString('CF');
+            ->dateTime('last_login')
+            ->allowEmptyDateTime('last_login');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
+
+        return $rules;
     }
 }

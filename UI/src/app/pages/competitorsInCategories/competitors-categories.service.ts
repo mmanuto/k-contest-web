@@ -23,7 +23,7 @@ export class CompetitorsInCategoriesService {
     }*/
 
     getAthleteList(request){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getAthletesByCategory', request);
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
     }
 
 } 

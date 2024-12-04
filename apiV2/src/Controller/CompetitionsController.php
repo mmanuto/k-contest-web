@@ -111,14 +111,19 @@ public function getAllCompetitions()
         ->toArray();
 
     foreach ($competitions as $competitionItem) {
+
         
-        $query = $conn->execute("SELECT COUNT(DISTINCT athletes_inscriptions.athlete_id) AS n_athletes FROM athletes_inscriptions
-                        WHERE competition_id = " . $competitionItem->id);
+        
+       $query = $conn->execute("SELECT COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
+                        WHERE competition_id = '" . $competitionItem->id."'");
 
         $result = $query->fetchAll('assoc');
-
         $competitionItem['inscriptions'] = $result[0]['n_athletes'];
+
+        
+
     }
+    //print_r($competitions);
 
     $this->apiResponse['data'] = $competitions;
     $this->apiResponse['success'] = true;
@@ -144,12 +149,15 @@ public function getAllCompetitions()
     public function getDatiGara()
     {
         Configure::load('constants');
+        $this->request->allowMethod('post');
         $data = $this->request->getData();
+
         $competition = $this->Competitions->find()
             ->where([
-                'id' => $data[0]
+                'id' => $data['idGara']
             ])
             ->first();
+        
 
             //controllo data e chiusura iscrizioni
         if($competition->comp_status == Configure::read('REG_OPEN') || 
@@ -219,13 +227,14 @@ public function getAllCompetitions()
     //  CATEGORIE                                                                                                                                                                                                                                                                                                                                   
     //========================================================================================================================================================
 
+    //TODO: da verificare
     public function caricaCategorie($categorie)
     {
 
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('Categorycodes');
 
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT MAX(codiceTipoCategorie) as codice FROM category_codes");
+        $stmt = $conn->execute("SELECT MAX(codiceTipoCategorie) as codice FROM categorycodes");
 
         $result = $stmt->fetchAll('assoc');
 
@@ -245,10 +254,10 @@ public function getAllCompetitions()
 
         }
 
-        $categories = $this->CategoryCodes->newEntities($dataRecords);
+        $categories = $this->Categorycodes->newEntities($dataRecords);
 
         foreach ($categories as $entity) {
-            $this->CategoryCodes->save($entity);
+            $this->Categorycodes->save($entity);
         }
 
         return array(
@@ -265,7 +274,7 @@ public function getAllCompetitions()
 
         if ($data[0] != "") {
             $record = array(
-                'codice' => $data[0],
+                'id' => $data[0],
                 'categoria' => $data[1],
                 'anno_min' => $data[2],
                 'anno_max' => $data[3],
@@ -292,16 +301,23 @@ public function getAllCompetitions()
         $data = $this->request->getData();
         //print_r($data);
         $dir = $data['gara'] . '/tabelloni';
-        //$files1 = scandir($dir);
-        $scanned_directory = array_diff(scandir($dir), array('..', '.'));
-        //print_r( $scanned_directory);
+        
+        $files1 = scandir($dir);
+        if($files1 && is_array($files1)){
+            $scanned_directory = array_diff(scandir($dir), array('..', '.'));
+            //print_r( $scanned_directory);
 
-        $record = array();
-        foreach ($scanned_directory as $tabellone) {
-            $record[] = array('name' => $tabellone, 'docpath' => $dir . '/' . $tabellone);
+            $record = array();
+            foreach ($scanned_directory as $tabellone) {
+                $record[] = array('name' => $tabellone, 'docpath' => $dir . '/' . $tabellone);
+            }
+            $this->apiResponse['data'] = $record;
+            $this->apiResponse['success'] = true;
+        }else{
+            $this->apiResponse['message'] = 'Classifiche non presenti';
+            $this->apiResponse['success'] = false;
         }
-        $this->apiResponse['data'] = $record;
-        $this->apiResponse['success'] = true;
+        
     }
 
 
@@ -325,10 +341,10 @@ public function getAllCompetitions()
         $kumiteMaster = [];
 
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT category_codes.categoria, category_codes.specialita, category_codes.grado, COUNT(DISTINCT athletes_inscriptions.athlete_id) AS n_athletes FROM athletes_inscriptions
-                            JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id
-                            WHERE category_codes.codiceTipoCategorie = 3 and competition_id = " . $data['competition_id'] . " and specialita = 'Percorso'
-                            GROUP BY category_codes.categoria, category_codes.grado, category_codes.specialita
+        $stmt = $conn->execute("SELECT categorycodes.categoria, categorycodes.specialita, categorycodes.grado, COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
+                            JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id
+                            WHERE categorycodes.codiceTipoCategorie = 3 and competition_id = '" . $data['competition_id'] . "' and specialita = 'Percorso'
+                            GROUP BY categorycodes.categoria, categorycodes.grado, categorycodes.specialita
                             ORDER BY specialita, categoria");
 
         $resultCombinata = $stmt->fetchAll('assoc');
@@ -339,10 +355,10 @@ public function getAllCompetitions()
             $result[] = $category;
         }
 
-        $stmt2 = $conn->execute("SELECT category_codes.categoria, category_codes.specialita, category_codes.grado, category_codes.sesso, COUNT(DISTINCT athletes_inscriptions.athlete_id) AS n_athletes FROM athletes_inscriptions
-                            JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id
-                            WHERE category_codes.codiceTipoCategorie = 3 and competition_id = " . $data['competition_id'] . " and categoria NOT IN ('BAMBINI A', 'BAMBINI B', 'FANCIULLI', 'RAGAZZI')
-                            GROUP BY category_codes.categoria, category_codes.grado, category_codes.specialita, category_codes.sesso
+        $stmt2 = $conn->execute("SELECT categorycodes.categoria, categorycodes.specialita, categorycodes.grado, categorycodes.sesso, COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
+                            JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id
+                            WHERE categorycodes.codiceTipoCategorie = 3 and competition_id = '" . $data['competition_id'] . "' and categoria NOT IN ('BAMBINI A', 'BAMBINI B', 'FANCIULLI', 'RAGAZZI')
+                            GROUP BY categorycodes.categoria, categorycodes.grado, categorycodes.specialita, categorycodes.sesso
                             ORDER BY specialita, categoria");
 
 
@@ -410,9 +426,11 @@ public function getAllCompetitions()
     public function getTotaleIscrizioni()
     {
         $data = $this->request->getData();
+        
         $conn = ConnectionManager::get('default');
-        $stmt2 = $conn->execute("SELECT COUNT(DISTINCT athletes_inscriptions.athlete_id) AS n_athletes FROM athletes_inscriptions
-                        WHERE competition_id = " . $data['competition_id']);
+        $query = "SELECT COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
+                        WHERE competition_id = '" . $data['competition_id']."'";
+        $stmt2 = $conn->execute($query);
 
         $result = $stmt2->fetchAll('assoc');
 
@@ -425,8 +443,8 @@ public function getAllCompetitions()
     {
         $data = $this->request->getData();
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT COUNT(DISTINCT athletes_inscriptions.category_code_id) AS n_categories FROM athletes_inscriptions
-                                WHERE competition_id = " . $data['competition_id']);
+        $stmt = $conn->execute("SELECT COUNT(DISTINCT athlete_inscriptions.categorycode_id) AS n_categories FROM athlete_inscriptions
+                                WHERE competition_id = '" . $data['competition_id']."'");
 
         $result = $stmt->fetchAll('assoc');
 
@@ -438,10 +456,10 @@ public function getAllCompetitions()
     protected function getCategories($data){
         
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT category_codes.*, COUNT(athletes_inscriptions.id) AS n_athletes FROM athletes_inscriptions 
-                                JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id 
-                                WHERE category_codes.codiceTipoCategorie = 3 AND competition_id = " . $data['competition_id'] ."
-                                GROUP BY category_codes.id");
+        $stmt = $conn->execute("SELECT categorycodes.*, COUNT(athlete_inscriptions.id) AS n_athletes FROM athlete_inscriptions 
+                                JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
+                                WHERE categorycodes.codiceTipoCategorie = 3 AND competition_id = '" . $data['competition_id'] ."'
+                                GROUP BY categorycodes.id");
 
         $categories = $stmt->fetchAll('assoc');
 
@@ -458,7 +476,7 @@ public function getAllCompetitions()
         ]); 
 
         $categories = [];
-        $tabelloni = $competition['tabelloni'] == 0 ? false : true;
+        $tabelloni = $competition['flag_tabs'] == 0 ? false : true;
         $result = [];
 
         if($tabelloni){
@@ -479,9 +497,9 @@ public function getAllCompetitions()
     public function syncCompetitionData(){
 
         $this->loadModel('Athletes');
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('Categorycodes');
         $this->loadModel('Competitions');
-        $this->loadModel('AthletesInscriptions');
+        $this->loadModel('AthleteInscriptions');
         $this->loadModel('Clubs');
         $this->loadModel('ClubInscriptions');
         
@@ -491,12 +509,12 @@ public function getAllCompetitions()
 
         $athletes = $this->Athletes->find('all')->toArray();
 
-        $categoryCodes = $this->CategoryCodes->find('all')->toArray();
+        $categorycodes = $this->Categorycodes->find('all')->toArray();
 
         $competition = $this->Competitions->get($data['competition_id'], [
             'contain' => []
         ]);
-        $atheleInscirption = $this->AthletesInscriptions->find()->where([
+        $atheleInscirption = $this->AthleteInscriptions->find()->where([
             'competition_id' =>$data['competition_id']
         ])
         ->toArray();
@@ -509,7 +527,7 @@ public function getAllCompetitions()
 
         $response['clubs'] = $clubs;
         $response['athletes'] = $athletes;
-        $response['categoryCodes'] = $categoryCodes;
+        $response['categorycodes'] = $categorycodes;
         $response['competition'] = $competition;
         $response['atheleInscirption'] = $atheleInscirption;
         $response['clubInscirption'] = $clubInscirption;

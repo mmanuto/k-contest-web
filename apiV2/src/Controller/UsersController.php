@@ -130,7 +130,7 @@ class UsersController extends ApiController
 
 
         public function updateUserData(){
-            $data = $this->request->data;
+            $data = $this->request->getData();
             /* print_r("dati: ");
             print_r($data); */
             if(isset($data['password'])){

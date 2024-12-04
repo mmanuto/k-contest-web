@@ -19,8 +19,8 @@ class AthletesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
-                'club_id' => 1,
+                'id' => '00bb9a6e-34d2-45ea-8809-f6e4d26ee8b5',
+                'club_id' => 'Lorem ipsum dolor ',
                 'nome' => 'Lorem ipsum dolor sit amet',
                 'cognome' => 'Lorem ipsum dolor sit amet',
                 'data_nascita' => 'Lorem ipsum dolor ',

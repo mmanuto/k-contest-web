@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace App\Test\TestCase\Controller;
 
-use App\Controller\CategoryCodesController;
+use App\Controller\CategorycodesController;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Controller\CategoryCodesController Test Case
+ * App\Controller\CategorycodesController Test Case
  *
- * @uses \App\Controller\CategoryCodesController
+ * @uses \App\Controller\CategorycodesController
  */
-class CategoryCodesControllerTest extends TestCase
+class CategorycodesControllerTest extends TestCase
 {
     use IntegrationTestTrait;
 
@@ -22,15 +22,15 @@ class CategoryCodesControllerTest extends TestCase
      * @var array<string>
      */
     protected $fixtures = [
-        'app.CategoryCodes',
-        'app.AthletesInscriptions',
+        'app.Categorycodes',
+        'app.AthleteInscriptions',
     ];
 
     /**
      * Test index method
      *
      * @return void
-     * @uses \App\Controller\CategoryCodesController::index()
+     * @uses \App\Controller\CategorycodesController::index()
      */
     public function testIndex(): void
     {
@@ -41,7 +41,7 @@ class CategoryCodesControllerTest extends TestCase
      * Test view method
      *
      * @return void
-     * @uses \App\Controller\CategoryCodesController::view()
+     * @uses \App\Controller\CategorycodesController::view()
      */
     public function testView(): void
     {
@@ -52,7 +52,7 @@ class CategoryCodesControllerTest extends TestCase
      * Test add method
      *
      * @return void
-     * @uses \App\Controller\CategoryCodesController::add()
+     * @uses \App\Controller\CategorycodesController::add()
      */
     public function testAdd(): void
     {
@@ -63,7 +63,7 @@ class CategoryCodesControllerTest extends TestCase
      * Test edit method
      *
      * @return void
-     * @uses \App\Controller\CategoryCodesController::edit()
+     * @uses \App\Controller\CategorycodesController::edit()
      */
     public function testEdit(): void
     {
@@ -74,7 +74,7 @@ class CategoryCodesControllerTest extends TestCase
      * Test delete method
      *
      * @return void
-     * @uses \App\Controller\CategoryCodesController::delete()
+     * @uses \App\Controller\CategorycodesController::delete()
      */
     public function testDelete(): void
     {

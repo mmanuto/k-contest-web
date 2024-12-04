@@ -27,7 +27,8 @@ export class CompetitionService
 
     getDatiGara(idGara)
     {
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', idGara);
+        console.log(idGara);
+        return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', {idGara: idGara});
                 
    }
 

@@ -118,14 +118,14 @@ class ClubsController extends ApiController
     // -----------------------------------------------------------------------------------------------------
 
 
-    public function checkCf()
+    public function checkFiscalCode()
     {
 
         $data = $this->request->getData();
 
         $clubDetails = $this->Clubs->find()
             ->where([
-                'CF' => $data['codice_fiscale']
+                'fiscal_code' => $data['codice_fiscale']
             ])->first();
 
         if ($clubDetails) {
@@ -153,7 +153,7 @@ class ClubsController extends ApiController
 
         $club = $this->Clubs->find()
             ->where([
-                'CF' => $dataClub['CF']
+                'fiscal_code' => $dataClub['fiscal_code']
             ])
             ->first();
 
@@ -185,7 +185,7 @@ class ClubsController extends ApiController
                 if ($this->salvaIscrizione($newClub, $competition)) {
 
                     //invio mail di riepilogo
-                    $testoMail = "Mail automatica di primo accesso al sistema di iscrizione. \r Di seguito i dati inseriti in fase di registrazione, per gli accessi successivi sar� sufficente inserire il codice fiscale della sciet� e cliccare sul pulsante recupera dati.\r Societa: " . $newClub['nome_societa'] . "\r Codice Fiscale: " . $newClub['CF'] . "\r Responsabile: " . $newClub['responsabile'] . "\r Telefono: " . $newClub['telefono'] . "\r Email: " . $newClub['mail'] . "\r coach: " . $newClub['coach'];
+                    $testoMail = "Mail automatica di primo accesso al sistema di iscrizione. \r Di seguito i dati inseriti in fase di registrazione, per gli accessi successivi sar� sufficente inserire il codice fiscale della sciet� e cliccare sul pulsante recupera dati.\r Societa: " . $newClub['nome_societa'] . "\r Codice Fiscale: " . $newClub['fiscal_code'] . "\r Responsabile: " . $newClub['responsabile'] . "\r Telefono: " . $newClub['telefono'] . "\r Email: " . $newClub['mail'] . "\r coach: " . $newClub['coach'];
 
                     $Email = new Mailer();
                     $Email->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])

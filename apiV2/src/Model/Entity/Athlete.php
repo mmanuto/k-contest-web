@@ -8,8 +8,8 @@ use Cake\ORM\Entity;
 /**
  * Athlete Entity
  *
- * @property int $id
- * @property int $club_id
+ * @property string $id
+ * @property string $club_id
  * @property string $nome
  * @property string|null $cognome
  * @property string|null $data_nascita
@@ -22,7 +22,7 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Club $club
  * @property \App\Model\Entity\Federation $federation
- * @property \App\Model\Entity\AthletesInscription[] $athletes_inscriptions
+ * @property \App\Model\Entity\AthleteInscription[] $athlete_inscriptions
  */
 class Athlete extends Entity
 {
@@ -48,6 +48,6 @@ class Athlete extends Entity
         'grado' => true,
         'club' => true,
         'federation' => true,
-        'athletes_inscriptions' => true,
+        'athlete_inscriptions' => true,
     ];
 }

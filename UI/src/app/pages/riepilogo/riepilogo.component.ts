@@ -54,7 +54,7 @@ export class RiepilogoComponent {
   // INIT                                           
   //=========================================================================================================================================================
 
-
+//TODO: da verificare
   ngOnInit() {
 
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
@@ -72,7 +72,7 @@ export class RiepilogoComponent {
           let index = this.listaIscritti.findIndex(x => x.id === item.athlete_id);
           if (index >= 0) {
             this.listaIscritti[index].prove += ' - ' + item.specialita + ' ' + item.categoria + ' ' + item.grado;
-            this.listaIscritti[index].codiciProve.push(item.codice);
+            this.listaIscritti[index].codiciProve.push(item.id);
           } else {
             let iscritto = {
               id: item.athlete_id,
@@ -85,7 +85,7 @@ export class RiepilogoComponent {
               sesso: item.sesso,
               peso: item.peso,
               prove: item.specialita,
-              codiciProve:[item.codice]
+              codiciProve:[item.id]
             };
             this.listaIscritti.push(iscritto);
           }

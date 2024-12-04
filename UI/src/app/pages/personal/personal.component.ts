@@ -24,8 +24,8 @@ export class PersonalComponent implements OnInit {
                 private personalService: PersonalService, 
                 protected router: Router){
                     //this.user = {name: '', society: '', email: '', phone: '', coach: ''};
-                    this.user = this.storageService.get('currentUser');
-        console.log(this.user);
+                    this.club = this.storageService.get('currentUser');
+        console.log(this.club);
   }
 
 
@@ -37,15 +37,6 @@ export class PersonalComponent implements OnInit {
     }
 
   updateDates(model){
-      this.club.responsabile = this.user.name;
-      this.club.nome_societa = this.user.society;
-      this.club.mail = this.user.email;
-      this.club.telefono = this.user.phone;
-      this.club.coach = this.user.Coach;
-      this.club.id = this.user.id;
-      this.club.CF = this.user.CF;
-      console.log("club: ");
-      console.log(this.club);
 
       this.personalService.updateUserData({club:this.club}).subscribe((response:any) => {
         console.log(response);

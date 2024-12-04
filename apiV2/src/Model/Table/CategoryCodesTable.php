@@ -9,25 +9,25 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * CategoryCodes Model
+ * Categorycodes Model
  *
- * @property \App\Model\Table\AthletesInscriptionsTable&\Cake\ORM\Association\HasMany $AthletesInscriptions
+ * @property \App\Model\Table\AthleteInscriptionsTable&\Cake\ORM\Association\HasMany $AthleteInscriptions
  *
- * @method \App\Model\Entity\CategoryCode newEmptyEntity()
- * @method \App\Model\Entity\CategoryCode newEntity(array $data, array $options = [])
- * @method \App\Model\Entity\CategoryCode[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\CategoryCode get($primaryKey, $options = [])
- * @method \App\Model\Entity\CategoryCode findOrCreate($search, ?callable $callback = null, $options = [])
- * @method \App\Model\Entity\CategoryCode patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\CategoryCode[] patchEntities(iterable $entities, array $data, array $options = [])
- * @method \App\Model\Entity\CategoryCode|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\CategoryCode saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\CategoryCode[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\CategoryCode[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
- * @method \App\Model\Entity\CategoryCode[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
- * @method \App\Model\Entity\CategoryCode[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Categorycode newEmptyEntity()
+ * @method \App\Model\Entity\Categorycode newEntity(array $data, array $options = [])
+ * @method \App\Model\Entity\Categorycode[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Categorycode get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Categorycode findOrCreate($search, ?callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Categorycode patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Categorycode[] patchEntities(iterable $entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Categorycode|false save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Categorycode saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Categorycode[]|\Cake\Datasource\ResultSetInterface|false saveMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Categorycode[]|\Cake\Datasource\ResultSetInterface saveManyOrFail(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Categorycode[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
+ * @method \App\Model\Entity\Categorycode[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
-class CategoryCodesTable extends Table
+class CategorycodesTable extends Table
 {
     /**
      * Initialize method
@@ -39,12 +39,12 @@ class CategoryCodesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('category_codes');
-        $this->setDisplayField('codice');
+        $this->setTable('categorycodes');
+        $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
-        $this->hasMany('AthletesInscriptions', [
-            'foreignKey' => 'category_code_id',
+        $this->hasMany('AthleteInscriptions', [
+            'foreignKey' => 'categorycode_id',
         ]);
     }
 
@@ -56,12 +56,6 @@ class CategoryCodesTable extends Table
      */
     public function validationDefault(Validator $validator): Validator
     {
-        $validator
-            ->scalar('codice')
-            ->maxLength('codice', 10)
-            ->requirePresence('codice', 'create')
-            ->notEmptyString('codice');
-
         $validator
             ->scalar('categoria')
             ->maxLength('categoria', 50)
@@ -123,5 +117,19 @@ class CategoryCodesTable extends Table
             ->notEmptyString('codiceTipoCategorie');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
+
+        return $rules;
     }
 }

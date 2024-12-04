@@ -133,7 +133,6 @@ competitions: any[];
     this.competitionService.getCompetitions().subscribe((response: any) => {
       this.competitions = response.result.data;
       this.buildTable();
-      console.log(this.competitions);
     });
   }
 
@@ -171,6 +170,7 @@ competitions: any[];
     
   }
 
+  /*
   //TODO: Test this function
   editTabelloni(event) {
     console.log(event);
@@ -194,6 +194,11 @@ competitions: any[];
       this.competitionService.uploadTabelloni({nomeGara: nomeGara, zipFile: this.zipFile}).subscribe((response: any) => {
         console.log(response);
       });
+  }
+*/
+
+  addCompetition(){
+    this.router.navigate(['/add-competition']);
   }
 
 }

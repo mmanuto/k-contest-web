@@ -7,12 +7,12 @@ use RestApi\Controller\ApiController;
 use Cake\Core\Configure;
 
 /**
- * AthletesInscriptions Controller
+ * AthleteInscriptions Controller
  *
- * @property \App\Model\Table\AthletesInscriptionsTable $AthletesInscriptions
- * @method \App\Model\Entity\AthletesInscription[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Model\Table\AthleteInscriptionsTable $AthleteInscriptions
+ * @method \App\Model\Entity\AthleteInscription[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class AthletesInscriptionsController extends ApiController
+class AthleteInscriptionsController extends ApiController
 {
     /**
      * Index method
@@ -22,11 +22,11 @@ class AthletesInscriptionsController extends ApiController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Athletes', 'CategoryCodes', 'Competitions'],
+            'contain' => ['Athletes', 'Categorycodes', 'Competitions'],
         ];
-        $athletesInscriptions = $this->paginate($this->AthletesInscriptions);
+        $athleteInscriptions = $this->paginate($this->AthleteInscriptions);
 
-        $this->set(compact('athletesInscriptions'));
+        $this->set(compact('athleteInscriptions'));
     }
 
     /**
@@ -38,11 +38,11 @@ class AthletesInscriptionsController extends ApiController
      */
     public function view($id = null)
     {
-        $athletesInscription = $this->AthletesInscriptions->get($id, [
-            'contain' => ['Athletes', 'CategoryCodes', 'Competitions'],
+        $athleteInscription = $this->AthleteInscriptions->get($id, [
+            'contain' => ['Athletes', 'Categorycodes', 'Competitions'],
         ]);
 
-        $this->set(compact('athletesInscription'));
+        $this->set(compact('athleteInscription'));
     }
 
     /**
@@ -52,20 +52,20 @@ class AthletesInscriptionsController extends ApiController
      */
     public function add()
     {
-        $athletesInscription = $this->AthletesInscriptions->newEmptyEntity();
+        $athleteInscription = $this->AthleteInscriptions->newEmptyEntity();
         if ($this->request->is('post')) {
-            $athletesInscription = $this->AthletesInscriptions->patchEntity($athletesInscription, $this->request->getData());
-            if ($this->AthletesInscriptions->save($athletesInscription)) {
+            $athleteInscription = $this->AthleteInscriptions->patchEntity($athleteInscription, $this->request->getData());
+            if ($this->AthleteInscriptions->save($athleteInscription)) {
                 $this->Flash->success(__('The athletes inscription has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The athletes inscription could not be saved. Please, try again.'));
         }
-        $athletes = $this->AthletesInscriptions->Athletes->find('list', ['limit' => 200])->all();
-        $categoryCodes = $this->AthletesInscriptions->CategoryCodes->find('list', ['limit' => 200])->all();
-        $competitions = $this->AthletesInscriptions->Competitions->find('list', ['limit' => 200])->all();
-        $this->set(compact('athletesInscription', 'athletes', 'categoryCodes', 'competitions'));
+        $athletes = $this->AthleteInscriptions->Athletes->find('list', ['limit' => 200])->all();
+        $categorycodes = $this->AthleteInscriptions->Categorycodes->find('list', ['limit' => 200])->all();
+        $competitions = $this->AthleteInscriptions->Competitions->find('list', ['limit' => 200])->all();
+        $this->set(compact('athleteInscription', 'athletes', 'categorycodes', 'competitions'));
     }
 
     /**
@@ -77,22 +77,22 @@ class AthletesInscriptionsController extends ApiController
      */
     public function edit($id = null)
     {
-        $athletesInscription = $this->AthletesInscriptions->get($id, [
+        $athleteInscription = $this->AthleteInscriptions->get($id, [
             'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $athletesInscription = $this->AthletesInscriptions->patchEntity($athletesInscription, $this->request->getData());
-            if ($this->AthletesInscriptions->save($athletesInscription)) {
+            $athleteInscription = $this->AthleteInscriptions->patchEntity($athleteInscription, $this->request->getData());
+            if ($this->AthleteInscriptions->save($athleteInscription)) {
                 $this->Flash->success(__('The athletes inscription has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The athletes inscription could not be saved. Please, try again.'));
         }
-        $athletes = $this->AthletesInscriptions->Athletes->find('list', ['limit' => 200])->all();
-        $categoryCodes = $this->AthletesInscriptions->CategoryCodes->find('list', ['limit' => 200])->all();
-        $competitions = $this->AthletesInscriptions->Competitions->find('list', ['limit' => 200])->all();
-        $this->set(compact('athletesInscription', 'athletes', 'categoryCodes', 'competitions'));
+        $athletes = $this->AthleteInscriptions->Athletes->find('list', ['limit' => 200])->all();
+        $categorycodes = $this->AthleteInscriptions->Categorycodes->find('list', ['limit' => 200])->all();
+        $competitions = $this->AthleteInscriptions->Competitions->find('list', ['limit' => 200])->all();
+        $this->set(compact('athleteInscription', 'athletes', 'categorycodes', 'competitions'));
     }
 
     /**
@@ -105,8 +105,8 @@ class AthletesInscriptionsController extends ApiController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $athletesInscription = $this->AthletesInscriptions->get($id);
-        if ($this->AthletesInscriptions->delete($athletesInscription)) {
+        $athleteInscription = $this->AthleteInscriptions->get($id);
+        if ($this->AthleteInscriptions->delete($athleteInscription)) {
             $this->Flash->success(__('The athletes inscription has been deleted.'));
         } else {
             $this->Flash->error(__('The athletes inscription could not be deleted. Please, try again.'));
@@ -118,13 +118,13 @@ class AthletesInscriptionsController extends ApiController
     public function getAthletesByCategory(){
 
         $request = $this->request->getData();
-        $athleteList = $this->AthletesInscriptions->find()
+        $athleteList = $this->AthleteInscriptions->find()
         ->where([
-            'category_code_id' => $request['categorycode_id'],
+            'categorycode_id' => $request['categorycode_id'],
             'competition_id' => $request['competition_id'],
             'deleted' => 0
         ])
-        ->contain(['Athletes' => ['Clubs'], 'CategoryCodes'])
+        ->contain(['Athletes' => ['Clubs'], 'Categorycodes'])
         ->order(['Clubs.id', 'Athletes.id'])
         ->toArray();
 
@@ -140,21 +140,21 @@ class AthletesInscriptionsController extends ApiController
         $data = $this->request->getData();
 
         foreach ($data as $item) {
-            $entity = $this->AthletesInscriptions->get($item['id']);
+            $entity = $this->AthleteInscriptions->get($item['id']);
             if ($entity) {
-                $entity->category_code_id = $item['categorycode_id'];
+                $entity->categorycode_id = $item['categorycode_id'];
                 $entity->modificato = $item['modificato'];
                 $entity->accorpamento = $item['accorpamento'];
                 $entity->old_category = $item['old_category'];
 
-                $this->AthletesInscriptions->save($entity);
+                $this->AthleteInscriptions->save($entity);
             }else{
                 $athlete = $this->Athletes->get($item['athlete_id']);
                 if($athlete){
-                    $newEntity = $this->AthletesInscriptions->newEmptyEntity();
-                    $newEntity = $this->AthletesInscriptions->patchEntity($newEntity, $item);
+                    $newEntity = $this->AthleteInscriptions->newEmptyEntity();
+                    $newEntity = $this->AthleteInscriptions->patchEntity($newEntity, $item);
                     $newEntity->id = $item['id'];
-                    $this->AthletesInscriptions->save($entity);
+                    $this->AthleteInscriptions->save($entity);
                 }
             }
         }
@@ -166,7 +166,7 @@ class AthletesInscriptionsController extends ApiController
 
     public function getModifiedInscriptions(){
 
-        $list = $this->AthletesInscriptions->find()
+        $list = $this->AthleteInscriptions->find()
         ->where([
             'modificato' => 1
         ])->toArray();
@@ -184,9 +184,9 @@ class AthletesInscriptionsController extends ApiController
     public function getAthleteList(){
         $request = $this->request->getData();
 
-        $athleteList = $this->AthletesInscriptions->find()
+        $athleteList = $this->AthleteInscriptions->find()
         ->where(['competition_id' => $request['competition_id']])
-        ->contain(['Athletes' => ['Clubs'], 'CategoryCodes'])
+        ->contain(['Athletes' => ['Clubs'], 'Categorycodes'])
         ->order(['Clubs.id', 'Athletes.id'])
         ->toArray();
 
@@ -202,10 +202,10 @@ class AthletesInscriptionsController extends ApiController
  
         $request = $this->request->getData();
         
-        $athleteInscription = $this->AthletesInscriptions->get($request['id']);
+        $athleteInscription = $this->AthleteInscriptions->get($request['id']);
         $athleteInscription['deleted'] = 1;
     
-        if ($this->AthletesInscriptions->save($athleteInscription)) {
+        if ($this->AthleteInscriptions->save($athleteInscription)) {
 
             $this->apiResponse['success'] = true;
         } else {
@@ -219,13 +219,13 @@ class AthletesInscriptionsController extends ApiController
 
     public function updateCategory(){
         $data = $this->request->getData();
-        $athleteInscription = $this->AthletesInscriptions->get($data['id']);
-        $athleteInscription['old_category'] = $athleteInscription['category_code_id'];
-        $athleteInscription['category_code_id'] = $data['categorycode_id'];
+        $athleteInscription = $this->AthleteInscriptions->get($data['id']);
+        $athleteInscription['old_category'] = $athleteInscription['categorycode_id'];
+        $athleteInscription['categorycode_id'] = $data['categorycode_id'];
         $athleteInscription['accorpamento'] = $data['accorpamento'] ? 1 : 0;
         $athleteInscription['modificato'] = 1;
 
-        if ($this->AthletesInscriptions->save($athleteInscription)) {
+        if ($this->AthleteInscriptions->save($athleteInscription)) {
 
             $this->apiResponse['success'] = true;
         } else {
@@ -236,13 +236,13 @@ class AthletesInscriptionsController extends ApiController
     //-------------------------------------------- Dividi categoria -----------------------------------------------------------------
     public function splitCategory(){
         
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('Categorycodes');
         $data = $this->request->getData();
 
 
-        $splittedCategories = $this->CategoryCodes->find()
+        $splittedCategories = $this->Categorycodes->find()
             ->where([
-                'OR' => [['codice' => $data['codice'].'-M'], ['codice' => $data['codice'].'-F']]
+                'OR' => [['id' => $data['id'].'-M'], ['id' => $data['id'].'-F']]
             ])->toArray();
 
         
@@ -257,39 +257,39 @@ class AthletesInscriptionsController extends ApiController
             }
 
         }else{
-            $categoryMale = $this->CategoryCodes->newEmptyEntity();
-            $categoryMale = $this->CategoryCodes->patchEntity($categoryMale, $data);
+            $categoryMale = $this->Categorycodes->newEmptyEntity();
+            $categoryMale = $this->Categorycodes->patchEntity($categoryMale, $data);
     
-            $categoryFemale = $this->CategoryCodes->newEmptyEntity();
-            $categoryFemale = $this->CategoryCodes->patchEntity($categoryFemale, $data);
+            $categoryFemale = $this->Categorycodes->newEmptyEntity();
+            $categoryFemale = $this->Categorycodes->patchEntity($categoryFemale, $data);
     
-            $categoryMale->codice = $data['codice'].'-M';
+            $categoryMale->id = $data['id'].'-M';
             $categoryMale->sesso = 'M';
-            $categoryMale = $this->CategoryCodes->save($categoryMale);
+            $categoryMale = $this->Categorycodes->save($categoryMale);
             
-            $categoryFemale->codice = $data['codice'].'-F';
+            $categoryFemale->id = $data['id'].'-F';
             $categoryFemale->sesso = 'F';
-            $categoryFemale = $this->CategoryCodes->save($categoryFemale);
+            $categoryFemale = $this->Categorycodes->save($categoryFemale);
         }
 
-        $athleteList = $this->AthletesInscriptions->find()
+        $athleteList = $this->AthleteInscriptions->find()
             ->where([
-                'category_code_id' => $data['id']
+                'categorycode_id' => $data['id']
             ])
             ->contain(['Athletes'])->toArray();
 
 
         foreach ($athleteList as $athlete) {
             if($athlete->athlete->sesso == 'F'){
-                $athlete->old_category = $athlete->category_code_id;
-                $athlete->category_code_id = $categoryFemale->id;
+                $athlete->old_category = $athlete->categorycode_id;
+                $athlete->categorycode_id = $categoryFemale->id;
             }else if($athlete->athlete->sesso == 'M'){
-                $athlete->old_category = $athlete->category_code_id;
-                $athlete->category_code_id = $categoryMale->id;             
+                $athlete->old_category = $athlete->categorycode_id;
+                $athlete->categorycode_id = $categoryMale->id;             
             }
 
             print_r($athlete);
-            $this->AthletesInscriptions->save($athlete);
+            $this->AthleteInscriptions->save($athlete);
         }
         
 

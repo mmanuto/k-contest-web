@@ -6,9 +6,9 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * AthletesInscriptionsFixture
+ * AthleteInscriptionsFixture
  */
-class AthletesInscriptionsFixture extends TestFixture
+class AthleteInscriptionsFixture extends TestFixture
 {
     /**
      * Init method
@@ -21,7 +21,7 @@ class AthletesInscriptionsFixture extends TestFixture
             [
                 'id' => 1,
                 'athlete_id' => 1,
-                'category_code_id' => 1,
+                'categorycode_id' => 1,
                 'competition_id' => 1,
                 'cintura' => 'Lorem ipsum dolor sit amet',
                 'n_iscrizione' => 1,

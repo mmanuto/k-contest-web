@@ -120,24 +120,26 @@ class TeamsController extends ApiController
      // -----------------------------------------------------------------------------------------------------
     // @ RECUPERO ELENCO CATEGORIE E CINTURE
     // -----------------------------------------------------------------------------------------------------
+
+    //TODO: da verificare
     public function getCategorieCinture()
     {
 
         $data = $this->request->getData();
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('Categorycodes');
 
-        $categorie = $this->CategoryCodes->find()->select(['categoria'])->distinct(['categoria'])->where(['specialita' => 'Kata Squadre', 'codiceTipoCategorie' => $data['code']])->toArray();
-        $cinture = $this->CategoryCodes->find()->select(['grado'])->distinct(['grado'])->where(['specialita' => 'Kata Squadre', 'codiceTipoCategorie' => $data['code']])->toArray();
+        $categorie = $this->Categorycodes->find()->select(['categoria'])->distinct(['categoria'])->where(['specialita' => 'Kata Squadre', 'codiceTipoCategorie' => $data['code']])->toArray();
+        $cinture = $this->Categorycodes->find()->select(['grado'])->distinct(['grado'])->where(['specialita' => 'Kata Squadre', 'codiceTipoCategorie' => $data['code']])->toArray();
 
 
         /* $conn = ConnectionManager::get('default');
 
-        $queryCategorie = "SELECT DISTINCT categoria FROM category_codes WHERE specialita = 'Kata Squadre' AND codiceTipoCategorie = ".$data['code'];
+        $queryCategorie = "SELECT DISTINCT categoria FROM categorycodes WHERE specialita = 'Kata Squadre' AND codiceTipoCategorie = ".$data['code'];
         $stmt = $conn->execute($queryCategorie);
 
         $categorie = $stmt ->fetchAll('assoc');
 
-        $queryCinture = "SELECT DISTINCT grado FROM category_codes WHERE specialita = 'Kata Squadre' AND codiceTipoCategorie = ".$data['code'];
+        $queryCinture = "SELECT DISTINCT grado FROM categorycodes WHERE specialita = 'Kata Squadre' AND codiceTipoCategorie = ".$data['code'];
         $stmt = $conn->execute($queryCinture);
                                 
 

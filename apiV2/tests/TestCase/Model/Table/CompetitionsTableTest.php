@@ -25,9 +25,10 @@ class CompetitionsTableTest extends TestCase
      */
     protected $fixtures = [
         'app.Competitions',
-        'app.AthletesInscriptions',
+        'app.AthleteInscriptions',
         'app.ClubInscriptions',
         'app.Teams',
+        'app.Timetables',
     ];
 
     /**
@@ -61,6 +62,17 @@ class CompetitionsTableTest extends TestCase
      * @uses \App\Model\Table\CompetitionsTable::validationDefault()
      */
     public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     * @uses \App\Model\Table\CompetitionsTable::buildRules()
+     */
+    public function testBuildRules(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

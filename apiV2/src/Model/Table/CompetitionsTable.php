@@ -11,9 +11,10 @@ use Cake\Validation\Validator;
 /**
  * Competitions Model
  *
- * @property \App\Model\Table\AthletesInscriptionsTable&\Cake\ORM\Association\HasMany $AthletesInscriptions
+ * @property \App\Model\Table\AthleteInscriptionsTable&\Cake\ORM\Association\HasMany $AthleteInscriptions
  * @property \App\Model\Table\ClubInscriptionsTable&\Cake\ORM\Association\HasMany $ClubInscriptions
  * @property \App\Model\Table\TeamsTable&\Cake\ORM\Association\HasMany $Teams
+ * @property \App\Model\Table\TimetablesTable&\Cake\ORM\Association\HasMany $Timetables
  *
  * @method \App\Model\Entity\Competition newEmptyEntity()
  * @method \App\Model\Entity\Competition newEntity(array $data, array $options = [])
@@ -48,13 +49,13 @@ class CompetitionsTable extends Table
         $this->hasMany('AthleteInscriptions', [
             'foreignKey' => 'competition_id',
         ]);
-        $this->hasMany('AthletesInscriptions', [
-            'foreignKey' => 'competition_id',
-        ]);
         $this->hasMany('ClubInscriptions', [
             'foreignKey' => 'competition_id',
         ]);
         $this->hasMany('Teams', [
+            'foreignKey' => 'competition_id',
+        ]);
+        $this->hasMany('Timetables', [
             'foreignKey' => 'competition_id',
         ]);
     }
@@ -142,7 +143,6 @@ class CompetitionsTable extends Table
         $validator
             ->scalar('comp_status')
             ->maxLength('comp_status', 30)
-            ->requirePresence('comp_status', 'create')
             ->notEmptyString('comp_status');
 
         $validator
@@ -155,5 +155,19 @@ class CompetitionsTable extends Table
             ->notEmptyString('flag_timetable');
 
         return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules): RulesChecker
+    {
+        $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
+
+        return $rules;
     }
 }

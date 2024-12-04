@@ -7,13 +7,14 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Hidehalo\Nanoid\Client;
 
 /**
  * Athletes Model
  *
  * @property \App\Model\Table\ClubsTable&\Cake\ORM\Association\BelongsTo $Clubs
  * @property \App\Model\Table\FederationsTable&\Cake\ORM\Association\BelongsTo $Federations
- * @property \App\Model\Table\AthletesInscriptionsTable&\Cake\ORM\Association\HasMany $AthletesInscriptions
+ * @property \App\Model\Table\AthleteInscriptionsTable&\Cake\ORM\Association\HasMany $AthleteInscriptions
  *
  * @method \App\Model\Entity\Athlete newEmptyEntity()
  * @method \App\Model\Entity\Athlete newEntity(array $data, array $options = [])
@@ -42,7 +43,7 @@ class AthletesTable extends Table
         parent::initialize($config);
 
         $this->setTable('athletes');
-        $this->setDisplayField('nome');
+        $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Clubs', [
@@ -52,9 +53,24 @@ class AthletesTable extends Table
         $this->belongsTo('Federations', [
             'foreignKey' => 'federation_id',
         ]);
-        $this->hasMany('AthletesInscriptions', [
+        $this->hasMany('AthleteInscriptions', [
             'foreignKey' => 'athlete_id',
         ]);
+    }
+
+    /**
+     * Summary of beforeSave
+     * @param mixed $event
+     * @param mixed $entity
+     * @param mixed $options
+     * @return void
+     */
+    public function beforeSave($event, $entity, $options)
+    {
+        if ($entity->isNew() && !$entity->id) {
+            $client = new Client();
+            $entity->id = $client->generateId();
+        }
     }
 
     /**
@@ -66,6 +82,8 @@ class AthletesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->scalar('club_id')
+            ->maxLength('club_id', 20)
             ->notEmptyString('club_id');
 
         $validator
@@ -122,6 +140,7 @@ class AthletesTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
+        $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
         $rules->add($rules->existsIn('club_id', 'Clubs'), ['errorField' => 'club_id']);
         $rules->add($rules->existsIn('federation_id', 'Federations'), ['errorField' => 'federation_id']);
 

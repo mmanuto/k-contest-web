@@ -32,7 +32,7 @@
               </thead>
               <tbody>
                   <tr *ngFor="let category of categories | paginate: { itemsPerPage: 25, currentPage: p }">                        
-                    <td class="align-middle">{{category.codice}}</td>
+                    <td class="align-middle">{{category.id}}</td>
                     <td class="align-middle">{{category.categoria}} - {{category.grado}} {{category.cat_peso}}</td>
                     <td class="align-middle">{{category.specialita}}</td>
                     <td class="align-middle">{{category.sesso}}</td>
@@ -44,7 +44,7 @@
                         <i class="fa fa-file-text"></i>
                       </button>
                       <button type="button" data-toggle="tooltip"  class="btn btn-primary btn-sm tt mr-1" 
-                      *ngIf="category.codice.includes('KU')" (click)="openKumiteBrackets(category)">
+                      *ngIf="category.id.includes('KU')" (click)="openKumiteBrackets(category)">
                         Tabellone
                       </button>
                       <button *ngIf="category.sesso == 'M/F'" type="button" class="btn btn-outline mr-1" data-toggle="tooltip" data-placement="top" title="Dividi categoria"  (click)="splitCategory(category)">
@@ -97,7 +97,7 @@
   <div class="row">
       <div class="col-12 ">
             <div class="modal-header">
-              <h4 *ngIf="selectedCategory" class="modal-title">{{selectedCategory.codice}} - {{selectedCategory.specialita}} - {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.sesso}} {{selectedCategory.cat_peso}}</h4>
+              <h4 *ngIf="selectedCategory" class="modal-title">{{selectedCategory.id}} - {{selectedCategory.specialita}} - {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.sesso}} {{selectedCategory.cat_peso}}</h4>
               <button type="button" class="close" (click)="closeModal()" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

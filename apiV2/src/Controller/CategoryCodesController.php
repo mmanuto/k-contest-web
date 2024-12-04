@@ -6,12 +6,12 @@ use RestApi\Controller\ApiController;
 use Cake\Datasource\ConnectionManager;
 
 /**
- * CategoryCodes Controller
+ * Categorycodes Controller
  *
- * @property \App\Model\Table\CategoryCodesTable $CategoryCodes
- * @method \App\Model\Entity\CategoryCode[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @property \App\Model\Table\CategorycodesTable $Categorycodes
+ * @method \App\Model\Entity\Categorycode[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
-class CategoryCodesController extends ApiController
+class CategorycodesController extends ApiController
 {
     /**
      * Index method
@@ -20,9 +20,9 @@ class CategoryCodesController extends ApiController
      */
     public function index()
     {
-        $categoryCodes = $this->paginate($this->CategoryCodes);
+        $categorycodes = $this->paginate($this->Categorycodes);
 
-        $this->set(compact('categoryCodes'));
+        $this->set(compact('categorycodes'));
     }
 
     /**
@@ -34,11 +34,11 @@ class CategoryCodesController extends ApiController
      */
     public function view($id = null)
     {
-        $categoryCode = $this->CategoryCodes->get($id, [
-            'contain' => ['AthletesInscriptions'],
+        $categorycode = $this->Categorycodes->get($id, [
+            'contain' => ['AthleteInscriptions'],
         ]);
 
-        $this->set(compact('categoryCode'));
+        $this->set(compact('categorycode'));
     }
 
     /**
@@ -48,17 +48,17 @@ class CategoryCodesController extends ApiController
      */
     public function add()
     {
-        $categoryCode = $this->CategoryCodes->newEmptyEntity();
+        $categorycode = $this->Categorycodes->newEmptyEntity();
         if ($this->request->is('post')) {
-            $categoryCode = $this->CategoryCodes->patchEntity($categoryCode, $this->request->getData());
-            if ($this->CategoryCodes->save($categoryCode)) {
+            $categorycode = $this->Categorycodes->patchEntity($categorycode, $this->request->getData());
+            if ($this->Categorycodes->save($categorycode)) {
                 $this->Flash->success(__('The category code has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The category code could not be saved. Please, try again.'));
         }
-        $this->set(compact('categoryCode'));
+        $this->set(compact('categorycode'));
     }
 
     /**
@@ -70,19 +70,19 @@ class CategoryCodesController extends ApiController
      */
     public function edit($id = null)
     {
-        $categoryCode = $this->CategoryCodes->get($id, [
+        $categorycode = $this->Categorycodes->get($id, [
             'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $categoryCode = $this->CategoryCodes->patchEntity($categoryCode, $this->request->getData());
-            if ($this->CategoryCodes->save($categoryCode)) {
+            $categorycode = $this->Categorycodes->patchEntity($categorycode, $this->request->getData());
+            if ($this->Categorycodes->save($categorycode)) {
                 $this->Flash->success(__('The category code has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The category code could not be saved. Please, try again.'));
         }
-        $this->set(compact('categoryCode'));
+        $this->set(compact('categorycode'));
     }
 
     /**
@@ -95,8 +95,8 @@ class CategoryCodesController extends ApiController
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $categoryCode = $this->CategoryCodes->get($id);
-        if ($this->CategoryCodes->delete($categoryCode)) {
+        $categorycode = $this->Categorycodes->get($id);
+        if ($this->Categorycodes->delete($categorycode)) {
             $this->Flash->success(__('The category code has been deleted.'));
         } else {
             $this->Flash->error(__('The category code could not be deleted. Please, try again.'));
@@ -111,7 +111,7 @@ class CategoryCodesController extends ApiController
      */
 
      public function getAllCategories(){
-        $categoryList = $this->CategoryCodes->find()->toArray();
+        $categoryList = $this->Categorycodes->find()->toArray();
 
         $this->apiResponse['data'] = $categoryList;
 	    $this->apiResponse['success'] = true;
@@ -123,16 +123,16 @@ class CategoryCodesController extends ApiController
      */
 
     public function getCategories(){
-        $this->loadModel('AthletesInscriptions');
+        $this->loadModel('AthleteInscriptions');
 
         $request = $this->request->getData();
         
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT category_codes.*, COUNT(athletes_inscriptions.id) AS n_athletes 
-                                FROM athletes_inscriptions 
-                                JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id 
-                                WHERE category_codes.codiceTipoCategorie = 3 AND athletes_inscriptions.deleted = 0 
-                                AND athletes_inscriptions.competition_id = ".$request['competition_id']." GROUP BY category_codes.id");
+        $stmt = $conn->execute("SELECT categorycodes.*, COUNT(athlete_inscriptions.id) AS n_athletes 
+                                FROM athlete_inscriptions 
+                                JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
+                                WHERE categorycodes.codiceTipoCategorie = 3 AND athlete_inscriptions.deleted = 0 
+                                AND athlete_inscriptions.competition_id = ".$request['competition_id']." GROUP BY categorycodes.id");
 
         $categories = $stmt->fetchAll('assoc');
 
@@ -144,15 +144,15 @@ class CategoryCodesController extends ApiController
      * Get all categories with athleteList (Stampa sintetico categoria)
      */
     public function getCategoriesWithAthletes(){
-        $this->loadModel('AthletesInscriptions');
+        $this->loadModel('AthleteInscriptions');
         
         $request = $this->request->getData();
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT category_codes.*, COUNT(athletes_inscriptions.id) AS n_athletes FROM athletes_inscriptions 
-                                JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id 
-                                WHERE category_codes.codiceTipoCategorie = 3 AND athletes_inscriptions.deleted = 0 
-                                AND athletes_inscriptions.competition_id = ".$request['competition_id']."
-                                GROUP BY category_codes.id");
+        $stmt = $conn->execute("SELECT categorycodes.*, COUNT(athlete_inscriptions.id) AS n_athletes FROM athlete_inscriptions 
+                                JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
+                                WHERE categorycodes.codiceTipoCategorie = 3 AND athlete_inscriptions.deleted = 0 
+                                AND athlete_inscriptions.competition_id = ".$request['competition_id']."
+                                GROUP BY categorycodes.id");
 
         $categories = $stmt->fetchAll('assoc');
 
@@ -160,12 +160,12 @@ class CategoryCodesController extends ApiController
 
         foreach ($categories as $category) {
        
-            $athleteList = $this->AthletesInscriptions->find()
+            $athleteList = $this->AthleteInscriptions->find()
             ->where([
-                'category_code_id' => $category['id'],
+                'categorycode_id' => $category['id'],
                 'deleted' => 0
             ])
-            ->contain(['Athletes' => ['Clubs'], 'CategoryCodes'])
+            ->contain(['Athletes' => ['Clubs'], 'Categorycodes'])
             ->order(['Clubs.id', 'Athletes.id'])
             ->toArray();
 

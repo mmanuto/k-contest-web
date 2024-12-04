@@ -63,9 +63,13 @@ class TeamsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->scalar('club_id')
+            ->maxLength('club_id', 20)
             ->notEmptyString('club_id');
 
         $validator
+            ->scalar('competition_id')
+            ->maxLength('competition_id', 20)
             ->notEmptyString('competition_id');
 
         $validator

@@ -31,7 +31,7 @@ export class MembershipComponent implements OnInit {
   public confirmed: boolean;
   public prove: any[];
   public show = false;
-  public categoria = "";
+  public categoria = {description: ""};
   public erroreCategoria = false;
   public errorePeso = false;
   public competition: any;
@@ -40,6 +40,7 @@ export class MembershipComponent implements OnInit {
   public CONST = Constants;
   public athletestNumber:number = 0;
   public athletestMaxNumber:number = 0;
+  public beltList = {};
 
   config = {
     search:true,
@@ -96,11 +97,22 @@ export class MembershipComponent implements OnInit {
 
     this.datiSocieta = this.storageService.get('currentUser');
     this.competition = this.storageService.get('currentCompetition');
+
+    let errorMessage = 'ATTENZIONE! Errore nel caricamento dei dati. Riprovare più tardi, se il problema persiste rivolgersi a info@iscrizionicsenveneto.it';
+
+    this.membershipService.getBeltList().subscribe((response: any) => {
+      if (response.result.success) {
+        this.beltList = response.result.data;
+      } else {
+        this.toastrService.error(errorMessage);
+      }
+    });
+    
     this.membershipService.getFederationsList().subscribe((response: any) => {
       if (response.result.success) {
         this.federationsList = response.result.data;
       } else {
-        this.toastrService.error('ATTENZIONE! Errore nel caricamento dei dati. Riprovare più tardi, se il problema persiste rivolgersi a info@iscrizionicsenveneto.it');
+        this.toastrService.error(errorMessage);
       }
     });
 
@@ -176,14 +188,14 @@ export class MembershipComponent implements OnInit {
 
     let params = {
       'anno': this.athleteForm.value.birthdate_year,
-      'categoryCode': this.competition.codiceTipoCategorie
+      'categorycode': this.competition.codiceTipoCategorie
     }
 
-    this.membershipService.getCategoria(params).subscribe((response: any) => {
+    this.membershipService.getAgeCategory(params).subscribe((response: any) => {
       if (response.result.success) {
-        this.categoria = response.result.data[0].categoria;
+        this.categoria = response.result.data;
       } else {
-        this.categoria = "";
+        this.categoria = {description: ""};
       }
     });
   }
@@ -197,23 +209,15 @@ export class MembershipComponent implements OnInit {
   }
 
   public showPeso() {
-    let kumite = true;
-    let kumiteRagazzi = true;
+    this.show = false;
 
     for (let item of this.prove) {
       if ((item.label == "Kumite" || item.label == "Kumite U12") && item.checked) {
         this.show = true;
         break;
-      } else if (item.label == "Kumite" && !item.checked) {
-        kumite = false;
-      } else if (item.label == "Kumite U12" && !item.checked) {
-        kumiteRagazzi = false;
       }
     }
 
-    if (!kumite && !kumiteRagazzi) {
-      this.show = false;
-    }
   }
 
   public next() {
@@ -223,9 +227,10 @@ export class MembershipComponent implements OnInit {
     if (this.steps[this.steps.length - 1].active)
       return false;
     if (this.steps[0].active) {
-      if (athleteForm.valid && this.categoria != "") {
+      if (athleteForm.valid && this.categoria.description != "") {
         this.erroreCategoria = false;
-        let request = { anno: this.athleteForm.value.birthdate_year, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, category_code: this.competition.codiceTipoCategorie };
+        
+        let request = { anno: this.athleteForm.value.birthdate_year, agecategory: this.categoria, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, categorycode: this.competition.codiceTipoCategorie };
         this.membershipService.getElencoProve(request).subscribe((response: any) => {
 
           if (response.result.success) {
@@ -246,7 +251,7 @@ export class MembershipComponent implements OnInit {
       }
       else {
         this.steps[0].hasError = true;
-        if (this.categoria == '') {
+        if (this.categoria.description == "") {
           this.erroreCategoria = true;
         }
       }
@@ -261,7 +266,7 @@ export class MembershipComponent implements OnInit {
     this.atleta.n_tessera = this.athleteForm.value.n_tessera;
     this.atleta.sesso = this.athleteForm.value.sesso;
     this.atleta.grado = this.athleteForm.value.cintura;
-    this.atleta.categoria = this.categoria;
+    this.atleta.categoria = this.categoria.description;
   }
   /*pulsante per tornare indietro nel widget*/
   public prev() {
@@ -325,7 +330,7 @@ export class MembershipComponent implements OnInit {
         this.atleta.peso = this.weightForm.value.peso;
 
         let elencoProve = {
-          'categoryCode': this.competition.codiceTipoCategorie,
+          'categorycode': this.competition.codiceTipoCategorie,
           'competition_id': this.competition.id,
           'specialita': [],
           'codes': []
@@ -358,7 +363,7 @@ export class MembershipComponent implements OnInit {
                 { name: 'selezione prove', icon: 'fa-user', active: false, valid: false, hasError: false }
               ];
               this.prove = [];
-              this.categoria = '';
+              this.categoria = {description: ""};
               //this.annoNascita = '';
               this.closeModal();
               this.toastrService.success('Atleta salvato');
@@ -429,7 +434,9 @@ export class MembershipComponent implements OnInit {
         'cintura': [this.atleta.grado, Validators.required]
       });
       this.showTessera();
-      this.categoria = user.categoria;
+
+      //TODO: controllare
+      this.categoria.description = user.categoria;
 
       this.weightForm = this.fb.group({
         'peso': [this.atleta.peso, Validators.required]
@@ -439,7 +446,7 @@ export class MembershipComponent implements OnInit {
     }
     else {
       this.atleta = {};
-      this.categoria = "";
+      this.categoria = {description: ""};
       this.prove = [];
       this.athleteForm.reset();
       this.weightForm.reset();

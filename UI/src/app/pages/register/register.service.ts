@@ -26,9 +26,9 @@ export class RegisterService
                  
     } */
 
-    checkCf(request)
+         checkFiscalCode(request)
      {
-         return this.http.post(Constants.BASEAPPURL + 'clubs/checkCf', request);
+         return this.http.post(Constants.BASEAPPURL + 'clubs/checkFiscalCode', request);
                  
     }
 

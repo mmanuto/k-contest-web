@@ -15,6 +15,7 @@ export const routes: Routes = [
       { path: 'membership', loadChildren: () => import('./pages/membership/membership.module').then(m => m.MembershipModule), data: { breadcrumb: 'Membership' } },
       { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule), data: { breadcrumb: 'Home' } },
       { path: 'competitions', loadChildren: () => import('./pages/competitions/competitions.module').then(m => m.CompetitionsModule), data: { breadcrumb: 'Gare in corso' }  },
+      { path: 'add-competition', loadChildren: () => import('./pages/add-competition/add-competition.module').then(m => m.AddCompetitionModule), data: { breadcrumb: 'Aggiungi Gara' }  },
       { path: 'competitionDetails/:id', loadChildren: () => import('./pages/competitionDetails/competitionDetails.module').then(m => m.CompetitionDetailsModule) },
       { path: 'teams', loadChildren: () => import('./pages/teams/teams.module').then(m => m.TeamsModule), data: { breadcrumb: 'Squadre' } },
       { path: 'riepilogo', loadChildren: () => import('./pages/riepilogo/riepilogo.module').then(m => m.RiepilogoModule), data: { breadcrumb: 'Riepilogo' } },

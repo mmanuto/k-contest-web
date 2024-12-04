@@ -6,10 +6,9 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * CategoryCode Entity
+ * Categorycode Entity
  *
- * @property int $id
- * @property string $codice
+ * @property string $id
  * @property string $categoria
  * @property int $anno_min
  * @property int $anno_max
@@ -23,9 +22,9 @@ use Cake\ORM\Entity;
  * @property float $costo_scontato
  * @property int $codiceTipoCategorie
  *
- * @property \App\Model\Entity\AthletesInscription[] $athletes_inscriptions
+ * @property \App\Model\Entity\AthleteInscription[] $athlete_inscriptions
  */
-class CategoryCode extends Entity
+class Categorycode extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -37,7 +36,6 @@ class CategoryCode extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
-        'codice' => true,
         'categoria' => true,
         'anno_min' => true,
         'anno_max' => true,
@@ -50,6 +48,6 @@ class CategoryCode extends Entity
         'costo_intero' => true,
         'costo_scontato' => true,
         'codiceTipoCategorie' => true,
-        'athletes_inscriptions' => true,
+        'athlete_inscriptions' => true,
     ];
 }

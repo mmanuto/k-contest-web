@@ -9,8 +9,8 @@ use Cake\ORM\Entity;
  * ClubInscription Entity
  *
  * @property int $id
- * @property int $club_id
- * @property int $competition_id
+ * @property string $club_id
+ * @property string $competition_id
  *
  * @property \App\Model\Entity\Club $club
  * @property \App\Model\Entity\Competition $competition

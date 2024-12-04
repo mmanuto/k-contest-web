@@ -42,7 +42,7 @@ class AthletesController extends ApiController
     public function view($id = null)
     {
         $athlete = $this->Athletes->get($id, [
-            'contain' => ['Clubs', 'Federations', 'AthletesInscriptions'],
+            'contain' => ['Clubs', 'Federations', 'AthleteInscriptions'],
         ]);
 
         $this->set(compact('athlete'));
@@ -116,25 +116,6 @@ class AthletesController extends ApiController
         return $this->redirect(['action' => 'index']);
     }
 
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ ELENCO FEDERAZIONI
-    // -----------------------------------------------------------------------------------------------------
-
-    public function getFederations()
-    {
-        $this->loadModel('Federations');
-        $federationList = $this->Federations->find('all');
-
-        if ($federationList) {
-            $this->apiResponse['data'] = $federationList;
-            $this->apiResponse['success'] = true;
-        } else {
-            $this->apiResponse['success'] = false;
-            $this->apiResponse['message'] = 'Errore nel recupero dei dati';
-        }
-    }
-
     // -----------------------------------------------------------------------------------------------------
     // @ ELENCO ATLETI APPARTENENTI ALLA SOCIETA'
     // -----------------------------------------------------------------------------------------------------
@@ -160,33 +141,16 @@ class AthletesController extends ApiController
     public function getIscritti()
     {
         $data = $this->request->getData();
-        $this->loadModel('AthletesInscriptions');
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('AthleteInscriptions');
+        $this->loadModel('categorycodes');
 
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT * FROM athletes_inscriptions 
-                                JOIN athletes ON athletes.id = athletes_inscriptions.athlete_id 
-                                JOIN category_codes ON category_codes.id = athletes_inscriptions.category_code_id 
-                                 WHERE athletes_inscriptions.competition_id =" . $data['competition_id'] . " AND athletes.club_id = " . $data['club_id']);
+        $stmt = $conn->execute("SELECT * FROM athlete_inscriptions 
+                                JOIN athletes ON athletes.id = athlete_inscriptions.athlete_id 
+                                JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
+                                 WHERE athlete_inscriptions.competition_id = '" . $data['competition_id'] . "' AND athletes.club_id = '" . $data['club_id']."'");
 
         $listaIscritti = $stmt->fetchAll('assoc');
-
-        /* $listaIscritti = $this->AthletesInscriptions->find('all')
-        ->select(['AthletesInscriptions.*, Athletes.*', 'CategoryCodes.*'])
-                ->join([
-                    'athletes' => [
-                        'table' => 'athletes',
-                        'type' => 'INNER',
-                        'conditions' => 'athletes.id = AthletesInscriptions.athlete_id'
-                    ],
-                    'category_codes' => [
-                        'table' => 'category_codes',
-                        'type' => 'INNER',
-                        'conditions' => 'category_codes.id = AthletesInscriptions.category_code_id'
-                    ]
-
-                ])
-                ->where(['AthletesInscriptions.competition_id' => $data['competition_id'], 'athletes.club_id' => $data['club_id']])->toArray(); */
 
         if ($listaIscritti) {
             $this->apiResponse['success'] = true;
@@ -202,36 +166,17 @@ class AthletesController extends ApiController
     // @ CATEGORIA E PROVE
     // -----------------------------------------------------------------------------------------------------
 
-    // =========================================== CATEGORIA DATO L'ANNO DI NASCITA =================================================
-    public function getCategoria()
-    {
-
-        $data = $this->request->getData();
-        $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT DISTINCT categoria FROM category_codes WHERE codiceTipoCategorie =" . $data['categoryCode'] . " AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
-
-        $categoria = $stmt->fetchAll('assoc');
-
-
-        if ($categoria) {
-            $this->apiResponse['data'] = $categoria;
-            $this->apiResponse['success'] = true;
-        } else {
-            $this->apiResponse['success'] = false;
-        }
-    }
-
     // =========================================== ELENCO PROVE PER ISCRIZIONE ===============================================
     public function getElencoProve()
     {
-        $this->loadModel('CategoryCodes');
+        $this->loadModel('Categorycodes');
         $this->loadModel('Belts');
         $data = $this->request->getData();
         $conn = ConnectionManager::get('default');
         $resultProve = [];
 
         if($data['anno'] >= 2013){
-            $stmt = $conn->execute("SELECT distinct specialita FROM category_codes WHERE codiceTipoCategorie =" . $data['category_code'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
+            $stmt = $conn->execute("SELECT distinct specialita FROM categorycodes WHERE codiceTipoCategorie =" . $data['categorycode'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
 
             $result = $stmt->fetchAll('assoc');
             foreach ($result as $prova) {
@@ -239,7 +184,7 @@ class AthletesController extends ApiController
             }
         }else{
            
-            $stmt = $conn->execute("SELECT distinct specialita FROM category_codes WHERE codiceTipoCategorie =" . $data['category_code'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max AND specialita <> 'Kata'");
+            $stmt = $conn->execute("SELECT distinct specialita FROM categorycodes WHERE codiceTipoCategorie =" . $data['categorycode'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max AND specialita <> 'Kata'");
             $result = $stmt->fetchAll('assoc');
             $beltList = $this->Belts->find()->toArray();
 
@@ -247,9 +192,9 @@ class AthletesController extends ApiController
                 $resultProve[] = ['name' => $prova['specialita'], 'code' => ''];
             }
 
-            $kataCategory = $this->CategoryCodes->find()
+            $kataCategory = $this->Categorycodes->find()
                 ->where([
-                    'codiceTipoCategorie' => $data['category_code'],
+                    'codiceTipoCategorie' => $data['categorycode'],
                     'sesso LIKE ' => '%'.$data['sesso'].'%',
                     'grado LIKE ' => '%'.$data['grado'].'%',
                     'anno_min <=' => $data['anno'],
@@ -262,9 +207,9 @@ class AthletesController extends ApiController
                 'code' => $kataCategory->id];
 
                 
-            $kataCategoryList = $this->CategoryCodes->find()
+            $kataCategoryList = $this->Categorycodes->find()
                 ->where([
-                    'codiceTipoCategorie' => $data['category_code'],
+                    'codiceTipoCategorie' => $data['categorycode'],
                     'sesso LIKE ' => '%'.$data['sesso'].'%',
                     'specialita' => 'Kata',
                     'categoria NOT LIKE' => 'MASTER'.'%',
@@ -312,7 +257,7 @@ class AthletesController extends ApiController
     public function saveAtleta()
     {
 
-        $this->loadModel('AthletesInscriptions');
+        $this->loadModel('AthleteInscriptions');
         $request = $this->request->getData();
         $conn = ConnectionManager::get('default');
 
@@ -340,7 +285,7 @@ class AthletesController extends ApiController
 
             $dataNascita = explode("/", $athltete['data_nascita']);
 
-            $query = "SELECT * FROM category_codes WHERE codiceTipoCategorie =" . $prove['categoryCode'] . " AND grado LIKE '%" . $athltete['grado'] . "%' 
+            $query = "SELECT * FROM categorycodes WHERE codiceTipoCategorie =" . $prove['categorycode'] . " AND grado LIKE '%" . $athltete['grado'] . "%' 
                         AND sesso LIKE '%" . $athltete['sesso'] . "%' AND " . $dataNascita[2] . " BETWEEN anno_min AND anno_max";
             if ($athltete['peso']) {
                 $query .= "  AND " . $athltete['peso'] . " BETWEEN peso_min AND peso_max-1";
@@ -353,7 +298,7 @@ class AthletesController extends ApiController
             $result = $stmt->fetchAll('assoc');
 
             //===================================== ELIMINO EVENTUALI PROVE GIA' INSERITE ========================================
-            $this->AthletesInscriptions
+            $this->AthleteInscriptions
                 ->deleteAll([
                     'athlete_id' => $savedAtlhete->id,
                     'competition_id' => $prove['competition_id']
@@ -363,21 +308,21 @@ class AthletesController extends ApiController
             foreach ($prove['specialita'] as $prova) {
                 foreach ($result as $record) {
                     if ($record['specialita'] == $prova) {
-                        $inscription = $this->AthletesInscriptions->newEmptyEntity();
+                        $inscription = $this->AthleteInscriptions->newEmptyEntity();
                         $inscription->athlete_id = $savedAtlhete->id;
-                        $inscription->category_code_id = $record['id'];
+                        $inscription->categorycode_id = $record['id'];
                         $inscription->competition_id = $prove['competition_id'];
-                        $this->AthletesInscriptions->save($inscription);
+                        $this->AthleteInscriptions->save($inscription);
                     }
                 }
             }
 
             foreach ($prove['codes'] as $code) {
-                $inscription = $this->AthletesInscriptions->newEmptyEntity();
+                $inscription = $this->AthleteInscriptions->newEmptyEntity();
                 $inscription->athlete_id = $savedAtlhete->id;
-                $inscription->category_code_id = $code;
+                $inscription->categorycode_id = $code;
                 $inscription->competition_id = $prove['competition_id'];
-                $this->AthletesInscriptions->save($inscription);
+                $this->AthleteInscriptions->save($inscription);
             }
 
             $this->apiResponse['success'] = true;
@@ -393,10 +338,10 @@ class AthletesController extends ApiController
     {
 
         $data = $this->request->getData();
-        $this->loadModel('AthletesInscriptions');
+        $this->loadModel('AthleteInscriptions');
 
         if (
-            $this->AthletesInscriptions
+            $this->AthleteInscriptions
                 ->deleteAll([
                     'athlete_id' => $data['athlete_id'],
                     'competition_id' => $data['competition_id']

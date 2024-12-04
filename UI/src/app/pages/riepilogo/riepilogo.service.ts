@@ -9,7 +9,7 @@ export class RiepilogoService {
 
     getDatiGara(idGara)
      {
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', idGara);
+         return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', {idGara:idGara});
                  
     }
 

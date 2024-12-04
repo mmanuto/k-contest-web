@@ -17,16 +17,16 @@ export class CompetitionDetailsService
     getCategories(request)
      {
         console.log('entra');
-         return this.http.post(Constants.BASEAPPURL + 'categoryCodes/getCategories', request);
+         return this.http.post(Constants.BASEAPPURL + 'categorycodes/getCategories', request);
                  
     }
 
     getCategoriesWithAthletes(request){
-        return this.http.post(Constants.BASEAPPURL + 'categoryCodes/getCategoriesWithAthletes', request);
+        return this.http.post(Constants.BASEAPPURL + 'categorycodes/getCategoriesWithAthletes', request);
     }
 
     getModifiedInscriptions(){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getModifiedInscriptions', {});
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getModifiedInscriptions', {});
     }
 
     toggleFlags(request){
@@ -44,7 +44,7 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getAthleteList(request){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getAthleteList', request);
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthleteList', request);
     }
 
     getTotalAthleteList(){
@@ -56,7 +56,7 @@ export class CompetitionDetailsService
     }
 
     getAllCategories(){
-        return this.http.post(Constants.BASEAPPURL + "categoryCodes/getAllCategories", {});
+        return this.http.post(Constants.BASEAPPURL + "categorycodes/getAllCategories", {});
     }
 
     //-------------------- Inserimento nuovo atleta --------------------------------------
@@ -80,11 +80,11 @@ export class CompetitionDetailsService
     //-------------------------------------- Modifica Atleta -----------------------------------
     deteleAtletaInscription(request){
         console.log(request);
-        return this.http.post(Constants.BASEAPPURL + "athletesInscriptions/deleteInscription", request);
+        return this.http.post(Constants.BASEAPPURL + "athleteInscriptions/deleteInscription", request);
     }   
 
     updateCategory(request){
-        return this.http.post(Constants.BASEAPPURL + "athletesInscriptions/updateCategory", request);
+        return this.http.post(Constants.BASEAPPURL + "athleteInscriptions/updateCategory", request);
     }
 
     // ====================================================================================================
@@ -92,7 +92,7 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getAthletesByCategory(request){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getAthletesByCategory', request);
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
     }
 
     getTotaleIscrizioni(request){
@@ -104,7 +104,7 @@ export class CompetitionDetailsService
     }
 
     splitCategory(request){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/splitCategory', request);
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/splitCategory', request);
     }
 
     // ====================================================================================================
@@ -112,7 +112,7 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getClubsWithAthletes(request){
-        return this.http.post(Constants.BASEAPPURL + 'athletesInscriptions/getClubsWithAthletes', request);
+        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getClubsWithAthletes', request);
     }
     
 }

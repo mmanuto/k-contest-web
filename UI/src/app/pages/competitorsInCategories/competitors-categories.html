@@ -1,107 +1,114 @@
-<div class="row">
+<h2>Totale Iscritti: {{athletestNumber}}</h2>
+<br/>
+<div widget class="card border-0 box-shadow mt-3">
+  <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
+    <h5 class="mb-0" style="color:white">Elenco categorie</h5>
+</div>
+  <div class="card-body pt-0 widget-body">
+    <div class="row">
 
-        <div class="col-lg-12 mb-4">
-            <h2>Totale Iscritti: {{athletestNumber}}</h2>
-        <br/>
+            <div class="col-lg-12 mb-4">
 
 
-            <div *ngIf="!tabelloni" class="card-body pt-0 widget-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <!-- <th>#</th> -->
-                            <th>Specialità</th>
-                            <th>Categoria</th>
-                            <th>Cintura</th>
-                            <th>Genere</th>
-                            <th>Atleti</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="categories.length == 0">
-                            <td>Nessun atleta iscritto alla manifestazione</td>
-                        </tr>
-                        <tr *ngFor="let item of categories" class="col-xl-6 col-lg-6 mb-4">
-                            <!-- <th scope="row">1</th> -->
-                            <td>{{item.specialita}}</td>
-                            <td>{{item.categoria}}</td>
-                            <td>{{item.grado}}</td>
-                            <td>{{item.sesso}}</td>
-                            <td>{{item.n_athletes}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
-            <div *ngIf="tabelloni && !dettaglio" >
-                <div class="table-responsive  bg-white">
-                    <table datatable class="table dataTable table-sm table-striped">
+                <div *ngIf="!tabelloni" class="card-body pt-0 widget-body">
+                    <table class="table table-striped">
                         <thead>
-                          <tr>
-                            <th>Specialità</th>
-                            <th>Categoria</th>
-                            <th>Genere</th>
-                            <th>N. Atleti</th>
-                            <th>Apri</th>
-                          </tr>
+                            <tr>
+                                <!-- <th>#</th> -->
+                                <th>Specialità</th>
+                                <th>Categoria</th>
+                                <th>Cintura</th>
+                                <th>Genere</th>
+                                <th>Atleti</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let category of categories | paginate: { itemsPerPage: 25, currentPage: p }">                        
-                              <td class="align-middle">{{category.specialita}}</td>
-                              <td class="align-middle">{{category.categoria}} - {{category.grado}} {{category.cat_peso}}</td>
-                              <td class="align-middle">{{category.sesso}}</td>
-                              <td class="align-middle">{{category.n_athletes}}</td>
-                              <td class="align-middle">
-                                <button type="button" data-toggle="tooltip" data-placement="top" title="Visualizza categoria" class="btn btn-primary btn-sm tt mr-1" data-animation="false" (click)="openCategory(category)">
-                                  Elenco
-                                </button>
-                                <button type="button" data-toggle="tooltip"  class="btn btn-primary btn-sm tt mr-1" 
-                                *ngIf="category.codice.includes('KU')" (click)="openKumiteBrackets(category)">
-                                  Tabellone
-                                </button>
-                              </td>
+                            <tr *ngIf="categories.length == 0">
+                                <td>Nessun atleta iscritto alla manifestazione</td>
+                            </tr>
+                            <tr *ngFor="let item of categories" class="col-xl-6 col-lg-6 mb-4">
+                                <!-- <th scope="row">1</th> -->
+                                <td>{{item.specialita}}</td>
+                                <td>{{item.categoria}}</td>
+                                <td>{{item.grado}}</td>
+                                <td>{{item.sesso}}</td>
+                                <td>{{item.n_athletes}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="bg-white text-center">
-                            <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="3"></pagination-controls>
-                        </div>        
+                <div *ngIf="tabelloni && !dettaglio" >
+                    <div class="table-responsive  bg-white">
+                        <table datatable class="table dataTable table-sm table-striped">
+                            <thead>
+                              <tr>
+                                <th>Specialità</th>
+                                <th>Categoria</th>
+                                <th>Genere</th>
+                                <th>N. Atleti</th>
+                                <th>Apri</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let category of categories | paginate: { itemsPerPage: 25, currentPage: p }">                        
+                                  <td class="align-middle">{{category.specialita}}</td>
+                                  <td class="align-middle">{{category.categoria}} - {{category.grado}} {{category.cat_peso}}</td>
+                                  <td class="align-middle">{{category.sesso}}</td>
+                                  <td class="align-middle">{{category.n_athletes}}</td>
+                                  <td class="align-middle">
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Visualizza categoria" class="btn btn-primary btn-sm tt mr-1" data-animation="false" (click)="openCategory(category)">
+                                      Elenco
+                                    </button>
+                                    <button type="button" data-toggle="tooltip"  class="btn btn-primary btn-sm tt mr-1" 
+                                    *ngIf="category.id.includes('KU')" (click)="openKumiteBrackets(category)">
+                                      Tabellone
+                                    </button>
+                                  </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                  </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="bg-white text-center">
+                                <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="3"></pagination-controls>
+                            </div>        
+                        </div>
+                      </div>
 
 
-            </div>
-            <div *ngIf="dettaglio">
-              <div class="col-lg-12 text-center">
-                <h2>{{selectedCategory.specialita}} {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.cat_peso}} {{selectedCategory.sesso}}</h2>
-                
-                <button type="button" data-toggle="tooltip" data-placement="top" class="btn btn-outline-primary tt mt-4" data-animation="false" (click)="backTocategory()">
-                  Torna all'elenco categorie
-                </button>
-  
                 </div>
-              
+                <div *ngIf="dettaglio">
+                  <div class="col-lg-12 text-center">
+                    <h2>{{selectedCategory.specialita}} {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.cat_peso}} {{selectedCategory.sesso}}</h2>
+                    
+                    <button type="button" data-toggle="tooltip" data-placement="top" class="btn btn-outline-primary tt mt-4" data-animation="false" (click)="backTocategory()">
+                      Torna all'elenco categorie
+                    </button>
+      
+                    </div>
+                  
 
-            <div class="row">
+                <div class="row">
 
-            <div class="bg-white mt-4" style="margin: 0 auto;">
-              <div id="minimal"></div>
+                <div class="bg-white mt-4" style="margin: 0 auto;">
+                  <div id="minimal"></div>
 
-              <div id="girone-2"></div>
+                  <div id="girone-2"></div>
 
-              <div id="girone-3"></div>
-            </div>
-          </div>
-            </div>
+                  <div id="girone-3"></div>
+                </div>
+              </div>
+                </div>
+
+        </div>
 
     </div>
-
+  </div>
 </div>
-
 
 <div bsModal #listModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-primary modal-lg" role="document">

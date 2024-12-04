@@ -8,8 +8,8 @@ export class TeamsService {
     //public url = "api/users";
     constructor(public http:HttpClient) { }
 
-    getCategorieCinture(categoryCode){
-        return this.http.post(Constants.BASEAPPURL + "teams/getCategorieCinture", {code: categoryCode});
+    getCategorieCinture(categorycode){
+        return this.http.post(Constants.BASEAPPURL + "teams/getCategorieCinture", {code: categorycode});
     }
 
     getListaIscritti(request){
