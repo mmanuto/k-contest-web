@@ -165,7 +165,7 @@ class ClubsController extends ApiController
 
                 //TODO: REGISTRAZIONE LOG ACCESSO
                 /* $log = $this->Logs->newEntity();
-                $log['registered_club'] = strtoupper($dataClub['nome_societa']);
+                $log['registered_club'] = strtoupper($dataClub['club_name']);
                 $log['action'] = 'Login';
                 $this->Logs->save($log);
  */
@@ -185,7 +185,7 @@ class ClubsController extends ApiController
                 if ($this->salvaIscrizione($newClub, $competition)) {
 
                     //invio mail di riepilogo
-                    $testoMail = "Mail automatica di primo accesso al sistema di iscrizione. \r Di seguito i dati inseriti in fase di registrazione, per gli accessi successivi sar� sufficente inserire il codice fiscale della sciet� e cliccare sul pulsante recupera dati.\r Societa: " . $newClub['nome_societa'] . "\r Codice Fiscale: " . $newClub['fiscal_code'] . "\r Responsabile: " . $newClub['responsabile'] . "\r Telefono: " . $newClub['telefono'] . "\r Email: " . $newClub['mail'] . "\r coach: " . $newClub['coach'];
+                    $testoMail = "Mail automatica di primo accesso al sistema di iscrizione. \r Di seguito i dati inseriti in fase di registrazione, per gli accessi successivi sar� sufficente inserire il codice fiscale della sciet� e cliccare sul pulsante recupera dati.\r Societa: " . $newClub['club_name'] . "\r Codice Fiscale: " . $newClub['fiscal_code'] . "\r Responsabile: " . $newClub['club_manager'] . "\r Telefono: " . $newClub['telefono'] . "\r Email: " . $newClub['mail'] . "\r coach: " . $newClub['coach'];
 
                     $Email = new Mailer();
                     $Email->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])

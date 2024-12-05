@@ -212,7 +212,7 @@ export class RiepilogoComponent {
         rows.push(recordSquadra);
       }
     }
-    var nome = 'ELENCO ATLETI ' + this.datiSocieta.nome_societa;
+    var nome = 'ELENCO ATLETI ' + this.datiSocieta.club_name;
 
     doc.text(nome, 15, 10);
 
@@ -252,13 +252,28 @@ export class RiepilogoComponent {
 
     doc.setFontSize(15);
 
-    var paragraph = 'Il sottoscritto  ' + this.datiSocieta.responsabile + ', Responsabile della Società ' + this.datiSocieta.nome_societa + ', dichiara che gli atleti partecipanti alla manifestazione in oggetto sono tutti in possesso del certificato medico.';
+    var paragraph = 'Il sottoscritto  ' + this.datiSocieta.club_manager + ', Responsabile della Società ' + this.datiSocieta.club_name + ', dichiara: ';
     var lines = doc.splitTextToSize(paragraph, (pdfInMM - lMargin - rMargin));
-    doc.text(lines, 15, 125);
+    doc.text(lines, 15, 123);
+
+    var paragraph2 = '\u2022' + '  '+' che gli atleti partecipanti alla manifestazione in oggetto sono tutti in possesso del certificato medico;';
+    var lines2 = doc.splitTextToSize(paragraph2, (pdfInMM - lMargin - rMargin));
+
+    doc.text(lines2, 20, 133);
+
+    var paragraph3 = '\u2022' + '  '+' di essere in possesso della liberatoria all’utilizzo delle immagini degli atleti;';
+    var lines3 = doc.splitTextToSize(paragraph3, (pdfInMM - lMargin - rMargin));
+
+    doc.text(lines3, 20, 145);
+
+    var paragraph4 = '\u2022' + '  '+' di essere in possesso della copia dei documenti d’identità dell’atleta e dei genitori (in caso di atleti minorenni).';
+    var lines4 = doc.splitTextToSize(paragraph4, (pdfInMM - lMargin - rMargin));
+
+    doc.text(lines4, 20, 153);
 
     doc.text('Data e Luogo', 20, 250);
     doc.text('Firma', 155, 250);
-
+    doc.save('test.pdf');
     return btoa(doc.output());
   }
 
@@ -286,10 +301,10 @@ export class RiepilogoComponent {
   creaExcelSocieta() {
     let data = [
       {
-        name: 'Societa: ' + this.datiSocieta.nome_societa
+        name: 'Societa: ' + this.datiSocieta.club_name
       },
       {
-        name: "Responsabile: " + this.datiSocieta.responsabile
+        name: "Responsabile: " + this.datiSocieta.club_manager
       },
       {
         name: "Email: " + this.datiSocieta.mail
@@ -368,10 +383,10 @@ export class RiepilogoComponent {
     console.log(this.datiSocieta);
     let data = [
       {
-        name: 'Societa: ' + this.datiSocieta.nome_societa
+        name: 'Societa: ' + this.datiSocieta.club_name
       },
       {
-        name: "Responsabile: " + this.datiSocieta.responsabile
+        name: "Responsabile: " + this.datiSocieta.club_manager
       },
       {
         name: "Codice Fiscale: " + this.datiSocieta.CF
@@ -407,7 +422,7 @@ export class RiepilogoComponent {
           prove: prova,
           peso: iscritto.peso,
           dataNascita: iscritto.data_nascita,
-          societa: this.datiSocieta.nome_societa
+          societa: this.datiSocieta.club_name
           
         });
 

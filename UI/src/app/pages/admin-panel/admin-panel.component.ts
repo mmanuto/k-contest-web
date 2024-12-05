@@ -227,19 +227,19 @@ export class AdminPanleComponent {
     let count = 1;
     for (let atleta of category.athletes) {
 
-      let record = [count, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.nome_societa];
+      let record = [count, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.club_name];
 
       if(category.id.substring(0, 3) == 'KIA'){
         let color = 'AKA'
         if(category.athletes.length != 3 && count % 2 == 0){
             color = 'AO';
         }
-        record = [count, color, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.nome_societa];
+        record = [count, color, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.club_name];
       }
 
       if((category.id.substring(0, 3) == 'KUA' || category.id.substring(0, 3) == 'KUG') && peso){
         
-        record = [count, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.nome_societa, atleta.athlete.peso];
+        record = [count, atleta.athlete.cognome + ' ' + atleta.athlete.nome, atleta.athlete.club.club_name, atleta.athlete.peso];
       }
       rows.push(record);
       count++;
@@ -537,7 +537,7 @@ export class AdminPanleComponent {
               position: position, 
               id: kumiteAthleteList[index].id, 
               name: kumiteAthleteList[index].athlete.cognome + ' ' + kumiteAthleteList[index].athlete.nome, 
-              club:kumiteAthleteList[index].athlete.club.nome_societa
+              club:kumiteAthleteList[index].athlete.club.club_name
             })
           }else{
             kumiteMatches.push({

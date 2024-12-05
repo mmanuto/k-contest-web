@@ -121,7 +121,7 @@ export class RegisterComponent {
         });
 
         this.club.responsabile = this.personalForm.value.name;
-        this.club.nome_societa = this.personalForm.value.society;
+        this.club.club_name = this.personalForm.value.society;
         this.club.fiscal_code = this.personalForm.value.cod_fiscale;
         this.club.mail = this.personalForm.value.email;
         this.club.telefono = this.personalForm.value.phone;
@@ -227,7 +227,7 @@ export class RegisterComponent {
             //fare automaticamente il next e confirm (o solo il confirm?)
             if (response.result.success) {
                 this.club.responsabile = response.result.valore.responsabile;
-                this.club.nome_societa = response.result.valore.nome_societa;
+                this.club.club_name = response.result.valore.club_name;
                 this.club.fiscal_code = response.result.valore.fiscal_code;
                 this.club.mail = response.result.valore.mail;
                 this.club.telefono = response.result.valore.telefono;

@@ -193,7 +193,7 @@ export class AthletesComponent {
           id: element.id,
           firstName: element.athlete.nome,
           lastName: element.athlete.cognome,
-          club: element.athlete.club.nome_societa,
+          club: element.athlete.club.club_name,
           birthdate: element.athlete.data_nascita,
           belt: element.athlete.grado,
           codes: element.categorycode.id,

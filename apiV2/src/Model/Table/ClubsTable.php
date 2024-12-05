@@ -43,7 +43,7 @@ class ClubsTable extends Table
         parent::initialize($config);
 
         $this->setTable('clubs');
-        $this->setDisplayField('nome_societa');
+        $this->setDisplayField('club_name');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Athletes', [
