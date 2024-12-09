@@ -185,10 +185,11 @@ export class MembershipComponent implements OnInit {
   }
 
   checkCategory() {
-
+    console.log(this.competition);
     let params = {
       'anno': this.athleteForm.value.birthdate_year,
-      'categorycode': this.competition.codiceTipoCategorie
+      'categorycode': this.competition.codiceTipoCategorie,
+      'competition_date': this.competition.data_gara    
     }
 
     this.membershipService.getAgeCategory(params).subscribe((response: any) => {
@@ -229,7 +230,7 @@ export class MembershipComponent implements OnInit {
     if (this.steps[0].active) {
       if (athleteForm.valid && this.categoria.description != "") {
         this.erroreCategoria = false;
-        
+
         let request = { anno: this.athleteForm.value.birthdate_year, agecategory: this.categoria, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, categorycode: this.competition.codiceTipoCategorie };
         this.membershipService.getElencoProve(request).subscribe((response: any) => {
 

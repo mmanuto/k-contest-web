@@ -273,7 +273,7 @@ export class RiepilogoComponent {
 
     doc.text('Data e Luogo', 20, 250);
     doc.text('Firma', 155, 250);
-    doc.save('test.pdf');
+
     return btoa(doc.output());
   }
 

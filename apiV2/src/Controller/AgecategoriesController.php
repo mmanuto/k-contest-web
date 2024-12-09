@@ -109,8 +109,8 @@ class AgecategoriesController extends ApiController
     public function getAgeCategory()
     {
         $data = $this->request->getData();
-        $currentYear = FrozenTime::now()->i18nFormat('yyyy');
-        $age = $currentYear - $data['anno'];
+        $competitionDate = explode("-", $data['competition_date']);
+        $age = $competitionDate[0] - $data['anno'];
 
         $category = $this->Agecategories->find()
         ->where(['age_min <=' => $age, 'age_max >=' => $age])->first();

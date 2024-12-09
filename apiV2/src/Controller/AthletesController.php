@@ -142,7 +142,7 @@ class AthletesController extends ApiController
     {
         $data = $this->request->getData();
         $this->loadModel('AthleteInscriptions');
-        $this->loadModel('categorycodes');
+        $this->loadModel('Categorycodes');
 
         $conn = ConnectionManager::get('default');
         $stmt = $conn->execute("SELECT * FROM athlete_inscriptions 
@@ -377,6 +377,10 @@ class AthletesController extends ApiController
         $filename = $competition['nome_gara'] . "/iscrizioni_" . $datiSocieta['club_name'] . ".pdf";
         $filenameCertificati = $competition['nome_gara'] . "/autodichiarazione_" . $datiSocieta['club_name'] . ".pdf";
 
+        if (!file_exists($competition['nome_gara'])) {
+            mkdir($competition['nome_gara'], 0777, true);
+        }
+
         file_put_contents($filename, $dataPdf);
         file_put_contents($filenameCertificati, $autodichiarazionePdf);
 
@@ -390,12 +394,6 @@ class AthletesController extends ApiController
             fputcsv($fp, $fields, ";");
         }
         fclose($fp);
-
-        if (!file_exists($competition['nome_gara'])) {
-            mkdir($competition['nome_gara'], 0777, true);
-        }
-
-
 
         //-------------------------------------- INVIO MAIL EXCEL  --------------------------------------
         $user = $this->Users->get(1);
@@ -413,9 +411,9 @@ class AthletesController extends ApiController
 
 
         //------------------------------------ INVIO MAIL PDF RIEPILOGO -------------------------------------
-        $destinatariPdf = array($competition['email'], $user['email'], $datiSocieta['mail']);
+        $destinatariPdf = array($competition['email'], $user['email'], $datiSocieta['mail'], 'giancarlo.cecchinato777@gmail.com');
 
-        $testoSocieta = "Buongiorno, in allegato il riepilogo delle iscrizioni per la manifestazione " . $competition['nome_gara'] . "\r\r Societa: " . $datiSocieta['club_name'] . "\r Codice Fiscale: " . $datiSocieta['CF'] . "\r Responsabile: " . $datiSocieta['club_manager'] . "\r Telefono: " . $datiSocieta['telefono'] . "\r Email: " . $datiSocieta['mail'] . "\r coach: " . $datiSocieta['coach'] . "\r\r Inviamo anche il modulo di autocertificazione per l'affiliazione e i certificati medici che deve essere firmato e consegnato in sede di gara, o inviato via email al responsabile di gara.";
+        $testoSocieta = "Buongiorno, in allegato il riepilogo delle iscrizioni per la manifestazione " . $competition['nome_gara'] . "\r\r Societa: " . $datiSocieta['club_name'] . "\r Codice Fiscale: " . $datiSocieta['fiscal_code'] . "\r Responsabile: " . $datiSocieta['club_manager'] . "\r Telefono: " . $datiSocieta['telephone_n'] . "\r Email: " . $datiSocieta['mail'] . "\r coach: " . $datiSocieta['coach'] . "\r\r Inviamo anche il modulo di autocertificazione per l'affiliazione e i certificati medici che deve essere firmato e consegnato in sede di gara, o inviato via email al responsabile di gara.";
 
         if ($data['note'] != '') {
             $testoSocieta .= "\r \r NOTE: \r " . $data['note'];
