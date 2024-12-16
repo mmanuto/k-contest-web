@@ -120,11 +120,11 @@ export class RegisterComponent {
             }
         });
 
-        this.club.responsabile = this.personalForm.value.name;
+        this.club.club_manager = this.personalForm.value.name;
         this.club.club_name = this.personalForm.value.society;
         this.club.fiscal_code = this.personalForm.value.cod_fiscale;
         this.club.mail = this.personalForm.value.email;
-        this.club.telefono = this.personalForm.value.phone;
+        this.club.telephone_n = this.personalForm.value.phone;
         this.club.coach = this.personalForm.value.coach;
         this.details.club = this.club;
         this.details.competitionId = this.accountForm.value.competitionId;
@@ -226,11 +226,11 @@ export class RegisterComponent {
 
             //fare automaticamente il next e confirm (o solo il confirm?)
             if (response.result.success) {
-                this.club.responsabile = response.result.valore.responsabile;
+                this.club.club_manager = response.result.valore.club_manager;
                 this.club.club_name = response.result.valore.club_name;
                 this.club.fiscal_code = response.result.valore.fiscal_code;
                 this.club.mail = response.result.valore.mail;
-                this.club.telefono = response.result.valore.telefono;
+                this.club.telephone_n = response.result.valore.telephone_n;
                 this.club.coach = response.result.valore.coach;
                 //incapsulo club in details assieme all'id della competizione
                 this.details.club = this.club;

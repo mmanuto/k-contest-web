@@ -55,12 +55,34 @@ class ClubsTableTest extends TestCase
     }
 
     /**
+     * Test beforeSave method
+     *
+     * @return void
+     * @uses \App\Model\Table\ClubsTable::beforeSave()
+     */
+    public function testBeforeSave(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
      * Test validationDefault method
      *
      * @return void
      * @uses \App\Model\Table\ClubsTable::validationDefault()
      */
     public function testValidationDefault(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     * @uses \App\Model\Table\ClubsTable::buildRules()
+     */
+    public function testBuildRules(): void
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -19,6 +19,8 @@ use Cake\ORM\Entity;
  * @property string|null $n_tessera
  * @property int|null $peso
  * @property string|null $grado
+ * @property \Cake\I18n\FrozenTime $created_date
+ * @property \Cake\I18n\FrozenTime $modified_date
  *
  * @property \App\Model\Entity\Club $club
  * @property \App\Model\Entity\Federation $federation
@@ -46,6 +48,8 @@ class Athlete extends Entity
         'n_tessera' => true,
         'peso' => true,
         'grado' => true,
+        'created_date' => true,
+        'modified_date' => true,
         'club' => true,
         'federation' => true,
         'athlete_inscriptions' => true,

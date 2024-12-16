@@ -107,6 +107,14 @@ class AthleteInscriptionsTable extends Table
             ->maxLength('old_category', 15)
             ->allowEmptyString('old_category');
 
+        $validator
+            ->dateTime('created_date')
+            ->notEmptyDateTime('created_date');
+
+        $validator
+            ->dateTime('modified_date')
+            ->notEmptyDateTime('modified_date');
+
         return $validator;
     }
 

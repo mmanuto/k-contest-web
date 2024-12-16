@@ -9,7 +9,7 @@ use Cake\ORM\Entity;
  * Club Entity
  *
  * @property string $id
- * @property string $club_code
+ * @property string|null $club_code
  * @property string $club_name
  * @property string $fiscal_code
  * @property string|null $short_name
@@ -18,6 +18,8 @@ use Cake\ORM\Entity;
  * @property string $mail
  * @property string $coach
  * @property \Cake\I18n\FrozenTime|null $last_login
+ * @property \Cake\I18n\FrozenTime $created_date
+ * @property \Cake\I18n\FrozenTime $modified_date
  *
  * @property \App\Model\Entity\Athlete[] $athletes
  * @property \App\Model\Entity\ClubInscription[] $club_inscriptions
@@ -44,6 +46,8 @@ class Club extends Entity
         'mail' => true,
         'coach' => true,
         'last_login' => true,
+        'created_date' => true,
+        'modified_date' => true,
         'athletes' => true,
         'club_inscriptions' => true,
         'teams' => true,

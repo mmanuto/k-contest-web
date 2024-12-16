@@ -64,13 +64,17 @@ class ClubInscriptionsTable extends Table
     {
         $validator
             ->scalar('club_id')
-            ->maxLength('club_id', 20)
+            ->maxLength('club_id', 21)
             ->notEmptyString('club_id');
 
         $validator
             ->scalar('competition_id')
             ->maxLength('competition_id', 20)
             ->notEmptyString('competition_id');
+
+        $validator
+            ->dateTime('created_date')
+            ->notEmptyDateTime('created_date');
 
         return $validator;
     }

@@ -83,8 +83,7 @@ class ClubsTable extends Table
         $validator
             ->scalar('club_code')
             ->maxLength('club_code', 50)
-            ->requirePresence('club_code', 'create')
-            ->notEmptyString('club_code');
+            ->allowEmptyString('club_code');
 
         $validator
             ->scalar('club_name')
@@ -130,6 +129,14 @@ class ClubsTable extends Table
         $validator
             ->dateTime('last_login')
             ->allowEmptyDateTime('last_login');
+
+        $validator
+            ->dateTime('created_date')
+            ->notEmptyDateTime('created_date');
+
+        $validator
+            ->dateTime('modified_date')
+            ->notEmptyDateTime('modified_date');
 
         return $validator;
     }

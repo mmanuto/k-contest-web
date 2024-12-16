@@ -175,7 +175,7 @@ class AthletesController extends ApiController
         $conn = ConnectionManager::get('default');
         $resultProve = [];
 
-        if($data['anno'] >= 2013){
+        if($data['anno'] >= 2014){
             $stmt = $conn->execute("SELECT distinct specialita FROM categorycodes WHERE codiceTipoCategorie =" . $data['categorycode'] . " AND grado LIKE '%" . $data['grado'] . "%' AND " . $data['anno'] . " BETWEEN anno_min AND anno_max");
 
             $result = $stmt->fetchAll('assoc');

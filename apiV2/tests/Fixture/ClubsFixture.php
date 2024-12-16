@@ -19,7 +19,7 @@ class ClubsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'eaac657f-6858-4bff-a310-10637435ab76',
+                'id' => '1fb651b1-6f2e-4970-8aab-e99775350503',
                 'club_code' => 'Lorem ipsum dolor sit amet',
                 'club_name' => 'Lorem ipsum dolor sit amet',
                 'fiscal_code' => 'Lorem ipsum dolor ',
@@ -28,7 +28,9 @@ class ClubsFixture extends TestFixture
                 'telephone_n' => 'Lorem ipsum dolor ',
                 'mail' => 'Lorem ipsum dolor sit amet',
                 'coach' => 'Lorem ipsum dolor sit amet',
-                'last_login' => '2024-11-01 15:22:04',
+                'last_login' => '2024-12-16 14:57:42',
+                'created_date' => 1734361062,
+                'modified_date' => 1734361062,
             ],
         ];
         parent::init();

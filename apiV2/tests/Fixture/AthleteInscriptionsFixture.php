@@ -30,6 +30,8 @@ class AthleteInscriptionsFixture extends TestFixture
                 'accorpamento' => 1,
                 'deleted' => 1,
                 'old_category' => 'Lorem ipsum d',
+                'created_date' => 1734361049,
+                'modified_date' => 1734361049,
             ],
         ];
         parent::init();

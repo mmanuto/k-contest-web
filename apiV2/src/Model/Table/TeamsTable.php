@@ -64,7 +64,7 @@ class TeamsTable extends Table
     {
         $validator
             ->scalar('club_id')
-            ->maxLength('club_id', 20)
+            ->maxLength('club_id', 21)
             ->notEmptyString('club_id');
 
         $validator
@@ -89,6 +89,14 @@ class TeamsTable extends Table
             ->maxLength('grado', 100)
             ->requirePresence('grado', 'create')
             ->notEmptyString('grado');
+
+        $validator
+            ->dateTime('created_date')
+            ->notEmptyDateTime('created_date');
+
+        $validator
+            ->dateTime('modified_date')
+            ->notEmptyDateTime('modified_date');
 
         return $validator;
     }

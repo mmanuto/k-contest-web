@@ -259,17 +259,17 @@ export class RiepilogoComponent {
     var paragraph2 = '\u2022' + '  '+' che gli atleti partecipanti alla manifestazione in oggetto sono tutti in possesso del certificato medico;';
     var lines2 = doc.splitTextToSize(paragraph2, (pdfInMM - lMargin - rMargin));
 
-    doc.text(lines2, 20, 133);
+    doc.text(lines2, 20, 135);
 
     var paragraph3 = '\u2022' + '  '+' di essere in possesso della liberatoria all’utilizzo delle immagini degli atleti;';
     var lines3 = doc.splitTextToSize(paragraph3, (pdfInMM - lMargin - rMargin));
 
-    doc.text(lines3, 20, 145);
+    doc.text(lines3, 20, 147);
 
     var paragraph4 = '\u2022' + '  '+' di essere in possesso della copia dei documenti d’identità dell’atleta e dei genitori (in caso di atleti minorenni).';
     var lines4 = doc.splitTextToSize(paragraph4, (pdfInMM - lMargin - rMargin));
 
-    doc.text(lines4, 20, 153);
+    doc.text(lines4, 20, 155);
 
     doc.text('Data e Luogo', 20, 250);
     doc.text('Firma', 155, 250);

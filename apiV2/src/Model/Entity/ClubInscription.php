@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property int $id
  * @property string $club_id
  * @property string $competition_id
+ * @property \Cake\I18n\FrozenTime $created_date
  *
  * @property \App\Model\Entity\Club $club
  * @property \App\Model\Entity\Competition $competition
@@ -29,6 +30,7 @@ class ClubInscription extends Entity
     protected $_accessible = [
         'club_id' => true,
         'competition_id' => true,
+        'created_date' => true,
         'club' => true,
         'competition' => true,
     ];

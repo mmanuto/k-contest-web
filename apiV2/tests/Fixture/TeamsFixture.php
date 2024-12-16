@@ -25,6 +25,8 @@ class TeamsFixture extends TestFixture
                 'componenti' => 'Lorem ipsum dolor sit amet',
                 'categoria' => 'Lorem ipsum dolor sit amet',
                 'grado' => 'Lorem ipsum dolor sit amet',
+                'created_date' => 1734361085,
+                'modified_date' => 1734361085,
             ],
         ];
         parent::init();

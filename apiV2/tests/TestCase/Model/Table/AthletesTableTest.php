@@ -55,6 +55,17 @@ class AthletesTableTest extends TestCase
     }
 
     /**
+     * Test beforeSave method
+     *
+     * @return void
+     * @uses \App\Model\Table\AthletesTable::beforeSave()
+     */
+    public function testBeforeSave(): void
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
      * Test validationDefault method
      *
      * @return void

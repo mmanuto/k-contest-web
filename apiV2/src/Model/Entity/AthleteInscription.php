@@ -19,6 +19,8 @@ use Cake\ORM\Entity;
  * @property int $accorpamento
  * @property int $deleted
  * @property string|null $old_category
+ * @property \Cake\I18n\FrozenTime $created_date
+ * @property \Cake\I18n\FrozenTime $modified_date
  *
  * @property \App\Model\Entity\Athlete $athlete
  * @property \App\Model\Entity\Categorycode $categorycode
@@ -46,6 +48,8 @@ class AthleteInscription extends Entity
         'accorpamento' => true,
         'deleted' => true,
         'old_category' => true,
+        'created_date' => true,
+        'modified_date' => true,
         'athlete' => true,
         'categorycode' => true,
         'competition' => true,

@@ -6,9 +6,8 @@ namespace App\Controller;
 
 //use App\Controller\AppController;
 use RestApi\Controller\ApiController;
-use RestApi\Utility\JwtToken;
-use Cake\Mailer\Email;
 use Cake\Mailer\Mailer;
+use Cake\I18n\FrozenTime;
 
 /**
  * Clubs Controller
@@ -158,17 +157,16 @@ class ClubsController extends ApiController
             ->first();
 
 
+        $competition = $this->Competitions->get($request['competitionId']);
+
         if ($club) {
             //---------------- SE C'E' CONTROLLO E SALVO ISCRIZIONE A COMPETIZIONE ------------
-            $competition = $this->Competitions->get($request['competitionId']);
+            
             if ($this->salvaIscrizione($club, $competition)) {
 
-                //TODO: REGISTRAZIONE LOG ACCESSO
-                /* $log = $this->Logs->newEntity();
-                $log['registered_club'] = strtoupper($dataClub['club_name']);
-                $log['action'] = 'Login';
-                $this->Logs->save($log);
- */
+                $club->last_login = FrozenTime::now('Europe/Rome');
+                $this->Clubs->save($club);
+
                 $this->apiResponse['data'] = ['competition' => $competition, 'club' => $club];
                 $this->apiResponse['message'] = 'Società già presente';
                 $this->apiResponse['success'] = true;
@@ -181,7 +179,6 @@ class ClubsController extends ApiController
 
             if ($newClub) {
 
-                $competition = $this->Competitions->get($request['competitionId']);
                 if ($this->salvaIscrizione($newClub, $competition)) {
 
                     //invio mail di riepilogo
@@ -195,8 +192,6 @@ class ClubsController extends ApiController
                         ->deliver($testoMail);
 
 
-
-                    $this->apiResponse['token'] = JwtToken::generateToken($newClub);
                     $this->apiResponse['data'] = ['competition' => $competition, 'club' => $newClub];
                     $this->apiResponse['message'] = 'Nuova società';
                     $this->apiResponse['success'] = true;
@@ -221,11 +216,14 @@ class ClubsController extends ApiController
 
         //se non esiste eseguire salvataggio
         if (!$iscrizione) {
+
             $inscription = $this->ClubInscriptions->newEmptyEntity();
             $inscription->club_id = $club->id;
             $inscription->competition_id = $competition->id;
 
-            if ($this->ClubInscriptions->save($inscription)) {
+            $saveInscription = $this->ClubInscriptions->save($inscription);
+
+            if ($saveInscription) {
                 return true;
             } else {
                 return false;
