@@ -10,6 +10,7 @@ use Cake\ORM\Entity;
  *
  * @property string $id
  * @property string $categoria
+ * @property string $agecategory_id
  * @property int $anno_min
  * @property int $anno_max
  * @property string $sesso
@@ -21,6 +22,7 @@ use Cake\ORM\Entity;
  * @property float $costo_intero
  * @property float $costo_scontato
  * @property int $codiceTipoCategorie
+ * @property int $order_number
  *
  * @property \App\Model\Entity\AthleteInscription[] $athlete_inscriptions
  */
@@ -37,6 +39,7 @@ class Categorycode extends Entity
      */
     protected $_accessible = [
         'categoria' => true,
+        'agecategory_id' => true,
         'anno_min' => true,
         'anno_max' => true,
         'sesso' => true,
@@ -48,6 +51,7 @@ class Categorycode extends Entity
         'costo_intero' => true,
         'costo_scontato' => true,
         'codiceTipoCategorie' => true,
+        'order_number' => true,
         'athlete_inscriptions' => true,
     ];
 }

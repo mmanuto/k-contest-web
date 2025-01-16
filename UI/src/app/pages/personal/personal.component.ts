@@ -41,6 +41,7 @@ export class PersonalComponent implements OnInit {
       this.personalService.updateUserData({club:this.club}).subscribe((response:any) => {
         console.log(response);
         if(response.result.success){
+            this.storageService.set('currentUser', this.club);
             window.location.reload();
             //aggiungere pop-up informativo di avvenuta modifica?
         }

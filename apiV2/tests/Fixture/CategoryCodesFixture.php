@@ -19,8 +19,9 @@ class CategorycodesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => '9faf7e64-fe24-4ed6-9eaa-c015a9842bbb',
+                'id' => '2ee6830f-e220-41ed-98ec-852a912aa8f1',
                 'categoria' => 'Lorem ipsum dolor sit amet',
+                'agecategory_id' => 'Lorem ip',
                 'anno_min' => 1,
                 'anno_max' => 1,
                 'sesso' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
@@ -32,6 +33,7 @@ class CategorycodesFixture extends TestFixture
                 'costo_intero' => 1,
                 'costo_scontato' => 1,
                 'codiceTipoCategorie' => 1,
+                'order_number' => 1,
             ],
         ];
         parent::init();

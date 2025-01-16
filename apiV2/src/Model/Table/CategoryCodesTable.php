@@ -43,6 +43,10 @@ class CategorycodesTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->belongsTo('Agecategories', [
+            'foreignKey' => 'agecategory_id',
+            'joinType' => 'INNER',
+        ]);
         $this->hasMany('AthleteInscriptions', [
             'foreignKey' => 'categorycode_id',
         ]);
@@ -61,6 +65,11 @@ class CategorycodesTable extends Table
             ->maxLength('categoria', 50)
             ->requirePresence('categoria', 'create')
             ->notEmptyString('categoria');
+
+        $validator
+            ->scalar('agecategory_id')
+            ->maxLength('agecategory_id', 10)
+            ->notEmptyString('agecategory_id');
 
         $validator
             ->integer('anno_min')
@@ -116,6 +125,11 @@ class CategorycodesTable extends Table
             ->requirePresence('codiceTipoCategorie', 'create')
             ->notEmptyString('codiceTipoCategorie');
 
+        $validator
+            ->integer('order_number')
+            ->requirePresence('order_number', 'create')
+            ->notEmptyString('order_number');
+
         return $validator;
     }
 
@@ -129,6 +143,7 @@ class CategorycodesTable extends Table
     public function buildRules(RulesChecker $rules): RulesChecker
     {
         $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
+        $rules->add($rules->existsIn('agecategory_id', 'Agecategories'), ['errorField' => 'agecategory_id']);
 
         return $rules;
     }

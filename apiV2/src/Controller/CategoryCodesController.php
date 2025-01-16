@@ -132,7 +132,7 @@ class CategorycodesController extends ApiController
                                 FROM athlete_inscriptions 
                                 JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
                                 WHERE categorycodes.codiceTipoCategorie = 3 AND athlete_inscriptions.deleted = 0 
-                                AND athlete_inscriptions.competition_id = ".$request['competition_id']." GROUP BY categorycodes.id");
+                                AND athlete_inscriptions.competition_id = '".$request['competition_id']."' GROUP BY categorycodes.id");
 
         $categories = $stmt->fetchAll('assoc');
 
@@ -151,7 +151,7 @@ class CategorycodesController extends ApiController
         $stmt = $conn->execute("SELECT categorycodes.*, COUNT(athlete_inscriptions.id) AS n_athletes FROM athlete_inscriptions 
                                 JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
                                 WHERE categorycodes.codiceTipoCategorie = 3 AND athlete_inscriptions.deleted = 0 
-                                AND athlete_inscriptions.competition_id = ".$request['competition_id']."
+                                AND athlete_inscriptions.competition_id = '".$request['competition_id']."'
                                 GROUP BY categorycodes.id");
 
         $categories = $stmt->fetchAll('assoc');
@@ -163,6 +163,7 @@ class CategorycodesController extends ApiController
             $athleteList = $this->AthleteInscriptions->find()
             ->where([
                 'categorycode_id' => $category['id'],
+		        'competition_id' => $request['competition_id'],
                 'deleted' => 0
             ])
             ->contain(['Athletes' => ['Clubs'], 'Categorycodes'])

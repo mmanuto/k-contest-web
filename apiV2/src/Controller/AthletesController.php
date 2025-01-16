@@ -8,6 +8,7 @@ use RestApi\Controller\ApiController;
 use Cake\Datasource\ConnectionManager;
 use Cake\Mailer\Email;
 use Cake\Mailer\Mailer;
+use Cake\I18n\FrozenTime;
 
 /**
  * Athletes Controller
@@ -278,6 +279,9 @@ class AthletesController extends ApiController
             }
         }
         $newAtlhete = $this->Athletes->patchEntity($newAtlhete, $athltete);
+        $newAtlhete->created_date = new FrozenTime($newAtlhete->created_date);
+        $newAtlhete->modified_date = new FrozenTime($newAtlhete->modified_date);
+
         $savedAtlhete = $this->Athletes->save($newAtlhete);
 
 

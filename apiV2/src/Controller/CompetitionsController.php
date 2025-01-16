@@ -459,7 +459,7 @@ public function getAllCompetitions()
         $stmt = $conn->execute("SELECT categorycodes.*, COUNT(athlete_inscriptions.id) AS n_athletes FROM athlete_inscriptions 
                                 JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
                                 WHERE categorycodes.codiceTipoCategorie = 3 AND competition_id = '" . $data['competition_id'] ."'
-                                GROUP BY categorycodes.id");
+                                GROUP BY categorycodes.id ORDER BY categorycodes.order_number");
 
         $categories = $stmt->fetchAll('assoc');
 

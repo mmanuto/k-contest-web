@@ -175,6 +175,7 @@ class ClubsController extends ApiController
             //---------------- ALTRIMENTI SALVO ANAGRAFICA SOCIETA' E ISCRIVO A COMPETIZIONE ------------
             $club = $this->Clubs->newEmptyEntity();
             $club = $this->Clubs->patchEntity($club, $dataClub);
+            $club->last_login = FrozenTime::now('Europe/Rome');
             $newClub = $this->Clubs->save($club);
 
             if ($newClub) {
@@ -242,9 +243,12 @@ class ClubsController extends ApiController
     {
 
         $request = $this->request->getData();
-        $club = $this->Clubs->get($request['id']);
-        $club = $this->Clubs->patchEntity($club, $request);
-        $newClub = $this->Clubs->save($club);
+        $club = $this->Clubs->get($request['club']['id']);
+        $club = $this->Clubs->patchEntity($club, $request['club']);
+
+        $club->last_login = $club->last_login->toDateTimeString();
+
+;        $newClub = $this->Clubs->save($club);
         if ($newClub) {
             $this->apiResponse['data'] = $newClub;
             $this->apiResponse['success'] = true;

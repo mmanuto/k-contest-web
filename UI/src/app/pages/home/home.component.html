@@ -30,6 +30,12 @@
                         tabelloni di gara nella sezione <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra</p>
                 </div>
 
+                <div *ngIf="competition.flag_timetable" style="color:firebrick">
+                    <h5>  Questi sono orari indicativi. La direzione gara si riserva di iniziare le categorie anche 15-20 minuti prima. <br/>
+                        Si consiglia a tutti di essere in palazzetto almeno 40-30 minuti prima dell'inizio della propria categoria.
+                    </h5>
+                </div>
+
                 <!--<div *ngIf="classifiche" class="m-4">
                     <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
                         <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
@@ -70,6 +76,7 @@
                         </div>
                            
                         <div  *ngIf="competition.flag_timetable" widget class="card border-0 box-shadow">
+                           
                             <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; text-align: center;">
                                 <h5 class="mb-0" style="color:white">TIMETABLE</h5>
                             </div>
@@ -86,7 +93,7 @@
                                     <tbody>
 
                                         <tr style="font-weight: 500;">
-                                            <td>BAMBINI B</td>
+                                            <td>BAMBINI A - B</td>
                                             <td>COMBINATA</td>
                                             <td>9.00</td>                                
                                         </tr>
@@ -97,13 +104,13 @@
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>RAGAZZI</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>   
+                                            <td> Kumite U12 </td>
+                                            <td> 9.00</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>RAGAZZI VERDE/BLU/MARRONE</td>
-                                            <td> Kumite U12 </td>
-                                            <td> 11.00</td>
+                                            <td>RAGAZZI</td>
+                                            <td>COMBINATA</td>
+                                            <td>10.00</td>   
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>ESORDIENTI</td>
@@ -123,32 +130,37 @@
                                         <tr style="font-weight: 500;">
                                             <td>CADETTI</td>
                                             <td>KUMITE</td>
-                                            <td> 14.00</td>
+                                            <td> 14.30</td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>JUNIORES</td>
+                                            <td>KATA</td>
+                                            <td> 16.00</td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>JUNIORES</td>
+                                            <td>KUMITE</td>
+                                            <td> 16.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>TUTTE LE CATEGORIE</td>
                                             <td>KATA SQUADRE</td>
-                                            <td> 15.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>JUNIORES</td>
-                                            <td>KATA + KUMITE</td>
-                                            <td> 15.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>SENIORES KATA</td>
-                                            <td>KATA</td>
                                             <td> 16.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>SENIORES KUMITE</td>
+                                            <td>SENIORES</td>
+                                            <td>KATA</td>
+                                            <td> 17.30</td>
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>SENIORES</td>
                                             <td>KUMITE</td>
-                                            <td> 17.00</td>
+                                            <td> 18.00</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>MASTER KATA</td>
                                             <td>KATA</td>
-                                            <td> 17.30</td>
+                                            <td> 19.00</td>
                                         </tr>
                                     </tbody>
                                 </table>
