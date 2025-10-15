@@ -33,6 +33,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.appUrl = Constants.WEBROOT;
     
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
       this.competition = response.result.data;

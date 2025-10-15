@@ -41,7 +41,7 @@ export class RegisterComponent {
         protected localStorageService: LocalStorageService){
 
         this.steps = [
-            { name: 'Gare in corso', icon: 'fa-trophy', active: true, valid: false, hasError: false },
+            { name: 'Eventi', icon: 'fa-trophy', active: true, valid: false, hasError: false },
             { name: 'Dati società', icon: 'fa-user', active: false, valid: false, hasError: false },
             { name: 'Conferma', icon: 'fa-check-square-o', active: false, valid: false, hasError: false }
         ];
@@ -94,7 +94,7 @@ export class RegisterComponent {
         this.steps.some(function (step, index, steps) {
             if (index < steps.length - 1) {
                 if (step.active) {
-                    if (step.name == 'Gare in corso') {
+                    if (step.name == 'Eventi') {
                         if (accountForm.valid) {
                             step.active = false;
                             step.valid = true;

@@ -139,6 +139,7 @@ public function getAllCompetitions()
                 'comp_status NOT IN' => [Configure::read('PENDING'), Configure::read('ARCHIVED')],
                 'DATE(data_gara) >=' => date('Y-m-d', mktime(0, 0, 0, intval(date("m")), intval(date("d") - 20), intval(date("Y"))))
             ])
+            ->order(['data_gara'])
             ->toArray();
 
         $this->apiResponse['data'] = $competition;
@@ -426,16 +427,36 @@ public function getAllCompetitions()
     public function getTotaleIscrizioni()
     {
         $data = $this->request->getData();
+        Configure::load('constants');
+
+
         
         $conn = ConnectionManager::get('default');
-        $query = "SELECT COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
+        if($data['competition_type'] == Configure::read('STAGE')){
+            
+            $query = "SELECT categorycode_id AS prova, specialita, atleti_max, COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions JOIN 
+                        categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id
+                        WHERE competition_id = '" . $data['competition_id']."' GROUP BY categorycode_id ORDER BY order_number";
+            
+            $stmt2 = $conn->execute($query);
+
+            $result = $stmt2->fetchAll('assoc');
+
+            $this->apiResponse['data'] = $result;
+            $this->apiResponse['success'] = true;
+
+        }else{
+
+            $query = "SELECT COUNT(DISTINCT athlete_inscriptions.athlete_id) AS n_athletes FROM athlete_inscriptions
                         WHERE competition_id = '" . $data['competition_id']."'";
-        $stmt2 = $conn->execute($query);
+            $stmt2 = $conn->execute($query);
 
-        $result = $stmt2->fetchAll('assoc');
+            $result = $stmt2->fetchAll('assoc');
 
-        $this->apiResponse['data'] = $result[0]['n_athletes'];
-        $this->apiResponse['success'] = true;
+            $this->apiResponse['data'] = $result[0]['n_athletes'];
+            $this->apiResponse['success'] = true;
+            
+        }
 
     }
 

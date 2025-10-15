@@ -39,6 +39,7 @@ export class MembershipComponent implements OnInit {
   public enableTessera = false;
   public CONST = Constants;
   public athletestNumber:number = 0;
+  public corsiAthletestNumber: any [];
   public athletestMaxNumber:number = 0;
   public beltList = {};
 
@@ -89,7 +90,8 @@ export class MembershipComponent implements OnInit {
       });
 
       this.weightForm = this.fb.group({
-        'peso': ['', Validators.required]
+        'peso': ['', Validators.required],
+        'tesserino': ['']
       });
   }
 
@@ -150,14 +152,32 @@ export class MembershipComponent implements OnInit {
     });
 
     //TODO: da togliere e inserire commonservices
-    this.homeService.getTotaleIscrizioni({competition_id: this.competition.id }).subscribe((response: any) => {
-      this.athletestNumber = response.result.data;
+    this.homeService.getTotaleIscrizioni({competition_id: this.competition.id, competition_type: this.competition.type }).subscribe((response: any) => {
+      
+      if(this.competition.type == Constants.STAGE){
+        this.corsiAthletestNumber =[];
 
-      if(this.athletestNumber == this.athletestMaxNumber){
-        this.competition.comp_status = this.CONST.REG_CLOSED_FULL;
-        this.membershipService.closeRegistrations({competition_id: this.competition.id, comp_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
+        response.result.data.forEach(prova => {
+          prova.closed = false;
+          
+          if(prova.n_athletes == prova.atleti_max){
+            prova.closed =true;
+          }
+          
         });
+
+        this.corsiAthletestNumber =  response.result.data;
+
+      }else{
+          this.athletestNumber = response.result.data;
+
+          if(this.athletestNumber == this.athletestMaxNumber){
+            this.competition.comp_status = this.CONST.REG_CLOSED_FULL;
+            this.membershipService.closeRegistrations({competition_id: this.competition.id, comp_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
+            });
+          }
       }
+      
     });
 
   }
@@ -212,8 +232,9 @@ export class MembershipComponent implements OnInit {
   public showPeso() {
     this.show = false;
 
+    console.log(this.prove);
     for (let item of this.prove) {
-      if ((item.label == "Kumite" || item.label == "Kumite U12") && item.checked) {
+      if ((item.label == "Kumite" || item.label == "Kumite U12" || item.code == "BST-ISTR") && item.checked) {
         this.show = true;
         break;
       }
@@ -224,14 +245,13 @@ export class MembershipComponent implements OnInit {
   public next() {
     let athleteForm = this.athleteForm;
 
-
     if (this.steps[this.steps.length - 1].active)
       return false;
     if (this.steps[0].active) {
-      if (athleteForm.valid && this.categoria.description != "") {
+      if ((athleteForm.valid || this.competition.type == Constants.STAGE) && this.categoria.description != "") {
         this.erroreCategoria = false;
 
-        let request = { anno: this.athleteForm.value.birthdate_year, agecategory: this.categoria, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, categorycode: this.competition.codiceTipoCategorie };
+        let request = { anno: this.athleteForm.value.birthdate_year, agecategory: this.categoria, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, categorycode: this.competition.codiceTipoCategorie, competition_type: this.competition.type };
         this.membershipService.getElencoProve(request).subscribe((response: any) => {
 
           if (response.result.success) {
@@ -261,7 +281,7 @@ export class MembershipComponent implements OnInit {
 
     this.atleta.nome = this.athleteForm.value.name;
     this.atleta.cognome = this.athleteForm.value.surname;
-    this.atleta.data_nascita = this.athleteForm.value.birthdate_day + '/' + this.weightForm.value.birthdate_month + '/' + this.weightForm.value.birthdate_year;
+    this.atleta.data_nascita = this.athleteForm.value.birthdate_day + '/' + this.athleteForm.value.birthdate_month + '/' + this.athleteForm.value.birthdate_year;
     this.atleta.cod_fiscale = this.athleteForm.value.cod_fiscale;
     this.atleta.federation_id = this.athleteForm.value.federation;
     this.atleta.n_tessera = this.athleteForm.value.n_tessera;
@@ -301,20 +321,21 @@ export class MembershipComponent implements OnInit {
     }
 
     if (provaScelta) {
-      var objKumite = this.prove.find(function (obj) { return obj.label == "Kumite"; });
-      var objKumiteRagazzi = this.prove.find(function (obj) { return obj.label == "Kumite U12"; });
 
-      var kumiteOk = false;
-      var kumiteRagazziOk = false;
+      let kumiteOk = false;
+      let stageOk = false;
 
-      if (objKumite == undefined || (objKumite != undefined && objKumite.checked && this.weightForm.value.peso != "" && this.weightForm.value.peso > 10) || (objKumite != undefined && !objKumite.checked)) {
-        kumiteOk = true;
-      }
-      if (objKumiteRagazzi == undefined || (objKumiteRagazzi != undefined && objKumiteRagazzi.checked && this.weightForm.value.peso != "" && this.weightForm.value.peso > 10) || (objKumiteRagazzi != undefined && !objKumiteRagazzi.checked)) {
-        kumiteRagazziOk = true;
-      }
-
-      if (kumiteOk && kumiteRagazziOk) {
+      switch (this.competition.type) {
+        case Constants.STAGE:
+          stageOk = this.checkTesserino();
+          break;
+      
+        default:
+          kumiteOk = this.checkKumite();
+          break;
+      }      
+      
+      if (kumiteOk || stageOk) {
 
         this.errorePeso = false;
         //TODO: Controllare recupero corretto dati società e gara
@@ -329,6 +350,7 @@ export class MembershipComponent implements OnInit {
         this.atleta.grado = this.athleteForm.value.cintura;
         //this.atleta.categoria = this.categoria;
         this.atleta.peso = this.weightForm.value.peso;
+        this.atleta.tesserino = this.weightForm.value.tesserino;
 
         let elencoProve = {
           'categorycode': this.competition.codiceTipoCategorie,
@@ -390,6 +412,30 @@ export class MembershipComponent implements OnInit {
 
   }
 
+  checkKumite(){
+      var objKumite = this.prove.find(function (obj) { return obj.label == "Kumite"; });
+      var objKumiteRagazzi = this.prove.find(function (obj) { return obj.label == "Kumite U12"; });
+
+      var kumiteOk = false;
+      var kumiteRagazziOk = false;
+
+      if (objKumite == undefined || (objKumite != undefined && objKumite.checked && this.weightForm.value.peso != "" && this.weightForm.value.peso > 10) || (objKumite != undefined && !objKumite.checked)) {
+        kumiteOk = true;
+      }
+      if (objKumiteRagazzi == undefined || (objKumiteRagazzi != undefined && objKumiteRagazzi.checked && this.weightForm.value.peso != "" && this.weightForm.value.peso > 10) || (objKumiteRagazzi != undefined && !objKumiteRagazzi.checked)) {
+        kumiteRagazziOk = true;
+      }
+
+      return kumiteOk && kumiteRagazziOk;
+  }
+
+  checkTesserino(){
+    var istruttori = this.prove.find(function (obj) { return obj.code == "BST-ISTR";});
+
+    return (istruttori == undefined || (istruttori != undefined && istruttori.checked && this.weightForm.value.tesserino != "" && this.weightForm.value.tesserino != null) || (istruttori != undefined && !istruttori.checked));
+        
+  }
+
   public toggle(type) {
     this.type = type;
   }
@@ -440,7 +486,8 @@ export class MembershipComponent implements OnInit {
       this.categoria.description = user.categoria;
 
       this.weightForm = this.fb.group({
-        'peso': [this.atleta.peso, Validators.required]
+        'peso': [this.atleta.peso, Validators.required],
+        'tesserino': ['']
       });
 
       this.prove = [];

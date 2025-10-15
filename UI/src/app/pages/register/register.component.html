@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col">
                     <div widget class="card border-0 w-100-p">
-                        <h2 class="text-center mt-3">Iscrizioni Gare</h2>
+                        <h2 class="text-center mt-3">Iscrizioni Gare e Stage <br/> Comitato regionale Veneto settore Karate </h2>
                         <div *ngIf="!confirmed" class="card-body widget-body">
 
 
@@ -27,12 +27,7 @@
                                     </div>
                                 </div>
                                 <!-- COMPETITIONS -->
-                                <form *ngIf="step.name=='Gare in corso'" [formGroup]="accountForm" class="row bg-light pt-2 w-100-p">
-                                    <div class="col-12 mb-4">
-                                        <p class="mt-3 mb-3" style="font-size:15px;">Selezionare la gara a cui si
-                                            intende partecipare e cliccare sul pulsante procedi. Per consultare la
-                                            circolare di gara cliccare sulla locandina</p>
-                                    </div>
+                                <form *ngIf="step.name=='Eventi'" [formGroup]="accountForm" class="row bg-light pt-2 w-100-p">
                                     <div class="row mb-4">
                                         <div class="col">
                                             <div class="card-body pt-0 widget-body">

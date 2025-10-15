@@ -19,16 +19,17 @@ class CompetitionsFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'afd1e5d4-2aab-452a-aa56-a8050a66e6aa',
+                'id' => '9c9dce0c-229d-4f80-9740-657eef4b749b',
+                'type' => 'Lorem ip',
                 'responsabile' => 'Lorem ipsum dolor sit amet',
                 'club_name' => 'Lorem ipsum dolor sit amet',
                 'logo' => 'Lorem ipsum dolor sit amet',
                 'email' => 'Lorem ipsum dolor sit amet',
                 'telephone' => 'Lorem ipsum dolor sit amet',
                 'nome_gara' => 'Lorem ipsum dolor sit amet',
-                'apertura_iscrizioni' => '2024-12-05',
-                'chiusura_iscrizioni' => '2024-12-05',
-                'data_gara' => '2024-12-05',
+                'apertura_iscrizioni' => '2025-10-02',
+                'chiusura_iscrizioni' => '2025-10-02',
+                'data_gara' => '2025-10-02',
                 'locandina' => 'Lorem ipsum dolor sit amet',
                 'circolare' => 'Lorem ipsum dolor sit amet',
                 'nr_atleti' => 1,

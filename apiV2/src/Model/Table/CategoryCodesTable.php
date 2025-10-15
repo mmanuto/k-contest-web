@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
 /**
  * Categorycodes Model
  *
+ * @property \App\Model\Table\AgecategoriesTable&\Cake\ORM\Association\BelongsTo $Agecategories
  * @property \App\Model\Table\AthleteInscriptionsTable&\Cake\ORM\Association\HasMany $AthleteInscriptions
  *
  * @method \App\Model\Entity\Categorycode newEmptyEntity()
@@ -45,7 +46,6 @@ class CategorycodesTable extends Table
 
         $this->belongsTo('Agecategories', [
             'foreignKey' => 'agecategory_id',
-            'joinType' => 'INNER',
         ]);
         $this->hasMany('AthleteInscriptions', [
             'foreignKey' => 'categorycode_id',
@@ -69,7 +69,7 @@ class CategorycodesTable extends Table
         $validator
             ->scalar('agecategory_id')
             ->maxLength('agecategory_id', 10)
-            ->notEmptyString('agecategory_id');
+            ->allowEmptyString('agecategory_id');
 
         $validator
             ->integer('anno_min')
@@ -129,6 +129,10 @@ class CategorycodesTable extends Table
             ->integer('order_number')
             ->requirePresence('order_number', 'create')
             ->notEmptyString('order_number');
+
+        $validator
+            ->integer('atleti_max')
+            ->allowEmptyString('atleti_max');
 
         return $validator;
     }

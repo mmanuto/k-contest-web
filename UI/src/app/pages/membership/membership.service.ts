@@ -20,7 +20,12 @@ export class MembershipService {
     }
 
     getElencoProve(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getElencoProve", request);
+        if(request.competition_type == Constants.COMPETITION){  
+            return this.http.post(Constants.BASEAPPURL + "athletes/getElencoProve", request);
+        }else{
+            return this.http.post(Constants.BASEAPPURL + "athletes/getCorsiStage", request);
+        }
+        
     }
 
     getAthleteList(request){

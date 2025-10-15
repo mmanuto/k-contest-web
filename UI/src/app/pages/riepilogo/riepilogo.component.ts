@@ -71,7 +71,9 @@ export class RiepilogoComponent {
         for (let item of response.result.data) {
           let index = this.listaIscritti.findIndex(x => x.id === item.athlete_id);
           if (index >= 0) {
-            this.listaIscritti[index].prove += ' - ' + item.specialita + ' ' + item.categoria + ' ' + item.grado;
+            //this.listaIscritti[index].prove += ' - ' + item.specialita + ' ' + item.categoria + ' ' + item.grado;
+            this.listaIscritti[index].prove += ' - ' + item.specialita;
+            this.listaIscritti[index].prezzo += item.costo_intero;
             this.listaIscritti[index].codiciProve.push(item.id);
           } else {
             let iscritto = {
@@ -80,12 +82,14 @@ export class RiepilogoComponent {
               cod_fiscale: item.cod_fiscale,
               data_nascita: item.data_nascita,
               n_tessera: item.n_tessera,
+              tesserino: item.tesserino,
               categoria: item.categoria,
               grado: item.grado,
               sesso: item.sesso,
               peso: item.peso,
               prove: item.specialita,
-              codiciProve:[item.id]
+              codiciProve:[item.id],
+              prezzo: item.costo_intero
             };
             this.listaIscritti.push(iscritto);
           }
@@ -147,19 +151,12 @@ export class RiepilogoComponent {
 
 
     let pdf = this.creaPdfIscrizioni();
-    let autodichiarazione = this.creaPdfCertificati();
-
-    let data;
-    data = this.creaExcelCsen();
-
-  /*  if (this.datiGara.richieste.tabsManagement) {
-      data = this.creaExcelCsen();
-      console.log(data);
-    } else {
-      data = this.creaExcelSocieta();
-      console.log(data);
-    }*/
-
+    let autodichiarazione = null;
+    let data = null ;
+    if(this.competition.type == Constants.COMPETITION){
+        autodichiarazione = this.creaPdfCertificati();
+        data = this.creaExcelCsen();
+    }   
 
     var params = {
       'datiSocieta': this.datiSocieta,
@@ -192,16 +189,20 @@ export class RiepilogoComponent {
     });
     doc.setFontSize(12);
 
-    var columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Sesso", "Cod. Fiscale", "Tessera CSEN", "Peso", "Grado", "Categoria", "Prove"];
+    var columns = [];
     var rows = [];
     let count = 1;
-    for (let atleta of this.listaIscritti) {
-      let record = [count, atleta.nome, atleta.data_nascita, atleta.sesso, atleta.cod_fiscale == null ? '' : atleta.cod_fiscale, atleta.n_tessera == null ? '' : atleta.n_tessera, atleta.peso, atleta.grado, atleta.categoria, atleta.prove];
-      rows.push(record);
-      count++;
-    }
 
-    if (this.listaSquadre.length > 0) {
+    if(this.competition.type == Constants.COMPETITION){
+
+      columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Sesso", "Cod. Fiscale", "Tessera CSEN", "Peso", "Grado", "Categoria", "Prove"];
+      for (let atleta of this.listaIscritti) {
+        let record = [count, atleta.nome, atleta.data_nascita, atleta.sesso, atleta.cod_fiscale == null ? '' : atleta.cod_fiscale, atleta.n_tessera == null ? '' : atleta.n_tessera, atleta.peso, atleta.grado, atleta.categoria, atleta.prove];
+        rows.push(record);
+        count++;
+      }
+
+      if (this.listaSquadre.length > 0) {
       rows.push([" ", " ", " ", " ", " ", " ", " "]);
       rows.push([" ", " ", " ", " ", " ", " ", " "]);
       rows.push(["COMPONENTI SQUADRA", " ", " ", " ", " ", " ", " ", "CATEGORIA"]);
@@ -212,7 +213,20 @@ export class RiepilogoComponent {
         rows.push(recordSquadra);
       }
     }
-    var nome = 'ELENCO ATLETI ' + this.datiSocieta.club_name;
+
+    } else if(this.competition.type == Constants.STAGE){
+      columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Cod. Fiscale", "N° Tessera", "Tesserino tecnico", "Corso", "Prezzo"];
+      console.log(this.listaIscritti);
+      for (let atleta of this.listaIscritti) {
+        let record = [count, atleta.nome, atleta.data_nascita, atleta.cod_fiscale == null ? '' : atleta.cod_fiscale, atleta.n_tessera == null ? '' : atleta.n_tessera, atleta.tesserino == null ? '' : atleta.tesserino, atleta.prove, atleta.prezzo == 0 ? '-' : atleta.prezzo + ' €'];
+        rows.push(record);
+        count++;
+      }
+    }
+    
+
+    
+    var nome = 'ELENCO ISCRITTI ' + this.datiSocieta.club_name;
 
     doc.text(nome, 15, 10);
 
@@ -223,6 +237,7 @@ export class RiepilogoComponent {
       body: rows
     });
 
+    doc.save('Elenco_Iscrizioni.pdf');
     return btoa(doc.output());
   }
 

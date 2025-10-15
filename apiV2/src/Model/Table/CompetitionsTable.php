@@ -69,6 +69,11 @@ class CompetitionsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
+            ->scalar('type')
+            ->maxLength('type', 10)
+            ->notEmptyString('type');
+
+        $validator
             ->scalar('responsabile')
             ->maxLength('responsabile', 100)
             ->requirePresence('responsabile', 'create')

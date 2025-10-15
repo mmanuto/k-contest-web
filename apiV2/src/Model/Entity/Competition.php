@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * Competition Entity
  *
  * @property string $id
+ * @property string $type
  * @property string $responsabile
  * @property string $club_name
  * @property string|null $logo
@@ -45,6 +46,7 @@ class Competition extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
+        'type' => true,
         'responsabile' => true,
         'club_name' => true,
         'logo' => true,

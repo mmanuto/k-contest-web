@@ -19,7 +19,7 @@ class AthletesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 'b4f103f6-7bcd-42fa-a389-c86e512c9138',
+                'id' => 'b9c9b6e3-7ffa-4941-80ee-00c2dad562d4',
                 'club_id' => 'Lorem ipsum dolor s',
                 'nome' => 'Lorem ipsum dolor sit amet',
                 'cognome' => 'Lorem ipsum dolor sit amet',
@@ -30,8 +30,9 @@ class AthletesFixture extends TestFixture
                 'n_tessera' => 'Lorem ipsum dolor sit amet',
                 'peso' => 1,
                 'grado' => 'Lorem ipsum d',
-                'created_date' => 1734361030,
-                'modified_date' => 1734361030,
+                'tesserino' => 'Lorem ipsum dolor sit amet',
+                'created_date' => 1759436861,
+                'modified_date' => 1759436861,
             ],
         ];
         parent::init();
