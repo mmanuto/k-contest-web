@@ -8,12 +8,12 @@
                     informazione contattare il responsabile di gara.</b></p>
         </div>
 
-        <div class="row ml-1" *ngIf="competition.type == CONST.COMPETITION"> 
+        <div class="row ml-1" *ngIf="competition.type == CONST.EventType.Competition"> 
             <h3 *ngIf="athletestNumber > 0" class="card-title mb-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
         </div>
 
-        <div class="col ml-1 mb-4" *ngIf="competition.type == CONST.STAGE"> 
+        <div class="col ml-1 mb-4" *ngIf="competition.type == CONST.EventType.Stage"> 
             <h3 *ngIf="corsiAthletestNumber.length > 0" class="card-title mb-3" style="color:firebrick">Totale iscritti in tempo reale:</h3>
 
             <div *ngFor="let prova of corsiAthletestNumber; let i = index;">
@@ -291,7 +291,7 @@
                            
 
                             <!-- cintura -->
-                            <div *ngIf="competition.type == CONST.COMPETITION" class="form-group col-md-5"
+                            <div *ngIf="competition.type == CONST.EventType.Competition" class="form-group col-md-5"
                                 [ngClass]="{'has-danger' : step.hasError && athleteForm.get('cintura').hasError('required'), 'has-success' : !athleteForm.get('cintura').hasError('required') }">
                                 <div class="form-group">
                                     <label for="exampleSelect1" class="form-control-label">Cintura</label>
@@ -305,7 +305,7 @@
                             </div>
 
                             <!-- sesso, con menù a tendina -->
-                            <div *ngIf="competition.type == CONST.COMPETITION" class="form-group col-md-2"
+                            <div *ngIf="competition.type == CONST.EventType.Competition" class="form-group col-md-2"
                                 [ngClass]="{'has-danger' : step.hasError && athleteForm.get('sesso').hasError('required'), 'has-success' : !athleteForm.get('sesso').hasError('required') }">
                                 <div class="form-group">
                                     <label for="exampleSelect1" class="form-control-label">Genere</label>
@@ -319,7 +319,7 @@
                                     obbligatorio</small>
                             </div>
 
-                            <div *ngIf="competition.type == CONST.COMPETITION" class="form-group col-md-5"
+                            <div *ngIf="competition.type == CONST.EventType.Competition" class="form-group col-md-5"
                                 [ngClass]="{'has-danger' : step.hasError && erroreCategoria, 'has-success' : !erroreCategoria }">
                                 <label class="control-label">Categoria</label>
                                 <input type="text" name="categoria" [value]="categoria.description" class="form-control"
@@ -332,11 +332,11 @@
                         </form>
 
                         <div *ngIf="step.name=='selezione prove'" class="row bg-light pt-2">
-                            <div *ngIf="competition.type == CONST.COMPETITION" class="col-12">
+                            <div *ngIf="competition.type == CONST.EventType.Competition" class="col-12">
                                 <p>Selezionare una o più prove. Nel caso venga selezionata la prova KUMITE comparirà un
                                     campo PESO nel quale andrà inserito il peso effettivo dell'atleta.</p>
                             </div>
-                             <div *ngIf="competition.type == CONST.STAGE && prove.length == 0" class="col-12">
+                             <div *ngIf="competition.type == CONST.EventType.Stage && prove.length == 0" class="col-12">
                                 <p>L'iscrizione al corso è riservata alle categorie agonistiche</p>
                             </div>
                             <div class="col-12 ml-4">
@@ -355,7 +355,7 @@
                                     <!--  </div> -->
                                 </div>
                                 <form *ngIf="show" [formGroup]="weightForm">
-                                    <div *ngIf="competition.type == CONST.COMPETITION " class="form-group col-md-6"
+                                    <div *ngIf="competition.type == CONST.EventType.Competition " class="form-group col-md-6"
                                         [ngClass]="{'has-danger' : (step.hasError &&  weightForm.get('peso').hasError('required')) || errorePeso, 'has-success' : !weightForm.get('peso').hasError('required') }">
                                         <div class="form-group">
                                             <label for="exampleSelect1" class="form-control-label mr-2">Peso *</label>
@@ -366,7 +366,7 @@
                                             obbligatorio. Inserire un peso valido</small>
                                     </div>
 
-                                    <div *ngIf="competition.type == CONST.STAGE " class="form-group col-md-6"
+                                    <div *ngIf="competition.type == CONST.EventType.Stage " class="form-group col-md-6"
                                         [ngClass]="{'has-danger' : (step.hasError &&  weightForm.get('peso').hasError('required')) || errorePeso, 'has-success' : !weightForm.get('peso').hasError('required') }">
                                         <div class="form-group">
                                             <label for="exampleSelect1" class="form-control-label mr-2">Tesserino tecnico *</label>

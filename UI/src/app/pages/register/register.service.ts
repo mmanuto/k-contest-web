@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 @Injectable()
 export class RegisterService 
 {
@@ -16,25 +16,25 @@ export class RegisterService
      //================================= LOGIN =======================================
      getCompetitions()
      {
-         return this.http.get(Constants.BASEAPPURL + 'competitions/getCompetitions', {});
+         return this.http.get(environment.BASEAPPURL + 'competitions/getCompetitions', {});
                  
     }
 
     /* saveClub(request)
      {
-         return this.http.post(Constants.BASEAPPURL + 'registeredClubs/saveClub', request);
+         return this.http.post(environment.BASEAPPURL + 'registeredClubs/saveClub', request);
                  
     } */
 
          checkFiscalCode(request)
      {
-         return this.http.post(Constants.BASEAPPURL + 'clubs/checkFiscalCode', request);
+         return this.http.post(environment.BASEAPPURL + 'clubs/checkFiscalCode', request);
                  
     }
 
     saveClub(request)
      {
-         return this.http.post(Constants.BASEAPPURL + 'clubs/saveClub', request);
+         return this.http.post(environment.BASEAPPURL + 'clubs/saveClub', request);
                  
     }
 

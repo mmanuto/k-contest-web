@@ -9,6 +9,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as Dataset from './datasets';
 import { InMemoryDatabase } from './storage/memory';
 import { BracketsManager } from 'brackets-manager';
+import * as Constants from '../../constants';
 
 declare global {
   interface JQuery {
@@ -90,6 +91,7 @@ export class CompetitorsInCategoriesComponent {
   public minimalData = {};
   public secondGirone = {};
   public thirdGirone = {};
+  public CONST = Constants;
 
 
   constructor(
@@ -121,6 +123,7 @@ export class CompetitorsInCategoriesComponent {
 
    //--------------------------------------------------------------------- LISTA ATLETI --------------------------------------------------------------
    openCategory(category){
+    console.log(category);
     this.selectedCategory = category;
     this.competitorsService.getAthleteList({categorycode_id: category.id, competition_id: this.datiGara.id }).subscribe((response: any) => {
       this.athleteList = response.result.data;

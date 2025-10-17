@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { CompetitionService } from './competition.service';
 import { FormBuilder } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -15,7 +16,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 
 export class CompetitionsComponent implements OnInit {
   datePipe = new DatePipe("en-US");
-  public imgUrl:string = Constants.IMAGES_WEBROOT;
+  public imgUrl:string = environment.IMAGES_WEBROOT;
   public zipFile = null;
   public data = [];
   public router: Router;

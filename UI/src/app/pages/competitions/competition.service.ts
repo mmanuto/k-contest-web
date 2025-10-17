@@ -1,7 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class CompetitionService
@@ -14,21 +13,21 @@ export class CompetitionService
 
     getCompetitions()
      {
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getAllCompetitions', {});
+         return this.http.post(environment.BASEAPPURL + 'competitions/getAllCompetitions', {});
                  
     }
 
     uploadTabelloni(zipFile)
      {
          console.log('SERVIZIO: UPLOADTABELLONI');
-         return this.http.post(Constants.BASEAPPURL + 'competitions/uploadTabelloni', zipFile);
+         return this.http.post(environment.BASEAPPURL + 'competitions/uploadTabelloni', zipFile);
                  
     }
 
     getDatiGara(idGara)
     {
         console.log(idGara);
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', {idGara: idGara});
+        return this.http.post(environment.BASEAPPURL + 'competitions/getDatiGara', {idGara: idGara});
                 
    }
 

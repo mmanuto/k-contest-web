@@ -1,6 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class SettingsService
@@ -10,7 +10,7 @@ export class SettingsService
     }
 
     updateUserData(request){
-        return this.http.post(Constants.BASEAPPURL + "users/updateUserData", request);
+        return this.http.post(environment.BASEAPPURL + "users/updateUserData", request);
     }
 
 }

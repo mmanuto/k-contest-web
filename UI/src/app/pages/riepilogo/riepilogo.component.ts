@@ -153,7 +153,7 @@ export class RiepilogoComponent {
     let pdf = this.creaPdfIscrizioni();
     let autodichiarazione = null;
     let data = null ;
-    if(this.competition.type == Constants.COMPETITION){
+    if(this.competition.type == Constants.EventType.Competition){
         autodichiarazione = this.creaPdfCertificati();
         data = this.creaExcelCsen();
     }   
@@ -193,7 +193,7 @@ export class RiepilogoComponent {
     var rows = [];
     let count = 1;
 
-    if(this.competition.type == Constants.COMPETITION){
+    if(this.competition.type == Constants.EventType.Competition){
 
       columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Sesso", "Cod. Fiscale", "Tessera CSEN", "Peso", "Grado", "Categoria", "Prove"];
       for (let atleta of this.listaIscritti) {
@@ -214,7 +214,7 @@ export class RiepilogoComponent {
       }
     }
 
-    } else if(this.competition.type == Constants.STAGE){
+    } else if(this.competition.type == Constants.EventType.Stage){
       columns = ["Nr.", "Cognome e Nome", "Data di nascita", "Cod. Fiscale", "N° Tessera", "Tesserino tecnico", "Corso", "Prezzo"];
       console.log(this.listaIscritti);
       for (let atleta of this.listaIscritti) {

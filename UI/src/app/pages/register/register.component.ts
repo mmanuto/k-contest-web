@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { UntypedFormGroup, UntypedFormControl, AbstractControl, UntypedFormBuilder, Validators, FormGroup, FormControl, FormBuilder} from '@angular/forms';
 import { CustomValidators } from 'ng2-validation';
@@ -31,7 +32,7 @@ export class RegisterComponent {
     public modalRefAdv: NgbModalRef;
     public urlLocandina: string;
     public urlCircolare: string;
-    public imgUrl: string = Constants.IMAGES_WEBROOT;
+    public imgUrl: string = environment.IMAGES_WEBROOT;
     
     constructor(public router: Router, 
         private formBuilder: FormBuilder, 

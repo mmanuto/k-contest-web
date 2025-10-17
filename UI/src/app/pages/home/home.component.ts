@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import { CustomValidators } from 'ng2-validation';
+import { environment } from '../../../environments/environment';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { HomeService } from './home.service';
@@ -20,7 +19,7 @@ export class HomeComponent implements OnInit {
   public competition: any;
   public modalRefIscrizioni: NgbModalRef;
   public currentClub: any;
-  public imgUrl: string = Constants.IMAGES_WEBROOT;
+  public imgUrl: string = environment.IMAGES_WEBROOT;
   public athletestNumber:number = 0;
   public athletestMaxNumber:number = 0;
   public CONST = Constants;
@@ -34,7 +33,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.appUrl = Constants.WEBROOT;
+    this.appUrl = environment.WEBROOT;
     
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
       this.competition = response.result.data;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class RiepilogoService {
@@ -9,25 +9,25 @@ export class RiepilogoService {
 
     getDatiGara(idGara)
      {
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', {idGara:idGara});
+         return this.http.post(environment.BASEAPPURL + 'competitions/getDatiGara', {idGara:idGara});
                  
     }
 
     getListaIscritti(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getIscritti", request);
+        return this.http.post(environment.BASEAPPURL + "athletes/getIscritti", request);
     }
 
 
     inviaDati(request){
         console.log(request);
-        return this.http.post(Constants.BASEAPPURL + "athletes/inviaDati", request);
+        return this.http.post(environment.BASEAPPURL + "athletes/inviaDati", request);
     }
 
 
 
     //TODO: ------------------------------------- METODI DA RIVEDERE ------------------------------------------
     getListaSquadre(request){
-        return this.http.post(Constants.BASEAPPURL + "teams/getListaSquadre", request);
+        return this.http.post(environment.BASEAPPURL + "teams/getListaSquadre", request);
         
     }
 

@@ -1,6 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable()
@@ -17,26 +17,26 @@ export class CompetitionDetailsService
     getCategories(request)
      {
         console.log('entra');
-         return this.http.post(Constants.BASEAPPURL + 'categorycodes/getCategories', request);
+         return this.http.post(environment.BASEAPPURL + 'categorycodes/getCategories', request);
                  
     }
 
     getCategoriesWithAthletes(request){
-        return this.http.post(Constants.BASEAPPURL + 'categorycodes/getCategoriesWithAthletes', request);
+        return this.http.post(environment.BASEAPPURL + 'categorycodes/getCategoriesWithAthletes', request);
     }
 
     getModifiedInscriptions(){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getModifiedInscriptions', {});
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getModifiedInscriptions', {});
     }
 
     toggleFlags(request){
-        return this.http.post(Constants.BASEAPPURL + 'competitions/toggleFlags', request);
+        return this.http.post(environment.BASEAPPURL + 'competitions/toggleFlags', request);
     }
 
     //--------------------------------------------------- PRINT KUMITE ------------------------------------------------------------------
 
     getKumiteList(){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getKumiteList', {});
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getKumiteList', {});
     }
 
     // ====================================================================================================
@@ -44,35 +44,35 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getAthleteList(request){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthleteList', request);
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getAthleteList', request);
     }
 
     getTotalAthleteList(){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getTotalAthleteList", {});
+        return this.http.post(environment.BASEAPPURL + "athletes/getTotalAthleteList", {});
     }
 
     getClubs(){
-        return this.http.post(Constants.BASEAPPURL + 'clubs/getClubs', {});
+        return this.http.post(environment.BASEAPPURL + 'clubs/getClubs', {});
     }
 
     getAllCategories(){
-        return this.http.post(Constants.BASEAPPURL + "categorycodes/getAllCategories", {});
+        return this.http.post(environment.BASEAPPURL + "categorycodes/getAllCategories", {});
     }
 
     //-------------------- Inserimento nuovo atleta --------------------------------------
     //TODO: Tutto da rivedere
 
     getCategoria(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getCategoria", request);
+        return this.http.post(environment.BASEAPPURL + "athletes/getCategoria", request);
         
     }
 
     getElencoProve(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/getElencoProve", request);
+        return this.http.post(environment.BASEAPPURL + "athletes/getElencoProve", request);
     }
 
     saveAtleta(request){
-        return this.http.post(Constants.BASEAPPURL + "athletes/saveAtleta", request);
+        return this.http.post(environment.BASEAPPURL + "athletes/saveAtleta", request);
     }
 
 
@@ -80,11 +80,11 @@ export class CompetitionDetailsService
     //-------------------------------------- Modifica Atleta -----------------------------------
     deteleAtletaInscription(request){
         console.log(request);
-        return this.http.post(Constants.BASEAPPURL + "athleteInscriptions/deleteInscription", request);
+        return this.http.post(environment.BASEAPPURL + "athleteInscriptions/deleteInscription", request);
     }   
 
     updateCategory(request){
-        return this.http.post(Constants.BASEAPPURL + "athleteInscriptions/updateCategory", request);
+        return this.http.post(environment.BASEAPPURL + "athleteInscriptions/updateCategory", request);
     }
 
     // ====================================================================================================
@@ -92,19 +92,19 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getAthletesByCategory(request){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
     }
 
     getTotaleIscrizioni(request){
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getTotaleIscrizioni', request);
+        return this.http.post(environment.BASEAPPURL + 'competitions/getTotaleIscrizioni', request);
     }
 
     getTotaleCategorie(request){
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getTotaleCategorie', request);
+        return this.http.post(environment.BASEAPPURL + 'competitions/getTotaleCategorie', request);
     }
 
     splitCategory(request){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/splitCategory', request);
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/splitCategory', request);
     }
 
     // ====================================================================================================
@@ -112,7 +112,7 @@ export class CompetitionDetailsService
     // ====================================================================================================
 
     getClubsWithAthletes(request){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getClubsWithAthletes', request);
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getClubsWithAthletes', request);
     }
     
 }

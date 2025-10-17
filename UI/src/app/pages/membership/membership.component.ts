@@ -154,7 +154,7 @@ export class MembershipComponent implements OnInit {
     //TODO: da togliere e inserire commonservices
     this.homeService.getTotaleIscrizioni({competition_id: this.competition.id, competition_type: this.competition.type }).subscribe((response: any) => {
       
-      if(this.competition.type == Constants.STAGE){
+      if(this.competition.type == Constants.EventType.Stage){
         this.corsiAthletestNumber =[];
 
         response.result.data.forEach(prova => {
@@ -248,7 +248,7 @@ export class MembershipComponent implements OnInit {
     if (this.steps[this.steps.length - 1].active)
       return false;
     if (this.steps[0].active) {
-      if ((athleteForm.valid || this.competition.type == Constants.STAGE) && this.categoria.description != "") {
+      if ((athleteForm.valid || this.competition.type == Constants.EventType.Stage) && this.categoria.description != "") {
         this.erroreCategoria = false;
 
         let request = { anno: this.athleteForm.value.birthdate_year, agecategory: this.categoria, sesso: this.athleteForm.value.sesso, grado: this.athleteForm.value.cintura, categorycode: this.competition.codiceTipoCategorie, competition_type: this.competition.type };
@@ -326,7 +326,7 @@ export class MembershipComponent implements OnInit {
       let stageOk = false;
 
       switch (this.competition.type) {
-        case Constants.STAGE:
+        case Constants.EventType.Stage:
           stageOk = this.checkTesserino();
           break;
       

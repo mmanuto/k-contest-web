@@ -18,11 +18,11 @@
                     <b style="color:firebrick">Si ricorda che le iscrizioni chiudono il giorno {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}.
                     Non saranno accettate iscrizioni o modifiche oltre tale data. </b>
                 </p>
-                <div *ngIf="competition.type == CONST.COMPETITION" class="row ml-1"> 
+                <div *ngIf="competition.type == CONST.EventType.Competition" class="row ml-1"> 
                     <h3 *ngIf="athletestNumber > 0" class="card-title mt-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
                 </div>
-                <div *ngIf="competition.type == CONST.COMPETITION && (competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME)" class="m-4">
+                <div *ngIf="competition.type == CONST.EventType.Competition && (competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME)" class="m-4">
                     <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL">ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
                     <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_TIME">ISCRIZIONI CHIUSE</h4>
                     <p class="card-text"> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
@@ -30,7 +30,7 @@
                         tabelloni di gara nella sezione <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra</p>
                 </div>
 
-                <div *ngIf="competition.type == CONST.COMPETITION && competition.flag_timetable" style="color:firebrick">
+                <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable" style="color:firebrick">
                     <h5>  La direzione gara si riserva di iniziare le categorie anche 15-20 minuti prima. <br/>
                         Si consiglia a tutti di essere in palazzetto almeno 40-30 minuti prima dell'inizio della propria categoria.
                     </h5>
@@ -170,7 +170,7 @@
                         <div class="col-md-12 mt-4">
                             <div class="card">
                                 <div class="card-body ml-4">
-                                    <div *ngIf="competition.type == CONST.COMPETITION" class="row ml-1"> 
+                                    <div *ngIf="competition.type == CONST.EventType.Competition" class="row ml-1"> 
                                         <h4 class="card-title mt-3">  Informativa di gara</h4>
                                         <a target="blank" [href]="imgUrl + competition.circolare" class="documents text-primary"> 
                                             <h4 class="card-title mt-3"> <i class="fa fa-download"></i></h4>
@@ -211,7 +211,7 @@
                         <div class="col-md-10 mb-4 mt-4">
                             <div class="card">
                                 <div class="card-body ml-4">
-                                    <div *ngIf="competition.type == CONST.COMPETITION" class="row ml-1"> 
+                                    <div *ngIf="competition.type == CONST.EventType.Competition" class="row ml-1"> 
                                         <h4 class="card-title mt-3">  Informativa di gara</h4>
                                         <a target="blank" [href]="imgUrl + competition.circolare" class="documents text-primary"> 
                                             <h4 class="card-title mt-3"> <i class="fa fa-download"></i></h4>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
+
 @Injectable()
 export class HomeService 
 {
@@ -16,17 +17,17 @@ export class HomeService
      //================================= LOGIN =======================================
      getDatiGara(idGara)
      {
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getDatiGara', {idGara:idGara});
+         return this.http.post(environment.BASEAPPURL + 'competitions/getDatiGara', {idGara:idGara});
                  
     }
 
     getTabelloni(nomeGara){
         console.log(nomeGara);
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getClassifiche', {'gara':nomeGara});
+        return this.http.post(environment.BASEAPPURL + 'competitions/getClassifiche', {'gara':nomeGara});
     }
 
     getTotaleIscrizioni(idGara){
-        return this.http.post(Constants.BASEAPPURL + 'competitions/getTotaleIscrizioni', idGara);
+        return this.http.post(environment.BASEAPPURL + 'competitions/getTotaleIscrizioni', idGara);
     }
 
 

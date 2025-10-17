@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { CompetitionDetailsService } from './competitionDetails.service';
+import { environment } from '../../../environments/environment';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
 import * as Constants from '../../constants';
@@ -17,7 +18,7 @@ export class CompetitionDetailsComponent implements OnInit {
   datePipe = new DatePipe("en-US");
   categorie = null;
   circolareNew = null;
-  public imgUrl:string = Constants.IMAGES_WEBROOT;
+  public imgUrl:string = environment.IMAGES_WEBROOT;
   public competitionId;
   public currentCompetition = null;
 

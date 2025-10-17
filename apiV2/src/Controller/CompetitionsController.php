@@ -492,19 +492,13 @@ public function getAllCompetitions()
 
         $data = $this->request->getData();
 
-        $competition = $this->Competitions->get($data['competition_id'], [
-            'contain' => []
-        ]); 
+        $competition = $this->Competitions->get($data['competition_id']); 
 
         $categories = [];
         $tabelloni = $competition['flag_tabs'] == 0 ? false : true;
         $result = [];
 
-        if($tabelloni){
-            $categories = $this->getCategories($data);
-        }else{
-            $categories = $this->getAthletesInCategories($data);
-        }
+        $categories = $this->getCategories($data);
         
         $result['categories'] = $categories;
         $result['tabs'] = $tabelloni;

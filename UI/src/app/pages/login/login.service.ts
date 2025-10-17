@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
+
 @Injectable()
 export class LoginService 
 {
@@ -16,7 +17,7 @@ export class LoginService
      //================================= LOGIN =======================================
      login(request)
      {
-         return this.http.post(Constants.BASEAPPURL + 'users/login', {'username': request.username, 'password': request.password});
+         return this.http.post(environment.BASEAPPURL + 'users/login', {'username': request.username, 'password': request.password});
                  
     }
 

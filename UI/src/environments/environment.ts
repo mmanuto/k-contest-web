@@ -3,8 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  BASEAPPURL: "http://" + document.location.hostname + ":4200/backend/",
+  IMAGES_WEBROOT: "http://" + document.location.hostname + ":4200/backend/webroot/resources/",
+  WEBROOT: "https://" + document.location.hostname + ":4200/backend/webroot/"
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

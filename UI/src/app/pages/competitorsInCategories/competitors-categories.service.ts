@@ -1,29 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import * as Constants from '../../constants';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class CompetitorsInCategoriesService {
     constructor(public http:HttpClient) { }
 
     getTabelloni(request){
-        return this.http.post(Constants.BASEAPPURL + "competitions/getTabelloni", request);
+        return this.http.post(environment.BASEAPPURL + "competitions/getTabelloni", request);
     }
 
 
     /*getAthletesInCategories(request){
-        return this.http.post(Constants.BASEAPPURL + "competitions/getAthletesInCategories", request);
+        return this.http.post(environment.BASEAPPURL + "competitions/getAthletesInCategories", request);
     }
 
     getCategories()
      {
         console.log('entra');
-         return this.http.post(Constants.BASEAPPURL + 'competitions/getCategories', {});
+         return this.http.post(environment.BASEAPPURL + 'competitions/getCategories', {});
                  
     }*/
 
     getAthleteList(request){
-        return this.http.post(Constants.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
+        return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
     }
 
 } 
