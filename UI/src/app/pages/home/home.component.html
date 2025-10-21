@@ -11,7 +11,7 @@
 
             </div>
             <div class="card-body pt-0 widget-body" style="width: 100%">
-                <p *ngIf="competition.comp_status == CONST.REG_OPEN" class="card-text">
+                <p *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationOpen" class="card-text">
                     Per procedere con le iscrizioni cliccare su <strong>Iscrizione atleti</strong> nel menù a sinistra.  
                     Una volta concluse le iscrizioni, nella sezione 
                     <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra verranno pubblicati i tabelloni di gara. <br/> 
@@ -22,9 +22,9 @@
                     <h3 *ngIf="athletestNumber > 0" class="card-title mt-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
                 </div>
-                <div *ngIf="competition.type == CONST.EventType.Competition && (competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME)" class="m-4">
-                    <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL">ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
-                    <h4 *ngIf="competition.comp_status == CONST.REG_CLOSED_TIME">ISCRIZIONI CHIUSE</h4>
+                <div *ngIf="competition.type == CONST.EventType.Competition && (competition.comp_status == CONST.CompetitionState.RegistrationClosedFull || competition.comp_status == CONST.CompetitionState.RegistrationClosedTime)" class="m-4">
+                    <h4 *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedFull">ISCRIZIONI CHIUSE causa raggiungimento limite massimo</h4>
+                    <h4 *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedTime">ISCRIZIONI CHIUSE</h4>
                     <p class="card-text"> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per
                         qualsiasi informazione contattare il responsabile di gara. <br> Appena disponibili verranno pubblicati i
                         tabelloni di gara nella sezione <strong> ATLETI IN CATEGORIA </strong> nel menù a sinistra</p>
@@ -40,12 +40,12 @@
                     <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
                         <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
                 </div>-->
-                <div *ngIf="competition.comp_status == CONST.PUBLISHED" class="m-4">
+                <div *ngIf="competition.comp_status == CONST.CompetitionState.Published" class="m-4">
                     <h4>ISCRIZIONI CHIUSE</h4>
                     <p class="card-text"> Le iscrizioni non sono ancora aperte. Per qualsiasi informazione contattare
                         il responsabile di gara. </p>
                 </div>
-               <div *ngIf="competition.comp_status == CONST.REG_CLOSED_FULL || competition.comp_status == CONST.REG_CLOSED_TIME" class="row" style="width: 100%;">
+               <div *ngIf="competition.comp_status == CONST.CompetitionState.Published || competition.comp_status == CONST.CompetitionState.RegistrationClosedFull || competition.comp_status == CONST.CompetitionState.RegistrationClosedTime" class="row" style="width: 100%;">
                     <div class="col-md-7 mt-4">
 
                         <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
@@ -206,7 +206,7 @@
                     </div>
 
                 </div>
-                <div *ngIf="competition.comp_status == CONST.REG_OPEN" class="row" style="width: 100%;">
+                <div *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationOpen" class="row" style="width: 100%;">
                     <div class="col-md-6">
                         <div class="col-md-10 mb-4 mt-4">
                             <div class="card">

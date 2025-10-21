@@ -1,7 +1,7 @@
 <?php
 
 return [
-    "PENDING" => 'PENDING',
+    "DRAFT" => 'DRAFT',
     "PUBLISHED" => 'PUBLISHED',
     "REG_OPEN" => 'REG_OPEN',
     "REG_CLOSED_TIME" => 'REG_CLOSED_TIME',

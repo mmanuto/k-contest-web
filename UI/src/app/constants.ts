@@ -1,13 +1,6 @@
  
 //COMPETITION STATUS
 
-export const PENDING = 'PENDING'; // Gara in attesa
-export const PUBLISHED = 'PUBLISHED'; // Gara pubblicata, iscrizioni chiuse
-export const REG_OPEN = 'REG_OPEN'; // Iscrizioni aperte
-export const REG_CLOSED_TIME = 'REG_CLOSED_TIME'; // Iscrizioni chiuse per limite di tempo
-export const REG_CLOSED_FULL = 'REG_CLOSED_FULL'; // Iscrizioni chiuse per numero massimo
-export const ARCHIVED = 'ARCHIVED'; // Gara chiusa, non più visibile
-
 export enum CompetitionState {
   Draft = 'DRAFT',  // Gara in attesa
   Published = 'PUBLISHED',   // Gara pubblicata, iscrizioni chiuse

@@ -397,25 +397,17 @@ class AthletesController extends ApiController
 
         //----------------------------  PDF  -------------------------------------
         $dataPdf = base64_decode($data['pdf']);
-
-        $autodichiarazionePdf = null;
-        if($data['autodichiarazione'] != null && $data['autodichiarazione'] != ''){
-            $autodichiarazionePdf = base64_decode($data['autodichiarazione']);
-        }
+        $autodichiarazionePdf = base64_decode($data['autodichiarazione']);
 
         $filename = $competition['nome_gara'] . "/iscrizioni_" . $datiSocieta['club_name'] . ".pdf";
-        
+        $filenameCertificati = $competition['nome_gara'] . "/autodichiarazione_" . $datiSocieta['club_name'] . ".pdf";
 
         if (!file_exists($competition['nome_gara'])) {
             mkdir($competition['nome_gara'], 0777, true);
         }
 
         file_put_contents($filename, $dataPdf);
-        if($autodichiarazionePdf != null){
-            $filenameCertificati = $competition['nome_gara'] . "/autodichiarazione_" . $datiSocieta['club_name'] . ".pdf";
-            file_put_contents($filenameCertificati, $autodichiarazionePdf);
-        }
-        
+        file_put_contents($filenameCertificati, $autodichiarazionePdf);
 
 
         //-----------------------------  EXCEL  -------------------------------------
@@ -458,24 +450,12 @@ class AthletesController extends ApiController
         }
 
         $EmailRiepilogo = new Mailer();
-        if($filenameCertificati != null){
-            $EmailRiepilogo->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])
-                ->setTo('info@iscrizionicsenveneto.it')
-                ->setBcc($destinatariPdf)
-                ->setSubject('Riepilogo iscrizione ' . $datiSocieta['club_name'] . ' - ' . $competition['nome_gara'])
-                ->setAttachments([$filename, $filenameCertificati])
-                ->deliver($testoSocieta);
-        }else{
-            $EmailRiepilogo->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])
-                ->setTo('info@iscrizionicsenveneto.it')
-                ->setBcc($destinatariPdf)
-                ->setSubject('Riepilogo iscrizione ' . $datiSocieta['club_name'] . ' - ' . $competition['nome_gara'])
-                ->setAttachments([$filename])
-                ->deliver($testoSocieta);
-
-        }
-        
-
+        $EmailRiepilogo->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])
+            ->setTo('info@iscrizionicsenveneto.it')
+            ->setBcc($destinatariPdf)
+            ->setSubject('Riepilogo iscrizione ' . $datiSocieta['club_name'] . ' - ' . $competition['nome_gara'])
+            ->setAttachments([$filename, $filenameCertificati])
+            ->deliver($testoSocieta);        
 
         $this->apiResponse['success'] = true;
     }

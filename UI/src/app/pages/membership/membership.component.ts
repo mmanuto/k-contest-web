@@ -125,7 +125,7 @@ export class MembershipComponent implements OnInit {
       });
     })
     this.membershipService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.competition.id }).subscribe((response: any) => {
-      //console.log(response);
+
       let listaIscritti = response.result.data;
       this.iscritti = [];
       if (listaIscritti) {
@@ -172,8 +172,8 @@ export class MembershipComponent implements OnInit {
           this.athletestNumber = response.result.data;
 
           if(this.athletestNumber == this.athletestMaxNumber){
-            this.competition.comp_status = this.CONST.REG_CLOSED_FULL;
-            this.membershipService.closeRegistrations({competition_id: this.competition.id, comp_status: this.CONST.REG_CLOSED_FULL}).subscribe((responseClose:any)=> {
+            this.competition.comp_status = this.CONST.CompetitionState.RegistrationClosedFull;
+            this.membershipService.closeRegistrations({competition_id: this.competition.id, comp_status: this.CONST.CompetitionState.RegistrationClosedFull}).subscribe((responseClose:any)=> {
             });
           }
       }
@@ -205,7 +205,6 @@ export class MembershipComponent implements OnInit {
   }
 
   checkCategory() {
-    console.log(this.competition);
     let params = {
       'anno': this.athleteForm.value.birthdate_year,
       'categorycode': this.competition.codiceTipoCategorie,
@@ -232,7 +231,6 @@ export class MembershipComponent implements OnInit {
   public showPeso() {
     this.show = false;
 
-    console.log(this.prove);
     for (let item of this.prove) {
       if ((item.label == "Kumite" || item.label == "Kumite U12" || item.code == "BST-ISTR") && item.checked) {
         this.show = true;
@@ -257,10 +255,18 @@ export class MembershipComponent implements OnInit {
           if (response.result.success) {
             this.prove = [];
             for (let prova of response.result.data) {
-              this.prove.push({ label: prova.name, code: prova.code, checked: false });
+              let closed = false;
+              this.corsiAthletestNumber.forEach(element => {
+                
+                if (prova.code == element.code && element.closed) {
+                  closed = true;
+                }
+                
+              });
+              this.prove.push({ label: prova.name, code: prova.code, checked: false, closed: closed });
             }
           }
-          console.log(response);
+          
           this.steps[0].active = false;
           this.steps[0].valid = true;
           this.steps[1].active = true;
@@ -461,9 +467,7 @@ export class MembershipComponent implements OnInit {
       this.atleta = this.athletes.filter(obj => {
         return obj.id == user.id
       });
-      console.log(user);
-      console.log(this.athletes);
-      console.log(this.atleta);
+
       this.atleta = this.atleta[0];
       let birthdate = this.atleta.data_nascita.split('/');
 
@@ -516,7 +520,7 @@ export class MembershipComponent implements OnInit {
 
   public deleteUser(user) {
     this.membershipService.deteleAtleta({ 'athlete_id': user.id, 'competition_id': this.competition.id }).subscribe((response: any) => {
-      console.log(response);
+
       if (response.result.success) {
         location.reload();
       }

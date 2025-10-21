@@ -151,10 +151,9 @@ export class RiepilogoComponent {
 
 
     let pdf = this.creaPdfIscrizioni();
-    let autodichiarazione = null;
+    let autodichiarazione = this.creaPdfCertificati();
     let data = null ;
-    if(this.competition.type == Constants.EventType.Competition){
-        autodichiarazione = this.creaPdfCertificati();
+    if(this.competition.type == Constants.EventType.Competition){ 
         data = this.creaExcelCsen();
     }   
 

@@ -136,7 +136,7 @@ public function getAllCompetitions()
 
         $competition = $this->Competitions->find()
             ->where([
-                'comp_status NOT IN' => [Configure::read('PENDING'), Configure::read('ARCHIVED')],
+                'comp_status NOT IN' => [Configure::read('DRAFT'), Configure::read('ARCHIVED')],
                 'DATE(data_gara) >=' => date('Y-m-d', mktime(0, 0, 0, intval(date("m")), intval(date("d") - 20), intval(date("Y"))))
             ])
             ->order(['data_gara'])

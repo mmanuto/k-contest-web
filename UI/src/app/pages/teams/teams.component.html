@@ -16,12 +16,12 @@
 
 <div class="row">
 
-    <div *ngIf="iscrizioniStatus != CONST.REG_OPEN" class="ml-4" style="width:100%; text-align: center; margin-bottom: 50px; margin-bottom: 25px">
+    <div *ngIf="iscrizioniStatus != CONST.CompetitionState.RegistrationOpen" class="ml-4" style="width:100%; text-align: center; margin-bottom: 50px; margin-bottom: 25px">
         <h3>ISCRIZIONI CHIUSE</h3>
         <p class="card-text"><b> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per qualsiasi
                 informazione contattare il responsabile di gara.</b></p>
     </div>
-    <div *ngIf="iscrizioniStatus == CONST.REG_OPEN" class="col-lg-9 mb-4">
+    <div *ngIf="iscrizioniStatus == CONST.CompetitionState.RegistrationOpen" class="col-lg-9 mb-4">
         <div widget class="card border-0 box-shadow">
             <div class="card-body pt-0 widget-body">
                 <div class="row mt-4">
