@@ -254,16 +254,23 @@ export class MembershipComponent implements OnInit {
 
           if (response.result.success) {
             this.prove = [];
+            
             for (let prova of response.result.data) {
+              
               let closed = false;
-              this.corsiAthletestNumber.forEach(element => {
+              if(this.competition.type == Constants.EventType.Stage){
+
+                this.corsiAthletestNumber.forEach(element => {
+                  
+                  if (prova.code == element.code && element.closed) {
+                    closed = true;
+                  }
                 
-                if (prova.code == element.code && element.closed) {
-                  closed = true;
-                }
+                });
                 
-              });
+              }
               this.prove.push({ label: prova.name, code: prova.code, checked: false, closed: closed });
+              
             }
           }
           
