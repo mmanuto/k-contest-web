@@ -1,20 +1,21 @@
 <div class="row mb-1">
     <div class="col mb-4">
 
+        <!-- COMPETITION -->
         <div *ngIf="competition.comp_status != CONST.CompetitionState.RegistrationOpen" class="ml-4 mb-4" style="width:100%; text-align: center">
-            <h3>ISCRIZIONI CHIUSE</h3>
-            <p class="card-text"><b> Al momento non nè possibile effettuare modifiche o aggiungere nuovi iscritti. Per
-                    qualsiasi
-                    informazione contattare il responsabile di gara.</b></p>
+            <h4 *ngIf="competition.comp_status != CONST.CompetitionState.Published" class="d-inline-block bg-danger text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
+            <h4 *ngIf="competition.comp_status == CONST.CompetitionState.Published" class="d-inline-block bg-warning text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
+            <p class="card-text"><b> {{CONST.StateMessages.RegistrationClosedTime}}</b></p>
         </div>
 
         <div class="row ml-1" *ngIf="competition.type == CONST.EventType.Competition"> 
-            <h3 *ngIf="athletestNumber > 0" class="card-title mb-4" style="color:firebrick">Totale iscritti in tempo reale: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
+            <h3 *ngIf="athletestNumber > 0" class="card-title mb-4">Totale iscritti: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
 
         </div>
 
+        <!-- STAGE -->
         <div class="col ml-1 mb-4" *ngIf="competition.type == CONST.EventType.Stage"> 
-            <h3 *ngIf="corsiAthletestNumber.length > 0" class="card-title mb-3" style="color:firebrick">Totale iscritti in tempo reale:</h3>
+            <h3 *ngIf="corsiAthletestNumber.length > 0" class="card-title mb-3">Totale iscritti:</h3>
 
             <div *ngFor="let prova of corsiAthletestNumber; let i = index;">
                 <h5 class="card-title mb-2" >{{prova.specialita}}: {{prova.n_athletes}}/{{prova.atleti_max}} </h5>

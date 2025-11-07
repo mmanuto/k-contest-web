@@ -1,25 +1,11 @@
-/* .register-container{
-    position: absolute;
-    .card{
-        .card-header{
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            margin-top: -40px;
-            border-radius: 50%;
-            font-size: 36px;
-        }
-    } */
+
+    .sfondo{
+    background-color: #202F40;
+    }
 
     .register-container2{
-        position: absolute;
         margin-top: 100px;
         margin-bottom: 50px;
-    }
-    .logo-csen{
-        height: 150px;
-        margin-top: -70px;
-    }
     
         .step{
         .step-content{
@@ -44,11 +30,22 @@
         }
     }
     
-    .documents{
+    .btn-eventi-text{
         margin-left: 10px;
-        font-size: 16px;
-        font-weight: 600;
+        font-size: 15px;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
         color: white;
+        height: 21px;
     }
+
+    .eventi-text{
+        font-weight: 500;
+        font-size: 15px;
+    }
+
+    .btn-eventi{
+        max-height: 33.5px;
+    }
+}
+    
     

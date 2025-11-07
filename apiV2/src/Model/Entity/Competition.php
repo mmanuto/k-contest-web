@@ -19,6 +19,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate|null $apertura_iscrizioni
  * @property \Cake\I18n\FrozenDate $chiusura_iscrizioni
  * @property \Cake\I18n\FrozenDate $data_gara
+ * @property string $place
  * @property string|null $locandina
  * @property string|null $circolare
  * @property int $nr_atleti
@@ -56,6 +57,7 @@ class Competition extends Entity
         'apertura_iscrizioni' => true,
         'chiusura_iscrizioni' => true,
         'data_gara' => true,
+        'place' => true,
         'locandina' => true,
         'circolare' => true,
         'nr_atleti' => true,

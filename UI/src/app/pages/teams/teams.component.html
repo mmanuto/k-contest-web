@@ -16,10 +16,10 @@
 
 <div class="row">
 
-    <div *ngIf="iscrizioniStatus != CONST.CompetitionState.RegistrationOpen" class="ml-4" style="width:100%; text-align: center; margin-bottom: 50px; margin-bottom: 25px">
-        <h3>ISCRIZIONI CHIUSE</h3>
-        <p class="card-text"><b> Non è più possibile effettuare modifiche o aggiungere nuovi iscritti. Per qualsiasi
-                informazione contattare il responsabile di gara.</b></p>
+    <div *ngIf="iscrizioniStatus != CONST.CompetitionState.RegistrationOpen" class="ml-4 mb-4" style="width:100%; text-align: center">
+            <h4 *ngIf="iscrizioniStatus != CONST.CompetitionState.Published" class="d-inline-block bg-danger text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
+            <h4 *ngIf="iscrizioniStatus == CONST.CompetitionState.Published" class="d-inline-block bg-warning text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
+            <p class="card-text"><b> {{CONST.StateMessages.RegistrationClosedTime}}</b></p>
     </div>
     <div *ngIf="iscrizioniStatus == CONST.CompetitionState.RegistrationOpen" class="col-lg-9 mb-4">
         <div widget class="card border-0 box-shadow">

@@ -10,8 +10,8 @@ import { LocalStorageService } from 'angular-2-local-storage';
 @Injectable()
 export class MenuService {
 
-userType: number;
-pregara: boolean;
+userType: string;
+//pregara: boolean;
 
   constructor(private location:Location, 
               private renderer2:Renderer2,
@@ -19,7 +19,7 @@ pregara: boolean;
               private localStorage: LocalStorageService,
               public translateService: TranslateService){ 
                 this.userType = this.localStorage.get('userType');
-                this.pregara = this.localStorage.get('pregara');
+                //this.pregara = this.localStorage.get('pregara');
                 console.log(this.userType);
               } 
 
@@ -45,7 +45,7 @@ pregara: boolean;
     let menu0 = this.renderer2.createElement('div');
     this.renderer2.setAttribute(menu0, 'id', 'menu0');
     menu.forEach((menuItem) => {
-        if(menuItem.parentId == 0 && menuItem.typeUser == this.userType && (!this.pregara || (this.pregara && menuItem.show))){
+        if(menuItem.parentId == 0 && menuItem.typeUser.includes(this.userType)){
           let subMenu = this.createVerticalMenuItem(menu, menuItem);
           this.renderer2.appendChild(menu0, subMenu);
         }

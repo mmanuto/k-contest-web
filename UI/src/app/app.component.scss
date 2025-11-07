@@ -1,11 +1,22 @@
-.sfondo{
-    /* background: url('/assets/img/sfondo/IMG_8794.jpg') no-repeat center center fixed;  */
-    background-color: #202F40;
-    overflow: hidden;
 
-}
 
 .logo-csen{
     height: 150px;
     margin-top: -70px;
+}
+
+.iubenda-footer {
+  /* Questo lo mette su una riga sotto la card bianca */
+  width: 100%; 
+  text-align: center;
+  padding: 20px 0;
+
+  /* Per farlo stare in fondo se la pagina è corta */
+  margin-top: auto; 
+}
+
+.iubenda-footer a {
+  color: #fff; /* Colore bianco per i link sul fondo scuro */
+  margin: 0 10px;
+  font-size: 12px;
 }

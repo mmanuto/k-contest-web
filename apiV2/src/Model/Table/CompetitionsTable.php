@@ -122,6 +122,12 @@ class CompetitionsTable extends Table
             ->notEmptyDate('data_gara');
 
         $validator
+            ->scalar('place')
+            ->maxLength('place', 500)
+            ->requirePresence('place', 'create')
+            ->notEmptyString('place');
+
+        $validator
             ->scalar('locandina')
             ->maxLength('locandina', 100)
             ->allowEmptyString('locandina');

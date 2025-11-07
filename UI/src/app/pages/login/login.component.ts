@@ -5,6 +5,7 @@ import { EmailValidators } from 'ngx-validators'
 import { LoginService } from './login.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { ToastrService } from 'ngx-toastr';
+import * as Constants from '../../constants';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +42,7 @@ export class LoginComponent {
 
                 //Salvo in sessione l'utente e il token
                 this.localStorageService.set('currentUser', response.result.data);
-                this.localStorageService.set('userType', 0);
+                this.localStorageService.set('userType', Constants.UserRole.Admin);
 
                 //reindirizzo alla pagina del profilo
                 this.router.navigate(['/competitions']);

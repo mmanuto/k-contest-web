@@ -20,19 +20,16 @@ export class RegisterComponent {
     @ViewChild('openAdv') openAdv: ElementRef;
 
     public steps: any[];
-    public accountForm: FormGroup;
     public personalForm: FormGroup;
     public club: any = {};
     public details: any = { club: '', competitionId: '', competitionName: '' };
     public showConfirm: boolean;
     public confirmed: boolean;
     public openCompetitions;
-    public modalRef: NgbModalRef;
-    public modalRefGDPR: NgbModalRef;
     public modalRefAdv: NgbModalRef;
-    public urlLocandina: string;
-    public urlCircolare: string;
     public imgUrl: string = environment.IMAGES_WEBROOT;
+    public CONST = Constants;
+    public selectedEvent = null;
     
     constructor(public router: Router, 
         private formBuilder: FormBuilder, 
@@ -42,16 +39,10 @@ export class RegisterComponent {
         protected localStorageService: LocalStorageService){
 
         this.steps = [
-            { name: 'Eventi', icon: 'fa-trophy', active: true, valid: false, hasError: false },
-            { name: 'Dati società', icon: 'fa-user', active: false, valid: false, hasError: false },
-            { name: 'Conferma', icon: 'fa-check-square-o', active: false, valid: false, hasError: false }
+            { name: 'Events', icon: 'fa-trophy', active: true, valid: false, hasError: false },
+            { name: 'Register', icon: 'fa-user', active: false, valid: false, hasError: false }
         ];
 
-
-
-        this.accountForm = this.formBuilder.group({
-            'competitionId': ['', Validators.required],
-        });
 
         this.personalForm = this.formBuilder.group({
             'login_cf': [''],
@@ -68,35 +59,21 @@ export class RegisterComponent {
 
         this.registerService.getCompetitions().subscribe((response: any) => {
             this.openCompetitions = response.result.data;
-            console.log(response);
+            //console.log(response);
         });
     }
-    public openModal(flyer, locandina, circolare) {
-        this.urlLocandina = locandina;
-        this.urlCircolare = circolare;
-        this.modalRef = this.modalService.open(flyer, { container: '.app', backdrop: 'static' });
-    }
 
+    public next(event){
 
-    public closeModal() {
-        this.urlLocandina = '';
-        this.urlCircolare = '';
-        this.modalRef.close();
-    }
-
-    public next() {
-        console.log(this.accountForm);
-        let accountForm = this.accountForm;
-        let personalForm = this.personalForm;
-
+        this.selectedEvent = event;
         if (this.steps[this.steps.length - 1].active)
             return false;
 
         this.steps.some(function (step, index, steps) {
             if (index < steps.length - 1) {
                 if (step.active) {
-                    if (step.name == 'Eventi') {
-                        if (accountForm.valid) {
+                    if (step.name == 'Events') {
+                        if (event && event.id) {
                             step.active = false;
                             step.valid = true;
                             steps[index + 1].active = true;
@@ -106,7 +83,35 @@ export class RegisterComponent {
                             step.hasError = true;
                         }
                     }
-                    if (step.name == 'Dati società') {
+                }
+            }
+        });
+
+    }
+
+    /*
+    public nextOld() {
+        let selectedEvent = this.selectedEvent;
+        let personalForm = this.personalForm;
+
+        if (this.steps[this.steps.length - 1].active)
+            return false;
+
+        this.steps.some(function (step, index, steps) {
+            if (index < steps.length - 1) {
+                if (step.active) {
+                    if (step.name == 'Events') {
+                        if (selectedEvent) {
+                            step.active = false;
+                            step.valid = true;
+                            steps[index + 1].active = true;
+                            return true;
+                        }
+                        else {
+                            step.hasError = true;
+                        }
+                    }
+                    if (step.name == 'Register') {
                         if (personalForm.valid) {
                             step.active = false;
                             step.valid = true;
@@ -121,21 +126,8 @@ export class RegisterComponent {
             }
         });
 
-        this.club.club_manager = this.personalForm.value.name;
-        this.club.club_name = this.personalForm.value.society;
-        this.club.fiscal_code = this.personalForm.value.cod_fiscale;
-        this.club.mail = this.personalForm.value.email;
-        this.club.telephone_n = this.personalForm.value.phone;
-        this.club.coach = this.personalForm.value.coach;
-        this.details.club = this.club;
-        this.details.competitionId = this.accountForm.value.competitionId;
-
-        //incapsulo club in details assieme all'id della competizione
-        var result = this.openCompetitions.filter(obj => {
-            return obj.id == this.details.competitionId
-        });
-        this.details.competitionName = result[0].nome_gara;
-    }
+        
+    }*/
 
     public prev() {
         if (this.steps[0].active)
@@ -157,6 +149,23 @@ export class RegisterComponent {
             this.openAdv.nativeElement.click();
             return;
         }
+
+        this.club.club_manager = this.personalForm.value.name;
+        this.club.club_name = this.personalForm.value.society;
+        this.club.fiscal_code = this.personalForm.value.cod_fiscale;
+        this.club.mail = this.personalForm.value.email;
+        this.club.telephone_n = this.personalForm.value.phone;
+        this.club.coach = this.personalForm.value.coach;
+        this.details.club = this.club;
+        this.details.competitionId = this.selectedEvent.id;
+        this.details.competitionName = this.selectedEvent.nome_gara;
+
+        this.saveClub();
+
+
+    }
+
+    public saveClub(){
         this.registerService.saveClub(this.details).subscribe((response: any) => {
             console.log(response);
 
@@ -164,7 +173,7 @@ export class RegisterComponent {
 
             this.localStorageService.set('currentUser', response.result.data.club);
             this.localStorageService.set('currentCompetition', response.result.data.competition);
-            this.localStorageService.set('userType', 1);
+            this.localStorageService.set('userType', Constants.UserRole.Authenticated);
 
             let selectedCompetition = response.result.data.competition;
             console.log(selectedCompetition);
@@ -199,8 +208,6 @@ export class RegisterComponent {
 
             this.router.navigate(['/home']);
         });
-
-
     }
     ngAfterViewInit() {
         document.getElementById('preloader').classList.add('hide');
@@ -215,8 +222,7 @@ export class RegisterComponent {
         this.modalRefAdv.close();
     }
 
-    public recuperaDati() {
-
+    public accedi() {
 
         if(this.personalForm.value.login_cf == '94535440153' || this.personalForm.value.login_cf == '04833350269'){
             this.openAdv.nativeElement.click();
@@ -235,12 +241,22 @@ export class RegisterComponent {
                 this.club.coach = response.result.valore.coach;
                 //incapsulo club in details assieme all'id della competizione
                 this.details.club = this.club;
-                this.details.competition = this.accountForm.value.competitionId;
-                this.confirm();
+                this.details.competitionId = this.selectedEvent.id;
+                this.details.competitionName = this.selectedEvent.nome_gara;
+                this.saveClub();
             }else{
                 this.toastrService.error('DATI NON TROVATI! Non risulta alcuna società associata al codice fiscale inserito. Controllare che il dato sia corretto, se il problema persiste rivolgersi a info@iscrizionicsenveneto.it');
             }
 
         });
+    }
+
+    public showTabsClassifications(event, page){
+
+        this.localStorageService.set('currentUser', null);
+        this.localStorageService.set('currentCompetition', event);
+        this.localStorageService.set('userType', Constants.UserRole.Public);
+
+        this.router.navigate([page]);
     }
 }
