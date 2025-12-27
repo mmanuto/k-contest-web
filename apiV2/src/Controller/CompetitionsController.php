@@ -34,9 +34,9 @@ class CompetitionsController extends ApiController
 
 
         $richieste = array(
-            'referee' => $data['referee'],
-            'competitionManagement' => $data['competitionManagement'],
-            'tabsManagement' => $data['tabsManagement']
+            'referee' => true,
+            'competitionManagement' => true,
+            'tabsManagement' => true
         );
 
         $record = array(
@@ -98,6 +98,75 @@ class CompetitionsController extends ApiController
         }
     }
 
+public function addGattamelata()
+    {
+        $competition = $this->Competitions->newEmptyEntity();
+        $richieste = array(
+            'referee' => true,
+            'competitionManagement' => true,
+            'tabsManagement' => true
+        );
+
+        $record = array(
+            'id' => 'GTTMLT-2026',
+            'type' => 'CMP',
+            'place' => 'KIOENE Padova',
+            'responsabile' => 'CSEN Veneto',
+            'club_name' => 'CSEN Veneto',
+            'logo' => 'TROFEO_GATTAMELATA_logo.png',
+            'email' => 'luciana@csenveneto.it',
+            'telephone' => '3923939904',
+            'nome_gara' => 'Trofeo Gattamelata',
+            'chiusura_iscrizioni' => new FrozenTime('2026-01-18'),
+            'apertura_iscrizioni' => new FrozenTime('2025-12-24'),
+            'data_gara' => new FrozenTime('2026-01-25'),
+            'nr_atleti' => '700',
+            'circolare' => 'TROFEO_GATTAMELATA_informativa.pdf',
+            'locandina' => 'TROFEO_GATTAMELATA_locandina.png',
+            'richieste' => json_encode($richieste),
+            'comp_status' => 'REG_OPEN'
+        );
+
+        $competition = $this->Competitions->patchEntity($competition, $record);
+
+        $competition->id = 'GTTMLT-2026';
+
+        print_r($competition);
+
+        if ($this->Competitions->save($competition)) {
+
+            $this->apiResponse['success'] = true;
+        } else {
+            /* debug($competition->errors()); */
+            $this->apiResponse['success'] = false;
+        }
+    }
+
+    public function updateGattamelata(){
+
+        $competition = $this->Competitions->get('GTTMLT-2026');
+        $competition->codiceTipoCategorie = 3;
+    
+        if ($this->Competitions->save($competition)) {
+
+            $this->apiResponse['success'] = true;
+            $this->apiResponse['data'] = $competition;
+        } else {
+            /* debug($competition->errors()); */
+            $this->apiResponse['success'] = false;
+        }
+
+    }
+
+    public function getCategoryCode(){
+        $this->loadModel('Categorycodes');
+
+        $categorycodes = $this->Categorycodes->find()->toArray();
+         $this->apiResponse['success'] = true;
+          $this->apiResponse['data'] =  $categorycodes;
+
+
+    }
 //===========================================================================================================================================================                                                                                                                            
 // GET                                                                                                                                                                                                                                     
 //===========================================================================================================================================================
@@ -145,6 +214,26 @@ public function getAllCompetitions()
         $this->apiResponse['data'] = $competition;
         $this->apiResponse['success'] = true;
 
+    }
+
+    public function update()
+    {
+        Configure::load('constants');
+
+        
+        $competition = $this->Competitions->find()
+            ->where([
+                'id' => 'DKKC-2025'
+            ])
+            ->first();
+	
+	    $competition->comp_status = Configure::read('REG_OPEN');
+	
+	    $competition->chiusura_iscrizioni = FrozenTime::now()->i18nFormat('yyyy-MM-dd HH:mm:ss');
+	    $this->Competitions->save($competition);
+
+        $this->apiResponse['data'] = $competition;
+        $this->apiResponse['success'] = true;
     }
 
     public function getDatiGara()
@@ -301,16 +390,26 @@ public function getAllCompetitions()
 
         $data = $this->request->getData();
         //print_r($data);
-        $dir = $data['gara'] . '/tabelloni';
+
+        $projectFolder = WWW_ROOT;
+        $relativePath = $data['gara'] . '/tabelloni';
+
+        $dir_path = $projectFolder . $relativePath;
+
         
-        $files1 = scandir($dir);
-        if($files1 && is_array($files1)){
-            $scanned_directory = array_diff(scandir($dir), array('..', '.'));
-            //print_r( $scanned_directory);
+        if(is_dir($dir_path)){
+
+            $files1 = scandir($dir_path);
+            $scanned_directory = array_diff($files1, array('..', '.'));
 
             $record = array();
+
+            // 4. Costruiamo l'URL PUBBLICO (per il frontend)
+            // Questo serve al frontend per creare il link <a href="...">
+            $baseUrl = "https://" . $_SERVER['HTTP_HOST'] . $projectFolder . $relativePath;
+
             foreach ($scanned_directory as $tabellone) {
-                $record[] = array('name' => $tabellone, 'docpath' => $dir . '/' . $tabellone);
+                $record[] = array('name' => $tabellone, 'docpath' => $relativePath . DS . $tabellone);
             }
             $this->apiResponse['data'] = $record;
             $this->apiResponse['success'] = true;

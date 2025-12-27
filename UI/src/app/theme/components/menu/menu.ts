@@ -1,17 +1,17 @@
 import { Menu } from './menu.model';
-import * as Constants from '../../../constants';
+import {UserRole} from '../../../constants';
 
 export const verticalMenuItems = [ 
-    new Menu (7, 'Elenco Gare', '/competitions', null, 'file-text-o', null, false, 0, [Constants.UserRole.Admin], true),
-    new Menu (8, 'Anagrafica Atleti', '/competitions', null, 'users', null, false, 0, [Constants.UserRole.Admin], true),
-    new Menu (9, 'Anagrafica Società', '/settings', null, 'users', null, false, 0, [Constants.UserRole.Admin], true),
-    new Menu (10, 'Impostazioni', '/settings', null, 'file-text-o', null, false, 0, [Constants.UserRole.Admin], true),
-    new Menu (1, 'Home', '/home', null, 'file-o', null, false, 0, [Constants.UserRole.Authenticated, Constants.UserRole.Public], true),
-    new Menu (2, 'Iscrizione atleti', '/membership', null, 'users', null, false, 0, [Constants.UserRole.Authenticated], false),
-    new Menu (3, 'Gestione squadre', '/teams', null, 'users', null, false, 0, [Constants.UserRole.Authenticated], false),
-    new Menu (4, 'Riepilogo', '/riepilogo', null, 'file-text-o', null, false, 0, [Constants.UserRole.Authenticated], false),
-    new Menu (5, 'Area personale', '/personal', null, 'user', null, false, 0, [Constants.UserRole.Authenticated], false),
-    new Menu (6, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, [Constants.UserRole.Authenticated, Constants.UserRole.Public], false)
+    new Menu (7, 'Elenco Gare', '/competitions', null, 'file-text-o', null, false, 0, [UserRole.Admin], true),
+    new Menu (8, 'Anagrafica Atleti', '/competitions', null, 'users', null, false, 0, [UserRole.Admin], true),
+    new Menu (9, 'Anagrafica Società', '/settings', null, 'users', null, false, 0, [UserRole.Admin], true),
+    new Menu (10, 'Impostazioni', '/settings', null, 'file-text-o', null, false, 0, [UserRole.Admin], true),
+    new Menu (1, 'Home', '/home', null, 'file-o', null, false, 0, [UserRole.Authenticated, UserRole.Public], true),
+    new Menu (2, 'Iscrizione atleti', '/membership', null, 'users', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (3, 'Gestione squadre', '/teams', null, 'users', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (4, 'Riepilogo', '/riepilogo', null, 'file-text-o', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (5, 'Area personale', '/personal', null, 'user', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (6, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, [UserRole.Authenticated, UserRole.Public], false)
 
     /*new Menu (1, 'ADMIN_NAV.DASHBOARD', '/', null, 'tachometer', null, false, 0),
     new Menu (2, 'ADMIN_NAV.MEMBERSHIP', '/membership', null, 'users', null, false, 0), 

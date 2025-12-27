@@ -31,12 +31,6 @@
                     <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
                         <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
                 </div>-->
-                <div *ngIf="competition.comp_status == CONST.CompetitionState.Published" class="m-4">
-                    <h4 class="d-inline-block bg-warning text-white p-2 rounded ml-4">ISCRIZIONI CHIUSE</h4>
-                    <p class="card-text ml-4"> 
-                        {{CONST.StateMessages.Published}}
-                     </p>
-                </div>
            <!--    <div *ngIf="competition.comp_status == CONST.CompetitionState.Published || competition.comp_status == CONST.CompetitionState.RegistrationClosedFull || competition.comp_status == CONST.CompetitionState.RegistrationClosedTime" class="row" style="width: 100%;">
                     <div class="col-md-7 mt-4">
 
@@ -197,11 +191,38 @@
                 </div> -->
                  <div class="row">
                     <div class="col-md-6">
+
+                        <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
+                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
+                                <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
+                            </div>
+                            <div class="card-body pt-0 widget-body">
+        
+                                <table *ngIf="tabelloni && tabelloni.length != 0" class="table table-striped col-md-12 ml-2">
+                                    <thead>
+                                        <tr>
+                                            <th class="ml-4">Specialità</th>
+                                            <th style="text-align: center">Visualizza</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr *ngFor="let item of tabelloni" class="col-xl-6 col-lg-6 mb-3">
+                                           
+                                            <td class="ml-4">{{item.name}}</td>
+                                            <td style="text-align: center"><a target="blank" [href]="appUrl + item.docpath"
+                                                    class="documents text-primary">
+                                                    <i class="fa fa-file-text-o" style="font-size: 20px"></i></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         
                         <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable" class="col-md-12 ml-2">
-                            <h5 class="mb-4" style="color:firebrick">  La direzione gara si riserva di iniziare le categorie anche 15-20 minuti prima. <br/>
+                            <h6 class="mb-4 mt-4 ml-4">  La direzione gara si riserva di iniziare le categorie fino a 20 minuti prima rispetto all'orario indicato. <br/>
                                 Si consiglia a tutti di essere in palazzetto almeno 40-30 minuti prima dell'inizio della propria categoria.
-                            </h5>
+                            </h6>
 
                             <div widget class="card border-0 box-shadow">
                            
@@ -221,23 +242,28 @@
                                     <tbody>
 
                                         <tr style="font-weight: 500;">
-                                            <td>BAMBINI A - B</td>
+                                            <td>UNDER 6</td>
                                             <td>COMBINATA</td>
                                             <td>9.00</td>                                
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>FANCIULLI</td>
+                                            <td>UNDER 8</td>
+                                            <td>COMBINATA</td>
+                                            <td>9.00</td>                                
+                                        </tr>
+                                        <tr style="font-weight: 500;">
+                                            <td>UNDER 10</td>
                                             <td>COMBINATA</td>
                                             <td>9.00</td>   
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>RAGAZZI</td>
-                                            <td> Kumite U12 </td>
+                                            <td>UNDER 12</td>
+                                            <td>COMBINATA</td>
                                             <td> 9.00</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>RAGAZZI</td>
-                                            <td>COMBINATA</td>
+                                            <td>UNDER 12</td>
+                                            <td>Kumite U12</td>
                                             <td>10.00</td>   
                                         </tr>
                                         <tr style="font-weight: 500;">
@@ -248,12 +274,12 @@
                                         <tr style="font-weight: 500;">
                                             <td>ESORDIENTI</td>
                                             <td>KUMITE</td>
-                                            <td> 12.00</td>
+                                            <td> 12.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
-                                            <td>CADETTI KATA</td>
+                                            <td>CADETTI</td>
                                             <td>KATA</td>
-                                            <td> 13.00</td>
+                                            <td> 14.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>CADETTI</td>
@@ -263,32 +289,27 @@
                                         <tr style="font-weight: 500;">
                                             <td>JUNIORES</td>
                                             <td>KATA</td>
-                                            <td> 15.30/16.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>TUTTE LE CATEGORIE</td>
-                                            <td>KATA SQUADRE</td>
-                                            <td>16.00/16.30</td>
+                                            <td> 15.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>JUNIORES</td>
                                             <td>KUMITE</td>
-                                            <td> 16.30</td>
+                                            <td> 15.30</td>
                                         </tr>                                        
                                         <tr style="font-weight: 500;">
                                             <td>SENIORES</td>
                                             <td>KATA</td>
-                                            <td> 17.00</td>
+                                            <td> 16.00</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>SENIORES</td>
                                             <td>KUMITE</td>
-                                            <td> 18.00</td>
+                                            <td> 16.30</td>
                                         </tr>
                                         <tr style="font-weight: 500;">
                                             <td>MASTER KATA</td>
                                             <td>KATA</td>
-                                            <td> 18.30/19.00</td>
+                                            <td> 17.00/17.30</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -321,33 +342,6 @@
                                 <p class="card-text"><strong>Responsabile iscrizioni:</strong> Manuto Monica <br />
                                         Email: info@iscrizionicsenveneto.it <br /> Tel: 3930480098 </p>
                             </div>
-
-                                                 <!--   <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
-                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-                                <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
-                            </div>
-                            <div class="card-body pt-0 widget-body">
-        
-                                <table *ngIf="tabelloni && tabelloni.length != 0" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="ml-4">Specialità</th>
-                                            <th style="text-align: center">Visualizza</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr *ngFor="let item of tabelloni" class="col-xl-6 col-lg-6 mb-3">
-                                           
-                                            <td class="ml-4">{{item.name}}</td>
-                                            <td style="text-align: center"><a target="blank" [href]="appUrl + item.docpath"
-                                                    class="documents text-primary">
-                                                    <i class="fa fa-file-text-o" style="font-size: 20px"></i></a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> -->
    
                         </div>
 

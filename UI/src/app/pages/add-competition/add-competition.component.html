@@ -122,78 +122,22 @@
                         <i class="fa fa-file-text"></i> Upload file e Richieste Aggiuntive</h4>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="form-control-label">Logo</label>
-                        <div class="input-group file-upload">
-                            <input type="file" id="logo" (change)="logoChange($event)" #inputLogo class="file-upload-btn" />
-                            <input type="text" [(value)]="logo" class="form-control" />
-                            <i class="fa fa-times delete-file" (click)="removeLogo()" *ngIf="requestForm.get('logo') != null"></i>
-                            <span class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fa fa-upload"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-5">
                         <label class="form-control-label">Locandina</label>
                         <div class="input-group file-upload">
                             <input type="file" (change)="locandinaChange($event)" #inputLoc class="file-upload-btn" />
-                            <input type="text" [(value)]="locandina" class="form-control">
-                            <i class="fa fa-times delete-file" (click)="removeLocandina()" *ngIf="locandina"></i>
-                            <span class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fa fa-upload"></i>
-                                </button>
-                            </span>
+                            <i class="fa fa-times delete-file" (click)="removeLocandina()" *ngIf="locandina"></i> 
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-5">
                         <label class="form-control-label">Circolare di gara</label>
                         <div class="input-group file-upload">
                             <input type="file" (change)="circolareChange($event)" #inputCirc class="file-upload-btn" />
-                            <input type="text" [(value)]="circolare" class="form-control">
                             <i class="fa fa-times delete-file" (click)="removeCircolare()" *ngIf="circolare"></i>
-                            <span class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fa fa-upload"></i>
-                                </button>
-                            </span>
                         </div>
                     </div>
                 </div>
-                <div class="row ">
-                    <div class="column col-md-5">
-                        <div class="row">
-                            <div class="form-group ml-3 col-md-4">
-                                <div class="custom-control custom-checkbox">
-                                    <input formControlName="referee" type="checkbox" class="custom-control-input checkbox-primary"
-                                        id="arbitri" checked>
-                                    <label class="custom-control-label" for="arbitri">Arbitri</label>
-                                </div>
-                            </div>
-                            <div class="form-group col-md-5">
-                                <div class="custom-control custom-checkbox">
-                                    <input formControlName="competitionManagement" type="checkbox" class="custom-control-input checkbox-primary"
-                                        id="gestioneGara" checked>
-                                    <label class="custom-control-label" for="gestioneGara">Gestione gara</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <div class="custom-control custom-checkbox">
-                                <input formControlName="tabsManagement" type="checkbox" class="custom-control-input checkbox-primary"
-                                    id="tabelloni" checked>
-                                <label class="custom-control-label" for="tabelloni">Creazione Tabelloni</label>
-                            </div>
-                            <!-- <label class="form-control-label">Creazione Tabelloni</label>
-                                <select formControlName="tabsManagement" class="form-control">
-                                    <option value="0">Organizzatore</option>
-                                    <option value="1">CSEN</option>
-                                </select> -->
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="form-group" style="float: right;">
                     <button [disabled]="!requestForm.valid" class="btn btn-primary pull-right" (click)="openModal(modalContent)" type="submit">Invia

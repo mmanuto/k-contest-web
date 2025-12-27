@@ -178,4 +178,20 @@ class CategorycodesController extends ApiController
         $this->apiResponse['data'] = $newCategories;
 	    $this->apiResponse['success'] = true;
     }
+
+    public function updateCategories(){
+
+        $this->Categorycodes->deleteAll(['id IN' => ['PAL22', 'PER22']]);
+
+        $categoryList = $this->Categorycodes->find()
+        ->where(['codiceTipoCategorie' => 3])->toArray();
+
+        if($categoryList){
+            foreach ($categoryList as $item) {
+                $item->anno_min++;
+                $item->anno_max++;
+                $this->Categorycodes->save($item);
+            }
+        }
+    }
 }
