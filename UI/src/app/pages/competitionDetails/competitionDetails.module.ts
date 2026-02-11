@@ -7,6 +7,7 @@ import { CompetitionDetailsComponent } from './competitionDetails.component';
 import { CompetitionDetailsService } from './competitionDetails.service';
 import { DirectivesModule } from '../../theme/directives/directives.module';
 import { AdminPanleComponent } from '../admin-panel/admin-panel.component';
+import { AdminPanelService } from '../admin-panel/admin-panel.service';
 import { BsModalService, ModalModule } from 'ngx-bootstrap/modal';
 import { AthletesComponent } from '../athletes/athletes.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -48,6 +49,7 @@ export const routes: Routes = [
   ],
   providers: [
     CompetitionDetailsService,
+    AdminPanelService,
     BsModalService
 ]
 })
