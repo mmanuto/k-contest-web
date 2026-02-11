@@ -41,6 +41,7 @@ class TimetablesTable extends Table
 
         $this->setTable('timetables');
         $this->setDisplayField('label');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Competitions', [
             'foreignKey' => 'competition_id',
@@ -57,36 +58,27 @@ class TimetablesTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->requirePresence('id', 'create')
-            ->notEmptyString('id');
+            ->scalar('competition_id')
+            ->maxLength('competition_id', 20)
+            ->notEmptyString('competition_id');
 
         $validator
-            ->scalar('label')
-            ->maxLength('label', 500)
-            ->requirePresence('label', 'create')
-            ->notEmptyString('label');
+            ->scalar('category')
+            ->maxLength('category', 500)
+            ->requirePresence('category', 'create')
+            ->notEmptyString('category');
+
+        $validator
+            ->scalar('specialita')
+            ->maxLength('specialita', 200)
+            ->requirePresence('specialita', 'create')
+            ->notEmptyString('specialita');
 
         $validator
             ->scalar('time')
             ->maxLength('time', 5)
             ->requirePresence('time', 'create')
             ->notEmptyString('time');
-
-        $validator
-            ->scalar('tatami')
-            ->maxLength('tatami', 15)
-            ->requirePresence('tatami', 'create')
-            ->notEmptyString('tatami');
-
-        $validator
-            ->scalar('color')
-            ->maxLength('color', 10)
-            ->requirePresence('color', 'create')
-            ->notEmptyString('color');
-
-        $validator
-            ->integer('competition_id')
-            ->notEmptyString('competition_id');
 
         return $validator;
     }

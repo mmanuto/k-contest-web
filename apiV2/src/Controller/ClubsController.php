@@ -247,8 +247,10 @@ class ClubsController extends ApiController
         $club = $this->Clubs->patchEntity($club, $request['club']);
 
         $club->last_login = $club->last_login->toDateTimeString();
+        $club->modified_date = $club->modified_date->toDateTimeString();
+        $club->created_date = $club->created_date->toDateTimeString();
 
-;        $newClub = $this->Clubs->save($club);
+       $newClub = $this->Clubs->save($club);
         if ($newClub) {
             $this->apiResponse['data'] = $newClub;
             $this->apiResponse['success'] = true;

@@ -708,7 +708,20 @@ public function getAllCompetitions()
         }
     }
 
-   
+   public function getTimetables(){
+
+    $this->loadModel('Timetables');
+
+    $data = $this->request->getData();
+
+    $timetables = $this->Timetables->find()
+        ->where(['competition_id' => $data['competition_id']])
+        ->toArray();
+    
+    $this->apiResponse['data'] = $timetables;
+    $this->apiResponse['success'] = true;
+
+   }
 
 
 }

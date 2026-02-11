@@ -219,7 +219,7 @@
                             </div>
                         </div>
                         
-                        <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable" class="col-md-12 ml-2">
+                        <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable && timetable" class="col-md-12 ml-2">
                             <h6 class="mb-4 mt-4 ml-4">  La direzione gara si riserva di iniziare le categorie fino a 20 minuti prima rispetto all'orario indicato. <br/>
                                 Si consiglia a tutti di essere in palazzetto almeno 40-30 minuti prima dell'inizio della propria categoria.
                             </h6>
@@ -240,76 +240,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
-                                        <tr style="font-weight: 500;">
-                                            <td>UNDER 6</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>                                
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>UNDER 8</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>                                
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>UNDER 10</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>   
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>UNDER 12</td>
-                                            <td>COMBINATA</td>
-                                            <td> 9.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>UNDER 12</td>
-                                            <td>Kumite U12</td>
-                                            <td>10.00</td>   
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>ESORDIENTI</td>
-                                            <td>KATA</td>
-                                            <td> 11.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>ESORDIENTI</td>
-                                            <td>KUMITE</td>
-                                            <td> 12.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>CADETTI</td>
-                                            <td>KATA</td>
-                                            <td> 14.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>CADETTI</td>
-                                            <td>KUMITE</td>
-                                            <td> 14.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>JUNIORES</td>
-                                            <td>KATA</td>
-                                            <td> 15.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>JUNIORES</td>
-                                            <td>KUMITE</td>
-                                            <td> 15.30</td>
-                                        </tr>                                        
-                                        <tr style="font-weight: 500;">
-                                            <td>SENIORES</td>
-                                            <td>KATA</td>
-                                            <td> 16.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>SENIORES</td>
-                                            <td>KUMITE</td>
-                                            <td> 16.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>MASTER KATA</td>
-                                            <td>KATA</td>
-                                            <td> 17.00/17.30</td>
+                                        <tr style="font-weight: 500;" *ngFor="let item of timetable">                        
+                                            <td>{{item.category}}</td>
+                                            <td>{{item.specialita}}</td>
+                                            <td>{{item.time}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -9,11 +9,10 @@ use Cake\ORM\Entity;
  * Timetable Entity
  *
  * @property int $id
- * @property string $label
+ * @property string $competition_id
+ * @property string $category
+ * @property string $specialita
  * @property string $time
- * @property string $tatami
- * @property string $color
- * @property int $competition_id
  *
  * @property \App\Model\Entity\Competition $competition
  */
@@ -29,12 +28,10 @@ class Timetable extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
-        'id' => true,
-        'label' => true,
-        'time' => true,
-        'tatami' => true,
-        'color' => true,
         'competition_id' => true,
+        'category' => true,
+        'specialita' => true,
+        'time' => true,
         'competition' => true,
     ];
 }

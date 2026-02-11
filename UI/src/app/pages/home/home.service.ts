@@ -30,6 +30,10 @@ export class HomeService
         return this.http.post(environment.BASEAPPURL + 'competitions/getTotaleIscrizioni', idGara);
     }
 
+    getTimetables(request){
+        return this.http.post(environment.BASEAPPURL + 'competitions/getTimetables', request);
+    }
+
 
 }
 

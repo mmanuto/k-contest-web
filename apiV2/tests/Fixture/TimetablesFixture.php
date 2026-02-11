@@ -20,11 +20,10 @@ class TimetablesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'label' => 'Lorem ipsum dolor sit amet',
+                'competition_id' => 'Lorem ipsum dolor ',
+                'category' => 'Lorem ipsum dolor sit amet',
+                'specialita' => 'Lorem ipsum dolor sit amet',
                 'time' => 'Lor',
-                'tatami' => 'Lorem ipsum d',
-                'color' => 'Lorem ip',
-                'competition_id' => 1,
             ],
         ];
         parent::init();

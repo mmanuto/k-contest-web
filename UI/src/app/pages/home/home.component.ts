@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
   public CONST = Constants;
   public tabelloni;
   public appUrl;
+  public timetable;
 
   constructor(protected localStorageService: LocalStorageService, public modalService: NgbModal, public homeService: HomeService) {
     this.competition = this.localStorageService.get('currentCompetition');
@@ -41,6 +42,19 @@ export class HomeComponent implements OnInit {
       this.localStorageService.set('iscrizioniStatus', this.competition.comp_status);
       this.athletestMaxNumber = this.competition.nr_atleti;
       this.localStorageService.set('athletestMaxNumber', this.athletestMaxNumber);
+
+      this.timetable = null;
+
+      if(this.competition.flag_timetable){
+        this.homeService.getTimetables({competition_id: this.competition.id }).subscribe((response: any) => {
+          
+          if(response.result.success){
+            this.timetable = response.result.data;
+          }
+          
+
+        });
+      }
 
 
       //se sono state pubblicate le classifiche, recupero i files corrispondenti
