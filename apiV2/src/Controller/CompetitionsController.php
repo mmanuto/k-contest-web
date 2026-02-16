@@ -723,5 +723,23 @@ public function getAllCompetitions()
 
    }
 
+   public function predict()
+    {
+        $this->request->allowMethod(['post']);
+        $data = $this->request->getData();
+        
+        // $data['categories'] conterrà l'elenco inviato da Angular
+        $scheduler = new \App\Service\TournamentSchedulerService();
+        $result = $scheduler->generateSchedule(
+            $data['categories'], 
+            (int)$data['tatami_pre'], 
+            (int)$data['tatami_ago'], 
+            $data['start_time']
+        );
+
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode($result));
+    }
+
 
 }

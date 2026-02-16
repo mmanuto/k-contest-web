@@ -18,6 +18,7 @@ import { PipesModule } from 'src/app/theme/pipes/pipes.module';
 import { SelectDropDownModule } from 'ngx-select-dropdown';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { CategoriesComponent } from '../categories/categories.component';
+import { TimetableComponent } from '../timetable/timetable.component';
 
 export const routes: Routes = [
   { path: '', component: CompetitionDetailsComponent, pathMatch: 'full' }
@@ -45,7 +46,8 @@ export const routes: Routes = [
     CompetitionDetailsComponent,
     AdminPanleComponent,
     AthletesComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    TimetableComponent
   ],
   providers: [
     CompetitionDetailsService,

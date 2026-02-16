@@ -1,0 +1,21 @@
+<div class="scheduler-container">
+  <div class="controls card">
+    <input type="number" [(ngModel)]="tatamiPre" placeholder="Tatami Pre-Agonisti">
+    <input type="number" [(ngModel)]="tatamiAgo" placeholder="Tatami Agonisti">
+    <input type="time" [(ngModel)]="startTime">
+    <button (click)="generatePrediction()" [disabled]="loading">
+      {{ loading ? 'Calcolo in corso...' : 'Genera Previsione' }}
+    </button>
+  </div>
+
+  <div class="tatami-grid" *ngIf="tatamiIds.length > 0">
+    <div class="tatami-column" *ngFor="let id of tatamiIds">
+      <h3>Tatami {{ id }}</h3>
+      <div class="category-card" *ngFor="let item of scheduleByTatami[id]">
+        <div class="time-range">{{ item.inizio }} - {{ item.fine }}</div>
+        <div class="cat-name">{{ item.categoria }}</div>
+        <span class="badge" [attr.data-type]="item.tipo">{{ item.tipo }}</span>
+      </div>
+    </div>
+  </div>
+</div>

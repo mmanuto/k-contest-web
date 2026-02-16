@@ -1,0 +1,53 @@
+.scheduler-container {
+  padding: 20px;
+  background: #f4f7f6;
+
+  .controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .tatami-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    align-items: flex-start;
+  }
+
+  .tatami-column {
+    flex: 1;
+    min-width: 250px;
+    background: #ebedef;
+    padding: 10px;
+    border-radius: 8px;
+
+    h3 { text-align: center; color: #2c3e50; }
+  }
+
+  .category-card {
+    background: white;
+    margin-bottom: 10px;
+    padding: 12px;
+    border-left: 5px solid #3498db;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    .time-range { font-weight: bold; color: #e67e22; }
+    .cat-name { margin: 5px 0; font-size: 0.9em; }
+    
+    .badge {
+      font-size: 0.7em;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: #95a5a6;
+      color: white;
+      &[data-type="KUA"], &[data-type="KUG"] { background: #e74c3c; } // Kumite Rosso
+      &[data-type="KIA"], &[data-type="KAG"] { background: #2ecc71; } // Kata Verde
+    }
+  }
+}
