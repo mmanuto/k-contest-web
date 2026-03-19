@@ -50,4 +50,21 @@ export class MembershipService {
     closeRegistrations(request){
         return this.http.post(environment.BASEAPPURL + "competitions/closeRegistrations", request);
     }
+
+    // --- METODI PER GESTIONE SQUADRE ---
+    getCategorieCinture(categorycode){
+        return this.http.post(environment.BASEAPPURL + "teams/getCategorieCinture", {code: categorycode});
+    }
+
+    getListaSquadre(request){
+        return this.http.post(environment.BASEAPPURL + "teams/getListaSquadre", request);
+    }
+
+    saveSquadra(request){
+        return this.http.post(environment.BASEAPPURL + "teams/saveSquadra", request);
+    }
+
+    deleteSquadra(request){
+        return this.http.post(environment.BASEAPPURL + "teams/deleteSquadra", request);
+    }
 } 

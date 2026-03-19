@@ -1,19 +1,37 @@
-.login-container{
-    position: absolute;
-    margin-top: 130px;
-    margin-bottom: 50px;
-    .card{
-        background-color: white !important;
-/*         .card-header{
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            margin-top: -40px;
-            border-radius: 50%;
-            font-size: 36px;
-        } */
+.rounded-lg {
+    border-radius: 0.75rem !important;
+}
+
+.box-shadow {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+}
+
+.text-aliceblue {
+    color: aliceblue;
+}
+
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:not(:disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3) !important;
     }
 }
-.bordo{
-    background-color: white;
+
+.input-group-text {
+    border-color: transparent;
+}
+
+.form-control {
+    border-color: transparent;
+    &:focus {
+        box-shadow: none;
+        background-color: #fff !important;
+        border-color: #80bdff;
+    }
+}
+
+// Per mantenere coerenza con lo sfondo della app
+body {
+    background-color: #202F40;
 }

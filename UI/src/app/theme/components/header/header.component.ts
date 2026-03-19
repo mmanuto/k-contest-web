@@ -64,6 +64,11 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  // Toggle menu per mobile
+  public toggleMenu() {
+      this.settings.theme.showMenu = !this.settings.theme.showMenu;
+  }
+
   @HostListener('window:resize')
   public onWindowResize():void {
      if(window.innerWidth <= 768){

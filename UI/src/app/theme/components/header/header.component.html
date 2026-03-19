@@ -1,36 +1,35 @@
-<nav class="navbar box-shadow app-header" [class.fixed-top]="settings.theme.navbarIsFixed" [class.logo-visible]="showInfoContent">
+<nav class="navbar box-shadow app-header" [class.fixed-top]="settings.theme.navbarIsFixed">
     <div class="d-flex flex-column w-100">
-        <div class="d-flex justify-content-start align-items-center top-navbar">                  
+        <div class="d-flex justify-content-between align-items-center top-navbar">                  
             
-            <a class="logo" routerLink="/" (click)="closeSubMenus()">
-                <span class="start">Iscrizioni</span><span class="ng">CSEN</span>
-            </a>
+            <div class="d-flex align-items-center">
+                <a href="javascript:void(0);" (click)="toggleMenu()" class="text-white menu-toggle-btn d-md-none mr-3 ml-2" style="font-size: 24px; outline: none;">
+                    <i class="fa fa-bars"></i>
+                </a>
 
-
-            <div class="ml-2 mr-2 d-none d-sm-block">
-                 <a id="info-content-icon" data-toggle="collapse" href="#info-content" (click)="showInfoContent = !showInfoContent" class="d-flex" [class.show]="showInfoContent">
-                    <div [@showInfo]="showInfoContent" class="triangle"></div>
+                <a class="d-flex align-items-center text-white ml-2 ml-md-3" routerLink="/" (click)="closeSubMenus()" style="text-decoration: none;">
+                    <img src="assets/img/logo/LogoCSEN.png" alt="Logo CSEN" style="width: 65px; height: 65px; margin-right: 12px;">
+                    <div class="d-flex flex-column justify-content-center pt-1">
+                        <span class="font-weight-bold" style="font-size: 1.3rem; line-height: 1; letter-spacing: 0.5px;">SETTORE KARATE</span>
+                        <span class="text-primary font-weight-bold" style="font-size: 1.3rem; letter-spacing: 0.5px;">CSEN VENETO</span>
+                    </div>
                 </a>
             </div>
 
-            <app-favorites class="d-none d-lg-inline-block"></app-favorites>
-
-            <div class="top-rigth-icons ml-auto d-flex align-items-center">
-                <div class="logo user mr-3"> {{currentUser.club_name | uppercase}}</div>
-
+            <div class="top-rigth-icons d-flex align-items-center pr-2">
+                <div *ngIf="currentUser" class="user-club-name mr-3 d-none d-md-block text-white" style="font-size: 1rem; font-weight: 600;"> 
+                    <i class="fa fa-building-o mr-2 text-primary"></i>{{currentUser.club_name | uppercase}}
+                </div>
                 
-                    <a (click)="logout()" class="ml-3">
-                        <i class="fa fa-sign-out logout" aria-hidden="true"></i>
-                    </a>                   
-                
+                <div *ngIf="currentUser" class="user-club-name mr-2 d-none d-sm-block d-md-none text-white font-weight-bold text-truncate" style="max-width: 130px; font-size: 0.85rem;"> 
+                    {{currentUser.club_name | uppercase}}
+                </div>
+
+                <button (click)="logout()" class="ml-2 btn btn-outline-light btn-sm rounded-pill d-flex align-items-center" title="Esci" style="border-color: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem;">
+                    <i class="fa fa-sign-out" aria-hidden="true" style="font-size: 16px;"></i> 
+                    <span class="d-none d-md-inline ml-1" style="font-weight: 500;">Logout</span>
+                </button>                   
             </div> 
-
         </div>
-
-        <div class="horizontal-menu-outer" *ngIf="settings.theme.menu == 'horizontal'">                   
-            <app-horizontal-menu *ngIf="showHorizontalMenu"  [menuItems]="menuItems"></app-horizontal-menu>        
-            <app-vertical-menu *ngIf="!showHorizontalMenu"  [menuItems]="menuItems"></app-vertical-menu>
-        </div>
-
     </div>
 </nav>

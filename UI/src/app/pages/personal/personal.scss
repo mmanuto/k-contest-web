@@ -1,0 +1,40 @@
+/* --- STILI PROFILO SOCIETÀ --- */
+
+.rounded-lg {
+    border-radius: 0.5rem !important;
+}
+
+/* Effetto di sollevamento del pulsante */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:not(:disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0, 123, 255, 0.3) !important;
+    }
+}
+
+/* Input Group Moderno (Integrazione Icona + Campo) */
+.input-group-modern {
+    
+    .input-group-text {
+        border-top-left-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        border-color: #e2e8f0;
+    }
+
+    .form-control {
+        border-top-right-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        border-color: #e2e8f0;
+        box-shadow: none !important;
+        transition: all 0.2s ease;
+    }
+
+    /* Effetto Focus globale sul gruppo */
+    &:focus-within {
+        .input-group-text, .form-control {
+            border-color: #80bdff;
+            background-color: #ffffff !important;
+        }
+    }
+}

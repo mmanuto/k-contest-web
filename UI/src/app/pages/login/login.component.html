@@ -1,64 +1,64 @@
-<div class="d-flex justify-content-center w-100 h-100 sfondo"> <!-- style="color:white" -->
-    <div class="text-right w-100 mt-2" style="margin-right: 30px; font-size: 15px;">
-            <i class="fa fa-user-o mr-3" style="color: aliceblue; cursor:pointer;" routerLink='/request'> Inserisci la tua gara</i>
-        <i class="fa fa-edit" style="color: aliceblue; cursor:pointer;" routerLink='/register'> Iscrizioni Eventi</i>
+<div class="min-vh-100 d-flex flex-column align-items-center" style="background-color: #202F40;">
+    
+    <div class="w-100 d-flex justify-content-between align-items-center p-3 p-md-4 text-white">
+        <div class="d-flex align-items-center">
+            <img src="assets/img/logo/LogoCSEN.png" alt="Logo CSEN" style="width: 80px; height: 80px;" class="mr-3">
+            <div class="d-none d-sm-block">
+                <span class="font-weight-bold d-block" style="font-size: 1.6rem; line-height: 1.1;">SETTORE KARATE</span>
+                <span class="text-primary font-weight-bold" style="font-size: 1.6rem;">CSEN VENETO</span>
+            </div>
+        </div>
+        <div>
+            <a routerLink="/register" class="text-white text-decoration-none font-weight-bold" style="font-size: 1.2rem;">
+                <i class="fa fa-edit mr-1"></i> Iscrizioni
+            </a>
+        </div>
     </div>
-    <div class="col-xl-4 col-md-6 col-10 login-container">
-        <div class="card border-0 box-shadow rounded-0">
-                <div class="d-flex justify-content-center align-items-center border-0">
-                <!-- <i class="fa fa-registered" aria-hidden="true"></i> -->
-                <img class="logo-csen" src="assets/img/logo/LogoCSEN.png" alt="">
-            </div>
-            <div class="card-body text-center pb-1">
-                    <h2 style="color: #565656;">Login Admin</h2>
 
-                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="text-left mt-4">
-                    <div class="form-group">
-                        <input [formControl]="username" class="form-control validation-field" placeholder="username" type="text">                      
-                        <small class="text-danger" *ngIf="form.get('username').touched && form.get('username').hasError('required')">username is required</small>                              
-                        <small class="text-danger" *ngIf="form.get('username').touched && form.get('username').hasError('username')">Invalid username address</small>
-                    </div>
-                    <div class="form-group">
-                        <input [formControl]="password" class="form-control validation-field" placeholder="Password" type="password">
-                        <small class="text-danger" *ngIf="form.get('password').touched && form.get('password').hasError('required')">Password is required</small>                              
-                        <small class="text-danger" *ngIf="form.get('password').touched && form.get('password').hasError('minlength')">Password isn't long enough, minimum of 6 characters</small>
-                    </div>
-<!--                     <div class="form-group d-flex justify-content-between">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="login-checkbox">
-                            <label class="custom-control-label" for="login-checkbox">Keep me signed in.</label>
+    <div class="container d-flex justify-content-center align-items-center flex-grow-1 mb-5">
+        <div class="col-xl-6 col-md-6 col-12">
+            <div class="card border-0 box-shadow rounded-lg overflow-hidden">
+                <div class="card-header bg-white border-0 text-center pt-5 pb-0">
+                    <h2 class="font-weight-bold text-dark mb-2" style="font-size: 2rem;">Area Admin</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Accedi alla gestione eventi</p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5">
+                    <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="text-left">
+                        <div class="form-group mb-4">
+                            <label class="font-weight-bold text-uppercase text-muted mb-1" style="font-size: 0.9rem;">Username</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light border-right-0"><i class="fa fa-user text-muted"></i></span>
+                                </div>
+                                <input [formControl]="username" class="form-control form-control bg-light border-left-0" placeholder="Inserisci username" type="text">
+                            </div>
+                            <small class="text-danger mt-1 d-block" *ngIf="username.touched && username.hasError('required')">L'username è obbligatorio</small>
                         </div>
-                        <a class="transition pull-right" href="javascript:void(0);">Forgot password?</a>                     
-                    </div> -->
-                    <div class="form-group">
-                        <button [disabled]="!form.valid" class="btn btn-block" type="submit">Sign in</button>
-                    </div>
-                </form>
+
+                        <div class="form-group mb-5">
+                            <label class="font-weight-bold text-uppercase text-muted mb-1" style="font-size: 0.9rem;">Password</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text bg-light border-right-0"><i class="fa fa-lock text-muted"></i></span>
+                                </div>
+                                <input [formControl]="password" class="form-control form-control bg-light border-left-0" placeholder="Password" type="password">
+                            </div>
+                            <small class="text-danger mt-1 d-block" *ngIf="password.touched && password.hasError('required')">La password è obbligatoria</small>
+                        </div>
+
+                        <button [disabled]="!form.valid" class="btn btn-primary btn-block btn rounded-pill font-weight-bold shadow-sm hover-lift py-3" type="submit">
+                            ACCEDI <i class="fa fa-sign-in ml-2"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
-           <!--  <div class="card-footer text-center bg-transparent">
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-square-o fa-stack-2x"></i>
-                            <i class="fa fa-facebook fa-stack-1x"></i>
-                        </span>
-                    </li>
-                    <li class="list-inline-item">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-square-o fa-stack-2x"></i>
-                            <i class="fa fa-twitter fa-stack-1x"></i>
-                        </span>
-                    </li>
-                    <li class="list-inline-item">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-square-o fa-stack-2x"></i>
-                            <i class="fa fa-google fa-stack-1x"></i>
-                        </span>
-                    </li>
-                </ul>
-            </div> -->
+            
+            <div class="text-center mt-4">
+                <a routerLink="/request" class="text-aliceblue text-decoration-none" style="opacity: 0.8;">
+                    <i class="fa fa-question-circle mr-1"></i> Hai bisogno di aiuto?
+                </a>
+            </div>
         </div>
     </div>
 </div>
-
-       

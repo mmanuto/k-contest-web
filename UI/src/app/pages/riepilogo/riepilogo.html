@@ -1,116 +1,146 @@
-<div class="row">
-     <div *ngIf="competition.comp_status != CONST.CompetitionState.RegistrationOpen" class="ml-4 mb-4" style="width:100%; text-align: center">
-            <h4 *ngIf="competition.comp_status != CONST.CompetitionState.Published" class="d-inline-block bg-danger text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
-            <h4 *ngIf="competition.comp_status == CONST.CompetitionState.Published" class="d-inline-block bg-warning text-white p-2 rounded">ISCRIZIONI CHIUSE</h4>
-            <p class="card-text"><b> {{CONST.StateMessages.RegistrationClosedTime}}</b></p>
-        </div>
+<div class="row mb-4">
 
-    <div class="col-lg-12 mb-4">
-        <div widget class="card border-0 box-shadow">
-            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-                <h5 class="mb-0" style="color:white">Lista Atleti</h5>
+    <div class="col-12 mb-4 mt-4">
+        <h3 class="font-weight-bold text-dark mb-1">
+            <i class="fa fa-check-square-o text-primary mr-2"></i>Revisione e Conferma Iscrizioni
+        </h3>
+        <p class="text-muted">Verifica i dati degli atleti e delle squadre. Quando sei pronto, procedi con l'invio ufficiale.</p>
+
+        <div *ngIf="competition.comp_status != CONST.CompetitionState.RegistrationOpen" class="alert alert-warning border-warning mt-3 shadow-sm d-flex align-items-center">
+            <i class="fa fa-lock fa-2x mr-3 text-warning"></i>
+            <div>
+                <h5 class="mb-1 font-weight-bold text-dark">ISCRIZIONI CHIUSE</h5>
+                <p class="mb-0 small text-dark">{{CONST.StateMessages.RegistrationClosedTime}}</p>
             </div>
-            <div class="card-body pt-0 widget-body">
-                <table class="table table-striped">
-                    <thead>
+        </div>
+    </div>
+
+    <div class="col-lg-8 mb-4">
+        
+        <div class="card border-0 box-shadow rounded-lg mb-4 bg-white overflow-hidden">
+            <div class="card-header bg-dark text-white border-0 py-3">
+                <h6 class="mb-0 font-weight-bold"><i class="fa fa-user mr-2"></i>Atleti Iscritti ({{listaIscritti.length}})</h6>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="bg-light text-muted text-uppercase small">
                         <tr>
-                            <!-- <th>#</th> -->
-                            <th>Nome</th>
-                            <th>Data di nascita</th>
-                            <th>Cintura</th>
-                            <th>Categoria</th>
-                            <th>Prove</th>
+                            <th class="border-top-0 pl-4">Atleta</th>
+                            <th class="border-top-0">Categoria</th>
+                            <th class="border-top-0">Cintura</th>
+                            <th class="border-top-0">Prove</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 0.95rem;">
                         <tr *ngIf="listaIscritti.length == 0">
-                            <td>Nessun atleta iscritto alla manifestazione</td>
+                            <td colspan="4" class="text-center py-4 text-muted italic">Nessun atleta iscritto alla manifestazione.</td>
                         </tr>
-                        <tr *ngFor="let item of listaIscritti" class="col-xl-6 col-lg-6 mb-4">
-                            <!-- <th scope="row">1</th> -->
-                            <td>{{item.nome}}</td>
-                            <td>{{item.data_nascita}}</td>
-                            <td>{{item.grado}}</td>
-                            <td>{{item.categoria}}</td>
-                            <td>{{item.prove}}</td>
+                        <tr *ngFor="let item of listaIscritti">
+                            <td class="align-middle pl-4 text-dark">
+                                <span class="font-weight-bold d-block">{{item.nome}}</span>
+                                <span class="text-muted small">Nato il: {{item.data_nascita}}</span>
+                            </td>
+                            <td class="align-middle">{{item.categoria}}</td>
+                            <td class="align-middle">{{item.grado}}</td>
+                            <td class="align-middle text-primary font-weight-bold">{{item.prove}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-12 mb-4" *ngIf="listaSquadre.length != 0">
-        <div widget class="card border-0 box-shadow">
-            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-                <h5 class="mb-0" style="color:white">Squadre</h5>
+        <div class="card border-0 box-shadow rounded-lg bg-white overflow-hidden" *ngIf="listaSquadre.length > 0">
+            <div class="card-header bg-dark text-white border-0 py-3">
+                <h6 class="mb-0 font-weight-bold"><i class="fa fa-users mr-2"></i>Squadre Formate ({{listaSquadre.length}})</h6>
             </div>
-            <div class="card-body pt-0 widget-body">
-                <table class="table table-striped">
-                    <thead>
+            
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="bg-light text-muted text-uppercase small">
                         <tr>
-                            <!--  <th>#</th> -->
-                            <th>Componenti</th>
-                            <th>Cintura</th>
-                            <th>Categoria</th>
+                            <th class="border-top-0 pl-4">Componenti</th>
+                            <th class="border-top-0">Categoria</th>
+                            <th class="border-top-0">Cintura</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let item of listaSquadre" class="col-xl-6 col-lg-6 mb-4">
-                            <!-- <td>{{item.numero}}</td> -->
-                            <td>{{item.componentiSquadra}}</td>
-                            <td>{{item.grado}}</td>
-                            <td>{{item.categoria}}</td>
+                    <tbody style="font-size: 0.95rem;">
+                        <tr *ngFor="let item of listaSquadre">
+                            <td class="align-middle font-weight-bold text-primary pl-4">{{item.componentiSquadra}}</td>
+                            <td class="align-middle">{{item.categoria}}</td>
+                            <td class="align-middle">{{item.grado}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
     </div>
 
-    <div class="col-lg-12 mt-3 ml-4">
-        <div class="form-group">
-            <label for="textarea-1">Note</label>
-            <div class="row">
-                <textarea class="form-control col-lg-8" id="textarea-1" [(ngModel)]="note"> </textarea>
-                <button class="btn-custom btn btn-primary mx-auto" (click)="openModal(modalContent)" [disabled]="atletiSpaiati" style="float: right">Invia
-                    dati</button>
+    <div class="col-lg-4 mb-4">
+        <div class="card border-0 box-shadow rounded-lg bg-white sticky-top" style="top: 20px;">
+            <div class="card-header bg-primary text-white border-0 py-3 text-center">
+                <h5 class="mb-0 font-weight-bold">Riepilogo e Invio</h5>
+            </div>
+            
+            <div class="card-body bg-light">
+                
+                <div class="alert alert-info border-0 shadow-sm mb-4">
+                    <i class="fa fa-info-circle mr-1"></i> Controlla attentamente i dati a sinistra. Una volta inviati, verrà generato un PDF ufficiale.
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="textarea-1" class="font-weight-bold text-dark text-uppercase">Note aggiuntive per l'organizzazione</label>
+                    <textarea class="form-control box-shadow-sm border-0" id="textarea-1" rows="4" placeholder="Scrivi qui eventuali segnalazioni..." [(ngModel)]="note"></textarea>
+                </div>
+
+            </div>
+            
+            <div class="card-footer bg-white border-top-0 py-4 text-center">
+                <button class="btn btn-success btn-lg rounded-pill px-4 box-shadow w-100 hover-lift text-uppercase font-weight-bold" 
+                        (click)="openModal(modalContent)" 
+                        [disabled]="atletiSpaiati || competition.comp_status != CONST.CompetitionState.RegistrationOpen">
+                    <i class="fa fa-paper-plane mr-2"></i> Conferma Iscrizioni
+                </button>
+                <small *ngIf="atletiSpaiati" class="text-danger d-block mt-2">Attenzione: Ci sono atleti spaiati che bloccano l'invio.</small>
             </div>
         </div>
-
     </div>
+
 </div>
 
-
 <ng-template #modalContent>
+    <div class="card border-0 box-shadow overflow-hidden m-0">
+        
+        <div class="card-header bg-danger text-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 font-weight-bold"><i class="fa fa-exclamation-triangle mr-2"></i> AUTODICHIARAZIONE RESPONSABILITÀ</h5>
+            <button type="button" class="close text-white" (click)="closeModal()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        
+        <div class="card-body p-4 bg-white">
+            <p class="lead text-dark" style="font-size: 1.1rem; line-height: 1.6;">
+                Il sottoscritto <strong>{{datiSocieta.club_manager}}</strong>, responsabile della Società <strong>{{datiSocieta.club_name}}</strong>, dichiara che gli atleti partecipanti alla manifestazione in oggetto sono tutti in possesso del certificato medico. 
+            </p>
+            <p class="text-muted border-left border-danger pl-3 my-4">
+                Dichiara inoltre di essere in possesso della liberatoria all'utilizzo delle immagini e della copia dei documenti di identità degli atleti o dei genitori in caso di atleti minorenni.
+            </p>
 
-    <div class="row">
-        <div class="col-12 vertical-tabs">
-            <div widget class="card border-0 box-shadow">
-                <div class="card-header border-0 text-muted modal-header state modal-info">
-                    <!--  <h5 class="mb-0">INSERISCI ATLETA</h5> -->
-                    <h4 class="modal-title" style=" color:white" id="modal-info-label">AUTODICHIARAZIONE</h4>
-                </div>
-                <div class="modal-body">
-
-                    Il sottoscritto {{datiSocieta.club_manager}} , responsabile della Società
-                    {{datiSocieta.club_name}}, dichiara che gli atleti partecipanti alla manifestazione in oggetto
-                    sono tutti in possesso del certificato medico. <br/> Dichiara inoltre di essere in possesso della liberatoria 
-                    all'utilizzo delle immagini e della copia dei documenti di identità degli atleti o dei genitori in caso di atleti minorenni.
-
-                    <div class="custom-control custom-checkbox mt-4" style="width:100%; align-items:center">
-                        <input type="checkbox" class="custom-control-input checkbox-primary" [(ngModel)]="dichiarazione"
-                            id="checkboxPrimary">
-                        <label class="custom-control-label" for="checkboxPrimary">Confermo</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" [disabled]="!dichiarazione" (click)="inviaDati()"
-                        data-dismiss="modal">Ok</button>
-                    <button type="button" class="btn btn-default" (click)="closeModal()" data-dismiss="modal">Close</button>
-                </div>
+            <div class="custom-control custom-checkbox bg-light p-3 rounded border mt-4">
+                <input type="checkbox" class="custom-control-input" [(ngModel)]="dichiarazione" id="checkboxDichiarazione">
+                <label class="custom-control-label font-weight-bold text-dark w-100" for="checkboxDichiarazione" style="cursor: pointer; padding-top: 2px;">
+                    Ho letto e confermo quanto sopra dichiarato
+                </label>
             </div>
         </div>
-    </div>
 
+        <div class="card-footer bg-light p-3 border-top d-flex justify-content-end">
+            <button type="button" class="btn btn-outline-secondary px-4 rounded-pill mr-2" (click)="closeModal()">Annulla</button>
+            <button type="button" class="btn btn-danger px-5 rounded-pill box-shadow" [disabled]="!dichiarazione" (click)="inviaDati()">
+                <i class="fa fa-check mr-2"></i> Conferma e Invia
+            </button>
+        </div>
+
+    </div>
 </ng-template>

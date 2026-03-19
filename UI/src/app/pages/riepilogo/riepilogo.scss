@@ -1,7 +1,35 @@
-.card-text{
+/* --- STILI RIEPILOGO & CHECKOUT --- */
+
+.rounded-lg {
+    border-radius: 0.5rem !important;
+}
+
+/* Modifica stile paginazione testuale (se necessario) */
+.card-text {
     font-size: 16px;
 }
 
-.toast{
+/* Effetto di sollevamento per i pulsanti principali */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:not(:disabled):hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(40, 167, 69, 0.3) !important;
+    }
+}
+
+/* Modifica del tooltip di Toastr */
+::ng-deep .toast {
     width: 500px !important;
+}
+
+/* Stile per i checkbox grandi della modale */
+.custom-control-label::before, 
+.custom-control-label::after {
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 0;
+}
+.custom-control-label {
+    padding-left: 0.5rem;
 }

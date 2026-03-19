@@ -1,7 +1,5 @@
-<div class="sidebar-outer">
-    <a class="logo d-flex align-items-center" routerLink="/" (click)="closeSubMenus()" *ngIf="settings.theme.sidebarIsFixed">
-        <img class="sidebar-logo" src="assets/img/logo/LogoCSEN.png" alt="">
-        <span class="start">SETTORE KARATE </span><span class="ng ml-4"> CSEN VENETO</span>
-    </a>
-    <app-vertical-menu [menuItems]="menuItems"></app-vertical-menu>    
+<div class="sidebar-outer box-shadow">
+    <div class="sidebar-menu-container">
+        <app-vertical-menu [menuItems]="menuItems"></app-vertical-menu>    
+    </div>
 </div>

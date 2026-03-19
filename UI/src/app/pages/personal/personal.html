@@ -1,84 +1,80 @@
-<div class="row">
-    <div class="col-lg-9 mb-4">
-        <div widget class="card border-0 box-shadow">
-            <div class="card-body pt-0 widget-body">
-                <div class="row mt-4">
-                    <div class="col-md-8">
-                        <form #m="ngForm" class="form-horizontal mb-4" (ngSubmit)="updateDates(m.value)">
-                                <h2 class="mt-3 mb-3">Aggiorna dati società</h2>
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Email</label>
-                                    <input type="text" name="email" class="form-control" [(ngModel)]="club.mail" required reverse="true">
-                                </div>
-                            </div>
-                            <!-- PROVA AUTOCORREZIONE EMAIL -->
-                            <!-- <div class="form-group row text-sm-right col-md-12"
-                                        [ngClass]="{'has-danger' : (step.hasError && m.get('email').hasError('required')) || (step.hasError && m.get('email').hasError('email')), 
-                                                            'has-success' : !m.get('email').hasError('required') && !m.get('email').hasError('email')}">
-                                        <label class="col-md-3 form-control-label mt-1">Email</label>
-                                        <div class="col-md-9 input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-envelope"></i>
-                                                </span>
-                                            </div>
-                                            <input formControlName="email" class="form-control"
-                                                [ngClass]="{'form-control-danger' : (step.hasError && m.get('email').hasError('required')) || (step.hasError && m.get('email').hasError('email')), 
-                                                                                                'form-control-success' :  !m.get('email').hasError('required') && !m.get('email').hasError('email')}"
-                                                type="text" data-hj-whitelist>
-                                        </div>
-                                        <small class="text-danger"
-                                            *ngIf="step.hasError && m.get('email').hasError('required')">è
-                                            richiesta un'email</small>
-                                        <small class="text-danger"
-                                            *ngIf="step.hasError && m.get('email').hasError('email')">Invalid
-                                            email address</small>
-                                    </div> -->
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Nome società</label>
-                                    <input type="text" name="society" class="form-control" [(ngModel)]="club.club_name" required reverse="true">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Responsabile</label>
-                                    <input type="text" name="name" class="form-control" [(ngModel)]="club.club_manager" required reverse="true">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Telefono</label>
-                                    <input type="text" name="phone" class="form-control" [(ngModel)]="club.telephone_n" required reverse="true">
-                                </div>
-                            </div>
-                            <div class="form-group col-md-12">
-                                <div class="form-group">
-                                    <label class="form-control-label">Coach</label>
-                                    <input type="text" name="coach" class="form-control" [(ngModel)]="club.coach" required reverse="true">
-                                </div>
-                            </div>
-                            <button class="btn-custom btn btn-primary mx-auto"  type="submit" [disabled]="m.form.invalid" style="float: right;" >Salva
-                                dati</button>
-                        </form>
-                    </div>
+<div class="row mb-4">
+    
+    <div class="col-12 mb-4 mt-4">
+        <h3 class="font-weight-bold text-dark mb-1">
+            <i class="fa fa-cogs text-primary mr-2"></i>Impostazioni Società
+        </h3>
+        <p class="text-muted">Aggiorna i dati e i contatti ufficiali del tuo club.</p>
+    </div>
 
-
-                    <!--                 <div class="col-md-3">
-                    <div class="col-12 mt-4">
-                        <div class="form-group">                        
-                            <div *ngFor="let item of squadraCorrente.componenti" class="custom-control custom-checkbox checkbox-circle">
-                                <input type="checkbox" class="custom-control-input checkbox-dark-gray" [id]="item.nome" [(ngModel)]="item.checked">
-                                <label class="custom-control-label" [for]="item.nome">{{item.nome}}</label>
+    <div class="col-xl-8 col-lg-10">
+        <div class="card border-0 box-shadow rounded-lg bg-white overflow-hidden">
+            <div class="card-header bg-dark text-white border-0 py-3">
+                <h5 class="mb-0 font-weight-bold"><i class="fa fa-building-o mr-2"></i>Profilo Società</h5>
+            </div>
+            
+            <div class="card-body p-4 p-md-5 bg-white">
+                <form #m="ngForm" (ngSubmit)="updateDates(m.value)" class="row">
+                    
+                    <div class="col-md-6 mb-4">
+                        <label class="font-weight-bold text-dark small text-uppercase">Email di Contatto *</label>
+                        <div class="input-group input-group-modern">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0 text-muted"><i class="fa fa-envelope"></i></span>
                             </div>
+                            <input type="email" name="email" class="form-control border-left-0 pl-0 bg-light" [(ngModel)]="club.mail" required>
                         </div>
                     </div>
-                </div> -->
-                </div>
 
+                    <div class="col-md-6 mb-4">
+                        <label class="font-weight-bold text-dark small text-uppercase">Telefono *</label>
+                        <div class="input-group input-group-modern">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0 text-muted"><i class="fa fa-phone"></i></span>
+                            </div>
+                            <input type="text" name="phone" class="form-control border-left-0 pl-0 bg-light" [(ngModel)]="club.telephone_n" required>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-4">
+                        <label class="font-weight-bold text-dark small text-uppercase">Nome Società *</label>
+                        <div class="input-group input-group-modern">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0 text-muted"><i class="fa fa-shield"></i></span>
+                            </div>
+                            <input type="text" name="society" class="form-control border-left-0 pl-0 bg-light font-weight-bold text-dark" [(ngModel)]="club.club_name" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="font-weight-bold text-dark small text-uppercase">Responsabile *</label>
+                        <div class="input-group input-group-modern">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0 text-muted"><i class="fa fa-user-circle"></i></span>
+                            </div>
+                            <input type="text" name="name" class="form-control border-left-0 pl-0 bg-light" [(ngModel)]="club.club_manager" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="font-weight-bold text-dark small text-uppercase">Coach Ufficiale *</label>
+                        <div class="input-group input-group-modern">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-light border-right-0 text-muted"><i class="fa fa-bullhorn"></i></span>
+                            </div>
+                            <input type="text" name="coach" class="form-control border-left-0 pl-0 bg-light" [(ngModel)]="club.coach" required>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-right mt-2 pt-4 border-top">
+                        <button class="btn btn-primary btn-lg rounded-pill px-5 hover-lift box-shadow" type="submit" [disabled]="m.form.invalid">
+                            <i class="fa fa-save mr-2"></i> Salva Modifiche
+                        </button>
+                    </div>
+
+                </form>
             </div>
         </div>
-
     </div>
+
 </div>

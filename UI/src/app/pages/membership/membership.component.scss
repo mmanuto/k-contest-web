@@ -1,60 +1,58 @@
-$card-height: 220px;
+/* --- STILI GLOBALI DASHBOARD --- */
 
-.flip {
-    width: 100%;
-    height: $card-height;
-    position: relative;
-    -webkit-perspective: 800px;
-    -moz-perspective: 800px;
-    -o-perspective: 800px;
-    perspective: 800px;
-    .content{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-/*         -webkit-transition: -webkit-transform 0.6s;
-        -moz-transition: -moz-transform 0.6s;
-        -o-transition: -o-transform 0.6s;
-        transition: transform 0.6s; */
-       /*  -webkit-transform-style: preserve-3d;
-        -moz-transform-style: preserve-3d;
-        -o-transform-style: preserve-3d;
-        transform-style: preserve-3d; */
-            z-index: 100;
-/*             -webkit-backface-visibility: hidden;
-            -moz-backface-visibility: hidden;
-            -o-backface-visibility: hidden;
-            backface-visibility: hidden; */
-            .card{
-                height: $card-height;
-            }
-/*         &.flipped{
-            -webkit-transform: rotateY( 180deg );
-            -moz-transform: rotateY( 180deg );
-            -o-transform: rotateY( 180deg );
-            transform: rotateY( 180deg );
-        } */
+.rounded-lg {
+    border-radius: 0.5rem !important;
+}
+
+/* --- CARD ATLETA (VISTA GRIGLIA) --- */
+
+.user-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0 !important;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        border-color: #cbd5e1 !important;
+    }
+
+    /* Modifica i link icona nell'header scuro */
+    .hover-white:hover {
+        color: #ffffff !important;
+    }
+    .hover-danger:hover {
+        color: #ff4d4f !important;
     }
 }
 
-.z-index-1{
-    z-index: 1;
+/* Utility per font monospace sul Codice Fiscale per renderlo più leggibile */
+.font-monospace {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.tooltip-static .tooltip {
-    position: relative;
-    display: block;
-    opacity: 1;
-    z-index: 1;
-    .tooltip-inner{
-        max-width: 100%;
+/* Modifica stile della paginazione (ngx-pagination) */
+::ng-deep .ngx-pagination {
+    margin-bottom: 0;
+    
+    .current {
+        background: #202F40 !important;
+        border-radius: 4px;
     }
 }
 
-.popover-static .popover {
-    position: relative;
-    display: block;
-    margin: 0;
-    max-width: 100%;
-    z-index: 1;
+/* Effetto di sollevamento del pulsante principale */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(40, 167, 69, 0.3) !important;
+    }
+}
+
+/* Miglioramenti grafici per le input fields della modale */
+.form-control {
+    border-radius: 0.25rem;
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    }
 }

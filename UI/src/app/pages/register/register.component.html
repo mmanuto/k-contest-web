@@ -1,289 +1,205 @@
-<div class="d-flex flex-column align-items-center sfondo min-vh-100">
-    <div class="text-right w-100 mt-2" style="margin-right: 30px; font-size: 15px;">
-        <i class="fa fa-user-o mr-3" style="color: aliceblue; cursor:pointer;" routerLink='/login'> Admin</i>
-        <i class="fa fa-edit" style="color: aliceblue; cursor:pointer; font-size: 17px;" routerLink='/request'>
-            Inserisci la tua gara</i>
+<div class="min-vh-100 d-flex flex-column align-items-center" style="background-color: #202F40;">
+    
+    <div class="w-100 d-flex justify-content-between align-items-center p-3 p-md-4 text-white">
+        <div class="d-flex align-items-center">
+            <img src="assets/img/logo/LogoCSEN.png" alt="Logo CSEN" style="width: 80px; height: 80px;" class="mr-3">
+            <div class="d-none d-sm-block">
+                <span class="font-weight-bold d-block" style="font-size: 1.6rem; line-height: 1.1;">SETTORE KARATE</span>
+                <span class="text-primary font-weight-bold" style="font-size: 1.6rem;">CSEN VENETO</span>
+            </div>
+        </div>
+        <div>
+            <a routerLink="/login" class="text-white text-decoration-none font-weight-bold" style="font-size: 1.2rem;">
+                <i class="fa fa-user-o mr-1"></i> Admin
+            </a>
+        </div>
     </div>
 
-    <div class="col-11 col-md-10 col-lg-9 justify-content-center register-container2">
-        <div class="card border-0 box-shadow rounded-0" style="width: 100% !important">
-            <div class="d-flex justify-content-center align-items-center border-0">
-                <img class="logo-csen" src="assets/img/logo/LogoCSEN.png" alt="">
+    <div class="container mb-5 mt-2">
+        <div class="card border-0 box-shadow rounded-lg overflow-hidden">
+            
+            <div class="card-header bg-white border-0 text-center py-4">
+                <h2 class="font-weight-bold text-dark mb-2" style="font-size: 2.2rem;">Iscrizioni Gare e Stage</h2>
+                <p class="text-muted mb-0" style="font-size: 1.2rem;">Comitato Regionale Veneto - Settore Karate</p>
             </div>
 
-            <div class="row">
-                <div class="col">
-                    <div widget class="card border-0 w-100-p">
-                        <h2 class="text-center mt-3">Iscrizioni Gare e Stage <br/> Comitato regionale Veneto settore Karate </h2>
-                        <div *ngIf="!confirmed" class="card-body widget-body">
+            <div class="card-body bg-light p-3 p-md-5">
+                <div *ngIf="!confirmed">
+                    <div *ngFor="let step of steps" [hidden]="!step.active">
+                        
+                        <div class="text-center mb-5">
+                            <h3 class="font-weight-bold text-primary" style="font-size: 1.8rem;">
+                                <i class="fa {{ step.icon }} mr-2"></i>{{step.name === 'Events' ? 'Seleziona Evento' : 'Accesso Società'}}
+                            </h3>
+                        </div>
 
+                        <div *ngIf="step.name == 'Events'">
+                            <div *ngIf="!openCompetitions || openCompetitions.length === 0" class="alert alert-info text-center shadow-sm" style="font-size: 1.2rem;">
+                                Nessun evento disponibile al momento.
+                            </div>
 
-                            <div *ngFor="let step of steps" [hidden]="!step.active" class="col w-100-p">
-                                <div class="row mb-4 ml-3">
-                                    <div class="col-md-5 col-sm-6 col-12 text-center row">
-                                        <h3 class="step-name"> <i class="fa {{ step.icon }} mr-2"
-                                                aria-hidden="true"></i>
-                                            {{step.name}}</h3>
-                                    </div>
-                                </div>
-                                <!-- COMPETITIONS -->
-                                <div *ngIf="step.name=='Events'" class="pt-2">
-                                    <div class="row mb-4">
-                                        
-                                            <div class="card-body pt-0 widget-body">
-                                                        <div class="form-group d-flex flex-column">
-                                                            <div *ngFor="let item of openCompetitions" class="row align-items-center mt-2 mb-2 mr-3 ml-3 bg-light">
+                            <div class="row">
+                                <div class="col-lg-9 mb-4" *ngFor="let item of openCompetitions">
+                                    <div class="card h-100 border-0 box-shadow-sm rounded-lg overflow-hidden event-card transition">
+                                        <div class="row no-gutters h-100">
+                                            
+                                            <div class="col-sm-4 bg-dark text-center d-flex align-items-center justify-content-center p-3">
+                                                <img [src]="imgUrl + item.locandina" class="img-fluid rounded" style="max-height: 200px; object-fit: contain;">
+                                            </div>
+                                            
+                                            <div class="col-sm-8">
+                                                <div class="card-body d-flex flex-column h-100 p-4">
+                                                    <h4 class="card-title font-weight-bold text-dark mb-2" style="font-size: 1.4rem;">{{item.nome_gara}}</h4>
+                                                    
+                                                    <div class="text-muted mb-3" style="font-size: 1.1rem;">
+                                                        <i class="fa fa-calendar mr-1"></i>{{item.data_gara | date: 'dd/MM/yyyy'}}
+                                                        <span *ngIf="item.place" class="ml-2"><i class="fa fa-map-marker mr-1"></i>{{item.place}}</span>
+                                                    </div>
 
-                                                                <div class="col-md-2">
-                                                                    <img class="card-img ml-2 mt-3 mb-3" [src]="imgUrl + item.locandina" style="width: 170px">
-                                                                </div>
-                                                                <div class="col-md-10">
-                                                                    <h4 class="ml-2" style="font-weight: bold;">{{item.nome_gara | uppercase}}</h4>
-                                                                    <p class="ml-2 mt-4 mb-1 eventi-text">Data: {{item.data_gara | date: 'dd/MM/yyyy'}}</p>
-                                                                    <p *ngIf="item.place" class="ml-2 mb-0 eventi-text">Luogo: {{item.place}}</p>
-                                                                    <div class="row align-items-center mt-2 ml-2">
-                                                                        <p *ngIf="item.comp_status == CONST.CompetitionState.RegistrationOpen" class="mb-0 eventi-text bg-success text-white p-1 rounded">Iscrizioni aperte fino al {{item.chiusura_iscrizioni | date: 'dd/MM/yyyy'}}</p>
-                                                                        <p *ngIf="item.comp_status == CONST.CompetitionState.Published" class="mb-0 eventi-text bg-warning text-white p-1 rounded">Apertura iscrizioni {{item.apertura_iscrizioni | date: 'dd/MM/yyyy'}}</p>
-                                                                        <p *ngIf="item.comp_status == CONST.CompetitionState.RegistrationClosedTime || item.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="mb-0 eventi-text bg-danger text-white p-1 rounded">Iscrizioni chiuse</p>
-                                                                        <button type="button" class="btn btn-primary btn-eventi ml-4" (click)="next(item)">
-                                                                            <i class="fa fa-sign-in"> <span class="btn-eventi-text">Accedi</span></i>
-                                                                        </button>
-                                                                    </div>
-                                                                    <div class="row mt-4 ml-2">
-                                                                        <a *ngIf="item.circolare != ''" target="blank" [href]="imgUrl + item.circolare">
-                                                                            <button type="button" class="btn btn-info btn-rounded ">
-                                                                                <i class="fa fa-download"> <span class="btn-eventi-text">Scarica l'informativa di gara</span></i>
-                                                                            </button>
-                                                                        </a>
-                                                                        <button *ngIf="item.flag_tabs" type="button" class="btn btn-info btn-rounded btn-eventi ml-4" (click)="showTabsClassifications(item, '/competitors-in-categories')">
-                                                                                <i class="fa fa-download"> <span class="btn-eventi-text">Visualizza Tabelloni</span></i>
-                                                                        </button>
-                                                                        <button *ngIf="item.flag_classifications" type="button" class="btn btn-info btn-rounded btn-eventi ml-4" (click)="showTabsClassifications(item, '/home')">
-                                                                                <i class="fa fa-download"> <span class="btn-eventi-text">Visualizza Classifiche</span></i>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-
-                                                            </div>
+                                                    <div class="mt-auto">
+                                                        <div class="mb-3">
+                                                            <span *ngIf="item.comp_status == CONST.CompetitionState.RegistrationOpen" class="badge badge-success p-2 w-100 text-wrap text-left" style="font-size: 1rem;">Iscrizioni aperte fino al {{item.chiusura_iscrizioni | date: 'dd/MM/yyyy'}}</span>
+                                                            <span *ngIf="item.comp_status == CONST.CompetitionState.Published" class="badge badge-warning text-dark p-2 w-100 text-wrap text-left" style="font-size: 1rem;">Apertura: {{item.apertura_iscrizioni | date: 'dd/MM/yyyy'}}</span>
+                                                            <span *ngIf="item.comp_status == CONST.CompetitionState.RegistrationClosedTime || item.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="badge badge-danger p-2 w-100 text-wrap text-left" style="font-size: 1rem;">Iscrizioni chiuse</span>
                                                         </div>
+                                                        
+                                                        <div class="d-flex flex-wrap gap-2">
+                                                            <button class="btn btn-primary flex-grow-1 font-weight-bold shadow-sm" style="font-size: 1.1rem; padding: 0.6rem;" (click)="next(item)">
+                                                                <i class="fa fa-sign-in mr-1"></i> Accedi
+                                                            </button>
+                                                            <a *ngIf="item.circolare" target="_blank" [href]="imgUrl + item.circolare" class="btn btn-outline-info flex-grow-1" style="font-size: 1.1rem; padding: 0.6rem;" title="Informativa">
+                                                                <i class="fa fa-file-pdf-o"></i> Informativa
+                                                            </a>
+                                                            <button *ngIf="item.flag_tabs" class="btn btn-outline-secondary flex-grow-1 mt-1" style="font-size: 1.1rem; padding: 0.6rem;" (click)="showTabsClassifications(item, '/competitors-in-categories')" title="Tabelloni">
+                                                                <i class="fa fa-sitemap"></i> Tabelloni
+                                                            </button>
+                                                            <button *ngIf="item.flag_classifications" class="btn btn-outline-success flex-grow-1 mt-1" style="font-size: 1.1rem; padding: 0.6rem;" (click)="showTabsClassifications(item, '/home')" title="Classifiche">
+                                                                <i class="fa fa-trophy"></i> Classifiche
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
-                                        
+                                        </div>
                                     </div>
                                 </div>
-                                
-                                 <!-- REGISTER -->
-                                <form *ngIf="step.name=='Register'" [formGroup]="personalForm" class="form-horizontal row bg-light pt-2 mt-3 w-100-p align-items-center">
-                                    <div *ngIf="selectedEvent" class="col-4 justify-content-center">
-                                        <img class="card-img m-4" [src]="imgUrl + selectedEvent.locandina">
-                                    </div>
-                                    <div class="col-8 justify-content-center">
-
-                                        <p class="mt-3 mb-3 col-12 text-center" style="font-size:15px;">Inserisci il CF/P.IVA usati in fase di registrazione e clicca su <b>ACCEDI</b>.</p>
-
-                                            <div class="form-group row text-sm-right col-md-12 mt-3">
-                                                <label class="col-md-3 form-control-label mt-1">CF/P.IVA Società</label>
-                                                <div class="col-md-6 input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-edit"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input formControlName="login_cf" class="form-control" type="text"
-                                                        data-hj-whitelist>
-                                                </div>
-                                                <div class=" mt-3 mb-3 col-12 text-center">
-                                                    <button class="btn btn-primary" (click)="accedi()">
-                                                        <i class="fa fa-sign-in"> </i>  &nbsp; Accedi</button>
-                                                </div>
-                                                </div>
-                                                
-                                                       
-                                            <p class="mt-3 mb-3 col-12 text-center" style="font-size:15px;">Se è la prima volta che accedi a questo portale compila tutti i dati e clicca su <b>REGISTRATI</b>. <br> Tutti i campi sono obbligatori. I
-                                                dati inseriti serviranno per gli accessi successivi.</p>
-                                        
-                                            <div class="form-group row text-sm-right col-md-12"
-                                                [ngClass]="{'has-danger' : step.hasError && personalForm.get('name').hasError('required'), 'has-success' : !personalForm.get('name').hasError('required') }">
-                                                <label class="col-md-3 form-control-label mt-1">Nome Responsabile</label>
-                                                <div class="col-md-6 input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-user-o"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input formControlName="name" class="form-control"
-                                                        [ngClass]="{'form-control-danger' :  personalForm.get('name').hasError('required'), 'form-control-success' :  !personalForm.get('name').hasError('required') }"
-                                                        type="text" data-hj-whitelist>
-                                                </div>
-                                                <small class="text-danger"
-                                                    *ngIf="step.hasError && personalForm.get('name').hasError('required')">è
-                                                    richiesto un nome</small>
-                                            </div>
-
-                                            <div class="form-group row text-sm-right col-md-12"
-                                                [ngClass]="{'has-danger' : step.hasError && personalForm.get('society').hasError('required'), 'has-success' : !personalForm.get('society').hasError('required') }">
-                                                <label class="col-md-3 form-control-label mt-1">Società</label>
-                                                <div class="col-md-6 input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-edit"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input formControlName="society" class="form-control"
-                                                        [ngClass]="{'form-control-danger' :  personalForm.get('society').hasError('required'), 'form-control-success' :  !personalForm.get('society').hasError('required') }"
-                                                        type="text" data-hj-whitelist>
-                                                </div>
-                                                <small class="text-danger"
-                                                    *ngIf="step.hasError && personalForm.get('society').hasError('required')">First
-                                                    Name is required</small>
-                                            </div>
-                                            <div class="form-group row text-sm-right col-md-12">
-                                                <label class="col-md-3 form-control-label mt-1">CF/P.IVA Società</label>
-                                                <div class="col-md-6 input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-edit"></i>
-                                                        </span>
-                                                    </div>
-                                                    <input formControlName="cod_fiscale" class="form-control" type="text"
-                                                        data-hj-whitelist>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row text-sm-right col-md-12"
-                                                [ngClass]="{'has-danger' : (step.hasError && personalForm.get('email').hasError('required')) || (step.hasError && personalForm.get('email').hasError('email')), 
-                                                                    'has-success' : !personalForm.get('email').hasError('required') && !personalForm.get('email').hasError('email')}">
-                                                <label class="col-md-3 form-control-label mt-1">Email</label>
-                                                <div class="col-md-6 input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-envelope"></i>
-                                                        </span>
-                                                    </div>
-                                                <input formControlName="email" class="form-control"
-                                                    [ngClass]="{'form-control-danger' : (step.hasError && personalForm.get('email').hasError('required')) || (step.hasError && personalForm.get('email').hasError('email')), 
-                                                                                                    'form-control-success' :  !personalForm.get('email').hasError('required') && !personalForm.get('email').hasError('email')}"
-                                                    type="text" data-hj-whitelist>
-                                            </div>
-                                            <small class="text-danger"
-                                                *ngIf="step.hasError && personalForm.get('email').hasError('required')">è
-                                                richiesta un'email</small>
-                                            <small class="text-danger"
-                                                *ngIf="step.hasError && personalForm.get('email').hasError('email')">Invalid
-                                                email address</small>
-                                        </div>
-
-                                        <div class="form-group row text-sm-right col-md-12"
-                                            [ngClass]="{'has-danger' : step.hasError && personalForm.get('phone').hasError('required'), 'has-success' : !personalForm.get('phone').hasError('required') }">
-                                            <label class="col-md-3 form-control-label mt-1">Telefono</label>
-                                            <div class="col-md-6 input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <i class="fa fa-phone"></i>
-                                                    </span>
-                                                </div>
-                                                <input formControlName="phone" class="form-control"
-                                                    [ngClass]="{'form-control-danger' :  personalForm.get('phone').hasError('required'), 'form-control-success' :  !personalForm.get('phone').hasError('required') }"
-                                                    type="number" data-hj-whitelist>
-                                            </div>
-                                            <small class="text-danger"
-                                                *ngIf="step.hasError && personalForm.get('phone').hasError('required')">E'
-                                                richiesto un numero di telefono</small>
-                                        </div>
-
-                                        <div class="form-group row text-sm-right mt-3 col-md-12"
-                                            [ngClass]="{'has-danger' : step.hasError && personalForm.get('coach').hasError('required'), 'has-success' : !personalForm.get('coach').hasError('required') }">
-                                            <label class="col-md-3 form-control-label mt-1">Coach</label>
-                                            <div class="col-md-6 input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">
-                                                        <i class="fa fa-user"></i>
-                                                    </span>
-                                                </div>
-                                                <input formControlName="coach" class="form-control"
-                                                    [ngClass]="{'form-control-danger' :  personalForm.get('coach').hasError('required'), 'form-control-success' :  !personalForm.get('coach').hasError('required') }"
-                                                    type="text" data-hj-whitelist>
-                                            </div>
-                                            <small class="text-danger"
-                                                *ngIf="step.hasError && personalForm.get('coach').hasError('required')">E'
-                                                richiesto il nome di un coach</small>
-                                        </div>
-                                        <div class=" mt-3 mb-3 col-12 text-center">
-                                            <button *ngIf="steps[steps.length-1].active" class="btn btn-primary"
-                                                (click)="confirm()"> <i class="fa fa-edit"></i> &nbsp; Registrati 
-                                                
-                                            </button>
-                                        </div>
-                                      
-                                    </div>
-                                </form>
-
                             </div>
+                        </div>
 
-                            <div class="row mt-3">
-                                <div class="col">
-                                    <button *ngIf="!steps[0].active" class="btn btn-primary pull-left" (click)="prev()">
-                                        <i class="fa fa-chevron-left arrow"></i>&nbsp; Indietro</button>
+                        <div *ngIf="step.name == 'Register'">
+                            <div class="row">
+                                <div class="col-md-5 mb-4 text-center border-right-md d-none d-md-block">
+                                    <h4 class="font-weight-bold text-dark mb-4" style="font-size: 1.5rem;">{{selectedEvent?.nome_gara}}</h4>
+                                    <img *ngIf="selectedEvent" class="img-fluid rounded shadow-sm" [src]="imgUrl + selectedEvent.locandina" style="max-height: 450px; object-fit: contain;">
+                                    <button class="btn btn-outline-secondary mt-5 btn rounded-pill" (click)="prev()">
+                                        <i class="fa fa-arrow-left mr-2"></i> Cambia Evento
+                                    </button>
+                                </div>
+
+                                <div class="col-md-7 pl-md-4">
+                                    <form [formGroup]="personalForm" class="w-100">
+                                        
+                                        <div class="card border-primary mb-4 shadow-sm">
+                                            <div class="card-header bg-primary text-white py-3">
+                                                <h5 class="mb-0" style="font-size: 1.2rem;"><i class="fa fa-sign-in mr-2"></i>Società già registrata?</h5>
+                                            </div>
+                                            <div class="card-body pb-4">
+                                                <p class="text-muted mb-3" style="font-size: 1.1rem;">Inserisci il CF o P.IVA usato in precedenza per accedere rapidamente.</p>
+                                                <div class="input-group input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text bg-light text-muted"><i class="fa fa-vcard-o"></i></span>
+                                                    </div>
+                                                    <input formControlName="login_cf" class="form-control text-uppercase" placeholder="Codice Fiscale / P.IVA" type="text" (keyup.enter)="accedi()">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary font-weight-bold px-4" type="button" (click)="accedi()">ACCEDI</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center my-4 text-muted">
+                                            <span class="bg-light px-3 font-weight-bold" style="letter-spacing: 2px; font-size: 1.1rem;">OPPURE</span>
+                                        </div>
+
+                                        <div class="card border-0 shadow-sm mb-2">
+                                            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                                                <h5 class="font-weight-bold text-dark" style="font-size: 1.3rem;"><i class="fa fa-user-plus mr-2 text-success"></i>Nuova Società</h5>
+                                                <p class="text-muted mb-0" style="font-size: 1.1rem;">Prima volta sul portale? Compila i campi per creare il tuo profilo.</p>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">Nome Responsabile *</label>
+                                                        <input formControlName="name" class="form-control form-control-lg bg-light" type="text" [ngClass]="{'is-invalid': step.hasError && personalForm.get('name').hasError('required')}">
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">Nome Società *</label>
+                                                        <input formControlName="society" class="form-control form-control-lg bg-light" type="text" [ngClass]="{'is-invalid': step.hasError && personalForm.get('society').hasError('required')}">
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">CF / P.IVA *</label>
+                                                        <input formControlName="cod_fiscale" class="form-control form-control bg-light font-monospace text-uppercase" type="text" [ngClass]="{'is-invalid': step.hasError && personalForm.get('cod_fiscale').hasError('required')}">
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">Coach *</label>
+                                                        <input formControlName="coach" class="form-control form-control bg-light" type="text" [ngClass]="{'is-invalid': step.hasError && personalForm.get('coach').hasError('required')}">
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">Telefono *</label>
+                                                        <input formControlName="phone" class="form-control form-control bg-light" type="number" [ngClass]="{'is-invalid': step.hasError && personalForm.get('phone').hasError('required')}">
+                                                    </div>
+                                                    <div class="col-sm-6 mb-3">
+                                                        <label class="font-weight-bold text-uppercase text-muted mb-1">Email di contatto *</label>
+                                                        <input formControlName="email" class="form-control form-control bg-light" type="email" [ngClass]="{'is-invalid': step.hasError && (personalForm.get('email').hasError('required') || personalForm.get('email').hasError('email'))}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-4 text-right border-top pt-4">
+                                                    <button class="btn btn-outline-secondary btn rounded-pill px-4 d-md-none mr-2" (click)="prev()">
+                                                        <i class="fa fa-arrow-left"></i> Indietro
+                                                    </button>
+                                                    <button class="btn btn-success btn rounded-pill px-5 font-weight-bold shadow hover-lift" (click)="confirm()">
+                                                        <i class="fa fa-check mr-2"></i> REGISTRATI
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </form>
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
                 </div>
             </div>
-
-
-
-
         </div>
-
-
     </div>
 
-<button id="openAdv" #openAdv type="button" class="btn btn-primary" [hidden]="true"
-        (click)="openModalAdv(modalAdvise)" data-toggle="modal" data-target="#modalAdvise"></button>
-
-    
+    <button id="openAdv" #openAdv type="button" class="btn btn-primary d-none" (click)="openModalAdv(modalAdvise)"></button>
 </div>
 
-<!-- <ng-template #flyer>
-    <div class="modal-body ">
-
-        <div class="modal-body">
-            <img class="card-img w-100 mb-4" [src]="urlLocandina" alt="Card image">
-            <a *ngIf="urlCircolare != ''" target="blank" [href]="urlCircolare" class="mt-4"><button type="button"
-                    class="btn btn-primary"><i class="fa fa-download"> <span class="documents">Scarica la circolare di
-                            gara</span></i></button></a>
-
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" (click)="closeModal()">CHIUDI</button>
-        </div>
-    </div>
-</ng-template> -->
-
 <ng-template #modalAdvise>
-
-    <div class="row">
-        <div class="col-12 vertical-tabs">
-            <div widget class="card border-0 box-shadow">
-
-                    <div class="card-header border-0 text-muted modal-header state modal-info">
-                            <!--  <h5 class="mb-0">INSERISCI ATLETA</h5> -->
-                            <h4 class="modal-title" style=" color:white" id="modal-info-label">ACCESSO NEGATO!!</h4>
-                        </div>
-                <div class="modal-body">
-
-                    Gentile utente, per l'iscrizione alla manifestazione selezionata la invitiamo a contattare il coordinatore Arbitri regionale e responsabile iscrizioni Sorgato Michele 
-                    Tel: 3356101226
-                    Mail: sorgato.michele73@gmail.com
-                    Grazie
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" (click)="closeModalAdv()"
-                        data-dismiss="modal">Ok</button>
-                </div>
+    <div class="card border-0 shadow m-0 overflow-hidden">
+        <div class="card-header bg-danger text-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 font-weight-bold"><i class="fa fa-exclamation-triangle mr-2"></i>ACCESSO RISERVATO</h5>
+            <button type="button" class="close text-white" (click)="closeModalAdv()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body p-4 text-center bg-white">
+            <p class="lead text-dark mb-4" style="font-size: 1.1rem; line-height: 1.6;">
+                Gentile utente, per l'iscrizione alla manifestazione selezionata la invitiamo a contattare il coordinatore Arbitri regionale e responsabile iscrizioni:
+            </p>
+            <div class="bg-light p-3 rounded d-inline-block text-left border">
+                <strong>Sorgato Michele</strong><br>
+                <i class="fa fa-phone text-muted mr-2 mt-2"></i> 335 6101226<br>
+                <i class="fa fa-envelope text-muted mr-2 mt-1"></i> sorgato.michele73@gmail.com
             </div>
+        </div>
+        <div class="card-footer bg-light border-top p-3 text-center">
+            <button type="button" class="btn btn-outline-danger px-5 rounded-pill" (click)="closeModalAdv()">Chiudi Avviso</button>
         </div>
     </div>
 </ng-template>

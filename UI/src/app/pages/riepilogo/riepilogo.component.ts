@@ -54,7 +54,6 @@ export class RiepilogoComponent {
   // INIT                                           
   //=========================================================================================================================================================
 
-//TODO: da verificare
   ngOnInit() {
 
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
@@ -145,17 +144,13 @@ export class RiepilogoComponent {
   //=========================================
   // INVIO DATI                                                                                
   //=========================================
-//TODO: tutto da rivedere!! EXCEL + PDF
 
   inviaDati() {
 
 
     let pdf = this.creaPdfIscrizioni();
     let autodichiarazione = this.creaPdfCertificati();
-    let data = null ;
-    if(this.competition.type == Constants.EventType.Competition){ 
-        data = this.creaExcelCsen();
-    }   
+    let data = null ;  
 
     var params = {
       'datiSocieta': this.datiSocieta,
@@ -299,164 +294,6 @@ export class RiepilogoComponent {
     ctx.drawImage(img, 0, 0);
     return canvas.toDataURL("image/png");
   }
-
-
-  //====================================================================================================
-  //                                                                                                    
-  //  #####  ##    ##   ####  #####  ##             ####   #####    ####  ##  #####  ######    ###    
-  //  ##      ##  ##   ##     ##     ##            ##     ##   ##  ##     ##  ##       ##     ## ##   
-  //  #####    ####    ##     #####  ##             ###   ##   ##  ##     ##  #####    ##    ##   ##  
-  //  ##      ##  ##   ##     ##     ##               ##  ##   ##  ##     ##  ##       ##    #######  
-  //  #####  ##    ##   ####  #####  ######        ####    #####    ####  ##  #####    ##    ##   ##  
-  //                                                                                                    
-  //====================================================================================================
-
-
-  creaExcelSocieta() {
-    let data = [
-      {
-        name: 'Societa: ' + this.datiSocieta.club_name
-      },
-      {
-        name: "Responsabile: " + this.datiSocieta.club_manager
-      },
-      {
-        name: "Email: " + this.datiSocieta.mail
-      },
-      {
-        name: "Telefono: " + this.datiSocieta.telefono
-      },
-      {
-        name: "Coach: " + this.datiSocieta.coach
-      },
-      {
-        name: 'COGNOME E NOME',
-        categoria: "CATEGORIA",
-        dataNascita: "DATA DI NASCITA",
-        sesso: "SESSO",
-        peso: "PESO",
-        grado: "GRADO",
-        percorso: "PERCORSO",
-        palloncino: "PALLONCINO",
-        kata: "KATA",
-        squadre: "KATA SQUADRE",
-        kumite: "KUMITE"
-      }
-    ];
-
-    for (let iscritto of this.listaIscritti) {
-
-      let percorso = iscritto.prove_scelte.find(obj => { return obj.label == "Percorso" });
-      let palloncino = iscritto.prove_scelte.find(obj => { return obj.label == "Palloncino" });
-      let kata = iscritto.prove_scelte.find(obj => { return obj.label == "Kata" });
-      let squadre = iscritto.prove_scelte.find(obj => { return obj.label == "Squadre" });
-      let kumite = iscritto.prove_scelte.find(obj => { return obj.label == "Kumite" });
-
-      data.push({
-        name: iscritto.nome,
-        categoria: iscritto.categoria,
-        dataNascita: this.datePipe.transform(iscritto.data_nascita, 'dd/MM/yyyy'),
-        sesso: iscritto.sesso,
-        peso: iscritto.peso,
-        grado: iscritto.grado,
-        percorso: (percorso && percorso.checked) ? "X" : '',
-        palloncino: (palloncino && palloncino.checked) ? "X" : '',
-        kata: (kata && kata.checked) ? "X" : '',
-        squadre: (squadre && squadre.checked) ? "X" : '',
-        kumite: (kumite && kumite.checked) ? "X" : ''
-      });
-
-    }
-
-    if (this.listaSquadre.length > 0) {
-      for (let squadra of this.listaSquadre) {
-        data.push({
-          name: '#SQ#',
-          categoria: squadra.categoria,
-          dataNascita: squadra.componentiSquadra
-        });
-      }
-    }
-
-    return data;
-
-  }
-
-  //=================================================================================
-  //                                                                                 
-  //  #####  ##    ##   ####  #####  ##             ####   ####  #####  ##     ##  
-  //  ##      ##  ##   ##     ##     ##            ##     ##     ##     ####   ##  
-  //  #####    ####    ##     #####  ##            ##      ###   #####  ##  ## ##  
-  //  ##      ##  ##   ##     ##     ##            ##        ##  ##     ##    ###  
-  //  #####  ##    ##   ####  #####  ######         ####  ####   #####  ##     ##  
-  //                                                                                 
-  //=================================================================================
-
-
-  creaExcelCsen() {
-    console.log(this.datiSocieta);
-    let data = [
-      {
-        name: 'Societa: ' + this.datiSocieta.club_name
-      },
-      {
-        name: "Responsabile: " + this.datiSocieta.club_manager
-      },
-      {
-        name: "Codice Fiscale: " + this.datiSocieta.CF
-      },
-      {
-        name: "Email: " + this.datiSocieta.mail
-      },
-      {
-        name: "Telefono: " + this.datiSocieta.telefono
-      },
-      {
-        name: "Coach: " + this.datiSocieta.coach
-      },
-      {
-        name: 'COGNOME E NOME',
-        prove: "PROVE",
-        peso: "PESO",
-        dataNascita: "DATA DI NASCITA",
-        societa: "SOCIETA"
-        /* categoria: "CATEGORIA",
-        
-        grado: "GRADO",
-        sesso: "SESSO",    */     
-      }
-    ];
-
-    for (let iscritto of this.listaIscritti) {
-      console.log(this.listaIscritti);
-
-      for (let prova of iscritto.codiciProve) {
-        data.push({
-          name: iscritto.nome,
-          prove: prova,
-          peso: iscritto.peso,
-          dataNascita: iscritto.data_nascita,
-          societa: this.datiSocieta.club_name
-          
-        });
-
-      }
-    }
-
-    if (this.listaSquadre.length > 0) {
-      for (let squadra of this.listaSquadre) {
-        data.push({
-          name: '#SQ#',
-          prove: squadra.categoria,
-          dataNascita: squadra.componentiSquadra
-        });
-      }
-    }
-
-    return data;
-  }
-
-
 
 }
 

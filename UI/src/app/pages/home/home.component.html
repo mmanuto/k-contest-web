@@ -1,292 +1,184 @@
-<div class="row mb-4">
-    <div class="col">
-        <div *ngIf="competition" widget class="card border-0 box-shadow">
-            <div class="row card-header transparent border-0 text-muted m-4 align-items-center">
+<div class="row mb-4" *ngIf="competition">
+    <div class="col-12">
+        
+        <div class="card border-0 box-shadow mb-4 overflow-hidden rounded-lg">
+            <div class="card-body p-4 p-md-5 d-flex flex-column flex-md-row align-items-center text-center text-md-left bg-white">
                 
-                    <img *ngIf="competition.logo" class="ml-3 mr-3" [src]="imgUrl + competition.logo" style="max-width: 100px; max-height: 100px;">
-                    <h1 class="m-4">{{competition.nome_gara}}</h1>
+                <div *ngIf="competition.logo" class="mr-md-4 mb-3 mb-md-0">
+                    <img [src]="imgUrl + competition.logo" class="img-fluid rounded shadow-sm" style="max-width: 120px; max-height: 120px; object-fit: contain;">
+                </div>
                 
+                <div class="flex-grow-1">
+                    <h1 class="font-weight-bold text-dark mb-2">{{competition.nome_gara}}</h1>
+                    
+                    <div class="mt-2">
+                        <span *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationOpen" class="badge badge-success px-3 py-2" style="font-size: 1.1rem; border-radius: 30px;">
+                            <i class="fa fa-unlock mr-1"></i> ISCRIZIONI APERTE
+                        </span>
+                        
+                        <span *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="badge badge-danger px-3 py-2" style="font-size: 1.1rem; border-radius: 30px;">
+                            <i class="fa fa-lock mr-1"></i> {{CONST.StateMessages.RegistrationClosedFull}}
+                        </span>
+                        
+                        <span *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedTime" class="badge badge-danger px-3 py-2" style="font-size: 1.1rem; border-radius: 30px;">
+                            <i class="fa fa-clock-o mr-1"></i> ISCRIZIONI CHIUSE
+                        </span>
+                    </div>
 
-            </div>
-            <div class="card-body pt-0 widget-body mt-2">   
-                <div *ngIf="competition.type == CONST.EventType.Competition" class="row ml-4"> 
-                    <h3 *ngIf="athletestNumber > 0" class="card-title ml-4 mt-4">Totale iscritti: {{athletestNumber}} {{athletestMaxNumber != 0 ? '/ ' + athletestMaxNumber : ''}}</h3>
-
-                </div>             
-
-                <div class="ml-4 mt-4">
-                    <h4 *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationOpen" class="d-inline-block bg-success text-white p-2 rounded ml-4">ISCRIZIONI APERTE</h4>
-                    <h4 *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="d-inline-block bg-danger text-white p-2 rounded ml-4">{{CONST.StateMessages.RegistrationClosedFull}}</h4>
-                    <h4 *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedTime"class="d-inline-block bg-danger text-white p-2 rounded ml-4">ISCRIZIONI CHIUSE</h4>
-                    <p *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedTime || competition.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="card-text ml-4"> 
+                    <p *ngIf="competition.comp_status == CONST.CompetitionState.RegistrationClosedTime || competition.comp_status == CONST.CompetitionState.RegistrationClosedFull" class="text-muted mt-2 mb-0">
                         {{CONST.StateMessages.RegistrationClosedTime}}
                     </p>
-                </div>                  
-                
-                    
-              
+                </div>
+            </div>
+        </div>
 
-
-                <!--<div *ngIf="classifiche" class="m-4">
-                    <p class="card-text"> Appena disponibili verranno pubblicati i risultati nella sezione 
-                        <strong> CLASSIFICHE </strong> nel menù a sinistra. </p>
-                </div>-->
-           <!--    <div *ngIf="competition.comp_status == CONST.CompetitionState.Published || competition.comp_status == CONST.CompetitionState.RegistrationClosedFull || competition.comp_status == CONST.CompetitionState.RegistrationClosedTime" class="row" style="width: 100%;">
-                    <div class="col-md-7 mt-4">
-
-                        <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
-                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-                                <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
-                            </div>
-                            <div class="card-body pt-0 widget-body">
-        
-                                <table *ngIf="tabelloni && tabelloni.length != 0" class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="ml-4">Specialità</th>
-                                            <th style="text-align: center">Visualizza</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr *ngFor="let item of tabelloni" class="col-xl-6 col-lg-6 mb-3">
-                                            
-                                            <td class="ml-4">{{item.name}}</td>
-                                            <td style="text-align: center"><a target="blank" [href]="appUrl + item.docpath"
-                                                    class="documents text-primary">
-                                                    <i class="fa fa-file-text-o" style="font-size: 20px"></i></a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+        <div class="row mb-4" *ngIf="competition.type == CONST.EventType.Competition">
+            
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card border-0 box-shadow h-100 bg-white rounded-lg stat-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="icon-circle bg-light-primary text-primary mr-3">
+                            <i class="fa fa-users"></i>
                         </div>
-                           
-                        <div  *ngIf="competition.flag_timetable" widget class="card border-0 box-shadow">
-                           
-                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; text-align: center;">
-                                <h5 class="mb-0" style="color:white">TIMETABLE</h5>
-                            </div>
-                            <div class="card-body pt-0 widget-body">
-
-                                <table class="table table-sm table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>CATEGORIA</th>
-                                            <th>SPECIALITA'</th>
-                                            <th>ORA</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr style="font-weight: 500;">
-                                            <td>BAMBINI A - B</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>                                
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>FANCIULLI</td>
-                                            <td>COMBINATA</td>
-                                            <td>9.00</td>   
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>RAGAZZI</td>
-                                            <td> Kumite U12 </td>
-                                            <td> 9.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>RAGAZZI</td>
-                                            <td>COMBINATA</td>
-                                            <td>10.00</td>   
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>ESORDIENTI</td>
-                                            <td>KATA</td>
-                                            <td> 11.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>ESORDIENTI</td>
-                                            <td>KUMITE</td>
-                                            <td> 12.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>CADETTI KATA</td>
-                                            <td>KATA</td>
-                                            <td> 13.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>CADETTI</td>
-                                            <td>KUMITE</td>
-                                            <td> 14.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>JUNIORES</td>
-                                            <td>KATA</td>
-                                            <td> 15.30/16.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>TUTTE LE CATEGORIE</td>
-                                            <td>KATA SQUADRE</td>
-                                            <td>16.00/16.30</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>JUNIORES</td>
-                                            <td>KUMITE</td>
-                                            <td> 16.30</td>
-                                        </tr>                                        
-                                        <tr style="font-weight: 500;">
-                                            <td>SENIORES</td>
-                                            <td>KATA</td>
-                                            <td> 17.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>SENIORES</td>
-                                            <td>KUMITE</td>
-                                            <td> 18.00</td>
-                                        </tr>
-                                        <tr style="font-weight: 500;">
-                                            <td>MASTER KATA</td>
-                                            <td>KATA</td>
-                                            <td> 18.30/19.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 mt-4">
-                            
-                                <div class="card-body ml-4">
-                                    <div *ngIf="competition.type == CONST.EventType.Competition"> 
-                                        <h4 class="card-title mt-3">  Informativa di gara</h4>
-                                        <a target="blank" [href]="imgUrl + competition.circolare" class="documents text-primary"> 
-                                            <h4 class="card-title mt-3"> <i class="fa fa-download"></i></h4>
-                                        </a>             
-                                    </div>
-                                     
-                                    <h4 class="card-title mt-3">Chiusura iscrizioni: {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}</h4>
-                                    <h5 style="color:firebrick">Non saranno accettate iscrizioni o modifiche oltre tale data.</h5>
-                                    
-                                    
-                                    <h4 class="card-title mt-4">Per informazioni</h4>
-                                    <p class="card-text"><strong>Organizzatore gara:</strong>
-                                            {{competition.responsabile}} <br /> Email: {{competition.email}} <br /> Tel:
-                                            {{competition.telephone}} </p>
-                                    <p class="card-text"><strong>Responsabile settore karate:</strong> Cecchinato
-                                            Giancarlo <br /> Tel: 338 7083332</p>
-                                    <p class="card-text"><strong>Coordinatore Arbitri:</strong> Michele Sorgato <br />
-                                            Email: sorgato.michele73@gmail.com <br /> Tel: 3923939904 </p>
-                                    <p class="card-text"><strong>Responsabile iscrizioni:</strong> Manuto Monica <br />
-                                            Email: info@iscrizionicsenveneto.it <br /> Tel: 3930480098 </p>
-                                </div>
-                           
-                        </div>
-                        
-                    </div> 
-                    <div class="col-xl-5 col-md-6 mt-4">
-                        <div class="card">
-                            <img class="card-img-top w-100" [src]="imgUrl + competition.locandina" alt="Card image cap">
-                        </div>
-                    </div>
-
-                </div> -->
-                 <div class="row">
-                    <div class="col-md-6">
-
-                        <div *ngIf="competition.flag_classifications" widget class="card border-0 box-shadow">
-                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-                                <h5 class="mb-0" style="color:white">CLASSIFICHE</h5>
-                            </div>
-                            <div class="card-body pt-0 widget-body">
-        
-                                <table *ngIf="tabelloni && tabelloni.length != 0" class="table table-striped col-md-12 ml-2">
-                                    <thead>
-                                        <tr>
-                                            <th class="ml-4">Specialità</th>
-                                            <th style="text-align: center">Visualizza</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        <tr *ngFor="let item of tabelloni" class="col-xl-6 col-lg-6 mb-3">
-                                           
-                                            <td class="ml-4">{{item.name}}</td>
-                                            <td style="text-align: center"><a target="blank" [href]="appUrl + item.docpath"
-                                                    class="documents text-primary">
-                                                    <i class="fa fa-file-text-o" style="font-size: 20px"></i></a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        
-                        <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable && timetable" class="col-md-12 ml-2">
-                            <h6 class="mb-4 mt-4 ml-4">  La direzione gara si riserva di iniziare le categorie fino a 20 minuti prima rispetto all'orario indicato. <br/>
-                                Si consiglia a tutti di essere in palazzetto almeno 40-30 minuti prima dell'inizio della propria categoria.
-                            </h6>
-
-                            <div widget class="card border-0 box-shadow">
-                           
-                            <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; text-align: center;">
-                                <h5 class="mb-0" style="color:white">TIMETABLE</h5>
-                            </div>
-                            <div class="card-body pt-0 widget-body">
-
-                                <table class="table table-sm table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>CATEGORIA</th>
-                                            <th>SPECIALITA'</th>
-                                            <th>ORA</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="font-weight: 500;" *ngFor="let item of timetable">                        
-                                            <td>{{item.category}}</td>
-                                            <td>{{item.specialita}}</td>
-                                            <td>{{item.time}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-md-12 mb-4 mt-4">
-                            
-                            <div class="card-body ml-4 text-center">
-                                
-                        
-                                <div *ngIf="competition.type == CONST.EventType.Competition"> 
-                                    
-                                    <a target="blank" [href]="imgUrl + competition.circolare" class="text-primary"> 
-                                            <h4 class="card-title mt-3 mb-3"> Informativa di gara <i class="fa fa-download ml-3"></i> </h4> 
-                                    </a>             
-                                </div>
-                                    
-                                <h4 class="card-title mt-4">Chiusura iscrizioni: {{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }}</h4>
-                                <h5 class="mb-4" style="color:firebrick">Non saranno accettate iscrizioni o modifiche oltre tale data.</h5>
-                                    
-                                <h4 class="card-title mt-4">Per informazioni</h4>
-                                <p class="card-text"><strong>Organizzatore gara:</strong>
-                                        {{competition.responsabile}} <br /> Email: {{competition.email}} <br /> Tel:
-                                        {{competition.telephone}} </p>
-                                <p class="card-text"><strong>Responsabile settore karate:</strong> Cecchinato
-                                        Giancarlo <br /> Tel: 338 7083332</p>
-                                <p class="card-text"><strong>Coordinatore Arbitri:</strong> Michele Sorgato <br />
-                                        Email: sorgato.michele73@gmail.com <br /> Tel: 3923939904 </p>
-                                <p class="card-text"><strong>Responsabile iscrizioni:</strong> Manuto Monica <br />
-                                        Email: info@iscrizionicsenveneto.it <br /> Tel: 3930480098 </p>
-                            </div>
-   
-                        </div>
-
-                    </div>
-                    <div class="col-xl-5 col-md-6 mt-4">
-                        <div class="card">
-                            <img class="card-img-top w-100" [src]="imgUrl + competition.locandina" alt="Card image cap">
+                        <div>
+                            <h6 class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 0.8rem;">Totale Iscritti</h6>
+                            <h3 class="mb-0 text-dark font-weight-bold">
+                                {{athletestNumber}} <span *ngIf="athletestMaxNumber != 0" class="text-muted" style="font-size: 1.2rem;">/ {{athletestMaxNumber}}</span>
+                            </h3>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 mb-3 mb-md-0">
+                <div class="card border-0 box-shadow h-100 bg-white rounded-lg stat-card">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="icon-circle bg-light-danger text-danger mr-3">
+                            <i class="fa fa-calendar-times-o"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 0.8rem;">Chiusura Iscrizioni</h6>
+                            <h4 class="mb-0 text-dark font-weight-bold">{{competition.chiusura_iscrizioni | date: 'dd/MM/yyyy'}}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <a target="_blank" [href]="imgUrl + competition.circolare" class="text-decoration-none">
+                    <div class="card border-0 box-shadow h-100 bg-primary text-white rounded-lg stat-card hover-lift">
+                        <div class="card-body d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="text-white-50 text-uppercase font-weight-bold mb-1" style="font-size: 0.8rem;">Documenti</h6>
+                                <h5 class="mb-0 font-weight-bold">Scarica Informativa di Gara</h5>
+                            </div>
+                            <div class="icon-circle bg-white text-primary shadow-sm">
+                                <i class="fa fa-download"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-lg-7 col-xl-8">
+
+                <div *ngIf="competition.flag_classifications && tabelloni && tabelloni.length != 0" class="card border-0 box-shadow mb-4 rounded-lg overflow-hidden">
+                    <div class="card-header bg-success text-white border-0 py-3 d-flex align-items-center">
+                        <i class="fa fa-trophy mr-2"></i>
+                        <h5 class="mb-0 font-weight-bold">CLASSIFICHE E RISULTATI</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush">
+                            <li *ngFor="let item of tabelloni" class="list-group-item d-flex justify-content-between align-items-center py-3 px-4 hover-bg-light">
+                                <span class="font-weight-bold">{{item.name}}</span>
+                                <a target="_blank" [href]="appUrl + item.docpath" class="btn btn-outline-success btn-sm rounded-pill px-3">
+                                    <i class="fa fa-file-pdf-o mr-1"></i> Visualizza
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div *ngIf="competition.type == CONST.EventType.Competition && competition.flag_timetable && timetable" class="card border-0 box-shadow mb-4 rounded-lg overflow-hidden">
+                    <div class="card-header bg-dark text-white border-0 py-3 d-flex align-items-center">
+                        <i class="fa fa-list-alt mr-2"></i>
+                        <h5 class="mb-0 font-weight-bold">TIMETABLE UFFICIALE</h5>
+                    </div>
+                    
+                    <div class="bg-light p-3 border-bottom text-center text-md-left small text-muted">
+                        <i class="fa fa-info-circle mr-1 text-info"></i> La direzione gara si riserva di iniziare le categorie fino a <strong>20 minuti prima</strong> rispetto all'orario indicato. Si consiglia di presentarsi al palazzetto almeno 40 minuti prima.
+                    </div>
+
+                    <div class="table-responsive bg-white">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="thead-light text-uppercase" style="font-size: 0.85rem;">
+                                <tr>
+                                    <th class="border-top-0 pl-4">Categoria</th>
+                                    <th class="border-top-0">Specialità</th>
+                                    <th class="border-top-0 text-center">Ora Inizio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of timetable">                        
+                                    <td class="font-weight-bold pl-4">{{item.category}}</td>
+                                    <td><span class="badge badge-light border">{{item.specialita}}</span></td>
+                                    <td class="text-center font-weight-bold text-primary" style="font-size: 1.1rem;">
+                                        <i class="fa fa-clock-o mr-1 text-muted"></i>{{item.time}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                
+
+                <div class="card border-0 box-shadow mb-4 rounded-lg bg-white">
+                    <div class="card-body p-4">
+                        <h5 class="font-weight-bold text-dark border-bottom pb-2 mb-3">Informazioni e Contatti</h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted text-uppercase  font-weight-bold">Organizzatore gara</h6>
+                                <p class="mb-0"><strong>{{competition.responsabile}}</strong></p>
+                                <p class="mb-0 "><i class="fa fa-envelope text-muted mr-1"></i> {{competition.email}}</p>
+                                <p class="mb-0 "><i class="fa fa-phone text-muted mr-1"></i> {{competition.telephone}}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-muted text-uppercase  font-weight-bold">Resp. Settore Karate</h6>
+                                <p class="mb-0"><strong>Cecchinato Giancarlo</strong></p>
+                                <p class="mb-0 "><i class="fa fa-phone text-muted mr-1"></i> 338 7083332</p>
+                            </div>
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <h6 class="text-muted text-uppercase  font-weight-bold">Resp. Iscrizioni</h6>
+                                <p class="mb-0"><strong>Manuto Monica</strong></p>
+                                <p class="mb-0 "><i class="fa fa-envelope text-muted mr-1"></i> info@iscrizionicsenveneto.it</p>
+                                <p class="mb-0 "><i class="fa fa-phone text-muted mr-1"></i> 393 0480098</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted text-uppercase  font-weight-bold">Coordinatore Arbitri</h6>
+                                <p class="mb-0"><strong>Michele Sorgato</strong></p>
+                                <p class="mb-0 "><i class="fa fa-envelope text-muted mr-1"></i> sorgato.michele73@gmail.com</p>
+                                <p class="mb-0 "><i class="fa fa-phone text-muted mr-1"></i> 392 3939904</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-5 col-xl-4 mb-4">
+                <div class="card border-0 box-shadow rounded-lg overflow-hidden sticky-top" style="top: 20px;">
+                    <div class="card-header bg-dark text-white border-0 py-2 text-center">
+                        <h6 class="mb-0 text-uppercase letter-spacing font-weight-bold" style="font-size: 0.8rem;">Locandina Ufficiale</h6>
+                    </div>
+                    <img class="img-fluid w-100" [src]="imgUrl + competition.locandina" alt="Locandina Gara" style="object-fit: cover;">
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

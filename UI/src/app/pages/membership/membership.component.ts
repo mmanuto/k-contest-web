@@ -22,6 +22,8 @@ export class MembershipComponent implements OnInit {
   public type: string = 'list';
   public modalRef: NgbModalRef;
 
+  public p: number = 1;
+
   public datiSocieta: any;
   public steps: any[];
   public athleteForm: FormGroup;
@@ -42,6 +44,13 @@ export class MembershipComponent implements OnInit {
   public corsiAthletestNumber: any [];
   public athletestMaxNumber:number = 0;
   public beltList = {};
+
+  // --- VARIABILI PER SQUADRE ---
+  public cintureSquadre: any[] = [];
+  public categorieSquadre: any[] = [];
+  public listaSquadre: any[] = [];
+  public idSelezionatiSquadre: string[] = [];
+  public squadraCorrente: any = {};
 
   config = {
     search:true,
@@ -99,6 +108,18 @@ export class MembershipComponent implements OnInit {
 
     this.datiSocieta = this.storageService.get('currentUser');
     this.competition = this.storageService.get('currentCompetition');
+
+    // Inizializza oggetto squadra corrente
+    this.squadraCorrente = {
+      id: '',
+      club_id: this.datiSocieta.id,
+      competition_id: this.competition.id,
+      categoria: '',
+      grado: '',
+      componenti: [],
+      specialita: 'Kata Squadre',
+      nComponenti: 0
+    };
 
     let errorMessage = 'ATTENZIONE! Errore nel caricamento dei dati. Riprovare più tardi, se il problema persiste rivolgersi a info@iscrizionicsenveneto.it';
 
@@ -179,6 +200,11 @@ export class MembershipComponent implements OnInit {
       }
       
     });
+
+    // CARICAMENTO DATI SQUADRE (Eseguito in coda)
+    if (this.competition.type == this.CONST.EventType.Competition) {
+      this.loadTeamsData();
+    }
 
   }
 
@@ -453,15 +479,9 @@ export class MembershipComponent implements OnInit {
     this.type = type;
   }
 
-  //=======================================================================
-  //                                                                       
-  //  #####  ####    ##  ######            ##     ##  #####  ##      ##  
-  //  ##     ##  ##  ##    ##              ####   ##  ##     ##      ##  
-  //  #####  ##  ##  ##    ##    ########  ##  ## ##  #####  ##  ##  ##  
-  //  ##     ##  ##  ##    ##              ##    ###  ##     ##  ##  ##  
-  //  #####  ####    ##    ##              ##     ##  #####   ###  ###   
-  //                                                                       
-  //=======================================================================
+  // =========================================================================
+  // INSERISCI - MODIFICA ATLETA
+  // =========================================================================
 
 
   public openModal(modalContent, user) {
@@ -532,6 +552,123 @@ export class MembershipComponent implements OnInit {
         location.reload();
       }
 
+    });
+  }
+
+
+  // =========================================================================
+  // GESTIONE SQUADRE
+  // =========================================================================
+
+  loadTeamsData() {
+    // 1. Carica le tendine (Cinture e Categorie per le squadre)
+    this.membershipService.getCategorieCinture(this.competition.codiceTipoCategorie).subscribe((response: any) => {
+      if (response.result.success) {
+        this.categorieSquadre = response.result.data.categorie;
+        this.cintureSquadre = response.result.data.cinture;
+      }
+    });
+
+    // 2. Carica le squadre già formate dalla società
+    this.membershipService.getListaSquadre({ competition_id: this.competition.id, club_id: this.datiSocieta.id }).subscribe((response: any) => {
+      this.listaSquadre = [];
+      this.idSelezionatiSquadre = [];
+
+      if (response.result.success) {
+        for (let team of response.result.data) {
+          team.componenti = JSON.parse(team.componenti);
+          let componentiSquadra = [];
+
+          for (let componente of team.componenti) {
+            if (componente.checked) {
+              this.idSelezionatiSquadre.push(componente.id);
+              componentiSquadra.push(componente.nome);
+            }
+          }
+          team.componentiSquadra = componentiSquadra.join(', ');
+          this.listaSquadre.push(team);
+        }
+      }
+    });
+  }
+
+  getAtletiSquadra() {
+    this.squadraCorrente.componenti = [];
+
+    if (this.squadraCorrente.categoria != "" && this.squadraCorrente.grado != "") {
+      for (let atleta of this.iscritti) {
+        // L'atleta deve avere la prova "Kata Squadre", la stessa categoria e lo stesso grado
+        if (atleta.prove.includes('Kata Squadre') && atleta.grado == this.squadraCorrente.grado && atleta.categoria == this.squadraCorrente.categoria) {
+          
+          let isAlreadyInTeam = this.idSelezionatiSquadre.includes(atleta.id);
+          
+          this.squadraCorrente.componenti.push({
+            id: atleta.id,
+            nome: atleta.nome,
+            checked: false,
+            disabled: isAlreadyInTeam // Blocca la checkbox se è già in un'altra squadra
+          });
+        }
+      }
+    }
+    this.checkNumberTeam();
+  }
+
+  checkNumberTeam() {
+    let count = 0;
+    for (let component of this.squadraCorrente.componenti) {
+      if (component.checked) count++;
+    }
+    this.squadraCorrente.nComponenti = count;
+  }
+
+  saveSquadra() {
+    let squadraDoppia = false;
+    let ids = [];
+    
+    for (let atleta of this.squadraCorrente.componenti) {
+      if (atleta.checked) ids.push(atleta.id);
+    }
+
+    if (this.listaSquadre.length != 0) {
+      for (let squadra of this.listaSquadre) {
+        let temIds = [];
+        for (let atleta of squadra.componenti) {
+          if (atleta.checked) temIds.push(atleta.id);
+        }
+        
+        // Verifica combinazione identica
+        if (ids[0] == temIds[0] && ids[1] == temIds[1] && ids[2] == temIds[2] && squadra.id != this.squadraCorrente.id) {
+          squadraDoppia = true;
+        }
+      }
+    }
+
+    if (squadraDoppia) {
+      this.toastrService.error('ATTENZIONE! Questa specifica squadra è già stata inserita.');
+    } else {
+      this.membershipService.saveSquadra(this.squadraCorrente).subscribe((response: any) => {
+        if (response.result.success) {
+          this.toastrService.success('Squadra salvata con successo!');
+          this.loadTeamsData(); // Ricarica la lista senza ricaricare la pagina!
+          
+          // Reset form squadra
+          this.squadraCorrente.id = '';
+          this.squadraCorrente.componenti = [];
+          this.squadraCorrente.categoria = '';
+          this.squadraCorrente.grado = '';
+          this.squadraCorrente.nComponenti = 0;
+        }
+      });
+    }
+  }
+
+  deleteSquadra(squadra) {
+    this.membershipService.deleteSquadra(squadra).subscribe((response: any) => {
+      if (response.result.success) {
+        this.toastrService.success('Squadra eliminata.');
+        this.loadTeamsData(); // Ricarica la lista dinamicamente
+      }
     });
   }
   
