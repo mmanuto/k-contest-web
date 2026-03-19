@@ -1,14 +1,76 @@
-
-.modal-xl {
-    max-width: 1200px;
+.category-list {
+  display: flex;
+  flex-direction: column;
 }
 
-.jQBracket{
-    .tools{
-      display: none;
-    }
+.category-card {
+  border: 1px solid #edf2f9;
+  border-left: 5px solid #d8e2ef; /* Bordo grigio per categorie in attesa */
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+
+  /* Rimuove i padding di default delle row interne per un layout più pulito */
+  .row {
+      margin-right: 0;
+      margin-left: 0;
   }
 
-  #minimal{
-    display: block;
+  /* Effetto hover morbido */
+  &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+      border-color: #e2e8f0;
   }
+
+  /* --- STATI DEL TATAMI --- */
+  
+  /* 1. Assegnata (Giallo) */
+  &.tatami-todo {
+      border-left: 5px solid #ffc107 !important; 
+      background-color: #fffcf5 !important;
+  }
+
+  /* 2. In Corso (Verde) */
+  &.tatami-doing {
+      border-left: 5px solid #28a745 !important; 
+      background-color: #fbfcff !important;
+      box-shadow: 0 4px 15px rgba(40, 167, 69, 0.1) !important;
+  }
+
+  /* 3. Conclusa (Azzurro/Info) */
+  &.tatami-done {
+      border-left: 5px solid #17a2b8 !important; 
+      background-color: #f4f8f9 !important;
+      opacity: 0.8; /* La rende leggermente opaca per suggerire che è archiviata */
+  }
+}
+
+/* Utilità per i bordi interni solo su Desktop */
+@media (min-width: 768px) {
+  .border-md-right {
+      border-right: 1px solid #f0f3f8;
+  }
+}
+
+/* Modifica stile della paginazione per renderla più moderna */
+.ngx-pagination {
+  margin-bottom: 0;
+  
+  .current {
+      background: #202F40 !important;
+      border-radius: 4px;
+  }
+}
+
+/* Animazione del Tatami */
+@keyframes pulse-highlight {
+    0% { transform: scale(1); background-color: #28a745; box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+    50% { transform: scale(1.05); background-color: #ffc107; color: #000; box-shadow: 0 0 8px 3px rgba(255, 193, 7, 0.7); }
+    100% { transform: scale(1); background-color: #28a745; box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+}
+
+.blink-animation {
+    animation: pulse-highlight 1s ease-in-out 5; 
+    display: inline-block; 
+}

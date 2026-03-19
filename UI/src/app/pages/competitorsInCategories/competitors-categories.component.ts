@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { LocalStorageService } from 'angular-2-local-storage';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +10,7 @@ import * as Dataset from './datasets';
 import { InMemoryDatabase } from './storage/memory';
 import { BracketsManager } from 'brackets-manager';
 import * as Constants from '../../constants';
+import { Subscription, interval } from 'rxjs';
 
 declare global {
   interface JQuery {
@@ -93,6 +94,9 @@ export class CompetitorsInCategoriesComponent {
   public thirdGirone = {};
   public CONST = Constants;
 
+  // Variabile per gestire l'abbonamento all'aggiornamento automatico
+  private pollingSubscription: Subscription;
+
 
   constructor(
     public toastrService: ToastrService,
@@ -110,13 +114,57 @@ export class CompetitorsInCategoriesComponent {
 
   ngOnInit() {  
   
-    this.competitorsService.getTabelloni({competition_id: this.datiGara.id }).subscribe((response: any) => {
-        this.categories = response.result.data.categories;
-        this.tabelloni = response.result.data.tabs;       
+    // Primo caricamento dei dati
+    this.loadTabelloni();
+    
+    // Imposta il polling: aggiorna i tabelloni e i tatami ogni 30 secondi (30000 millisecondi)
+    this.pollingSubscription = interval(30000).subscribe(() => {
+        this.loadTabelloni();
     });
     
     this.homeService.getTotaleIscrizioni({competition_id: this.datiGara.id }).subscribe((response: any) => {
       this.athletestNumber = response.result.data;
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.pollingSubscription) {
+        this.pollingSubscription.unsubscribe();
+    }
+  }
+
+  // Funzione separata per il caricamento per poterla richiamare sia all'init che nel polling
+  loadTabelloni() {
+    this.competitorsService.getTabelloni({competition_id: this.datiGara.id }).subscribe((response: any) => {
+        const newCategories = response.result.data.categories;
+
+        // 1. Ripuliamo subito la stringa del tatami (rimuovendo la 'T' o 't') per ogni categoria ricevuta
+        newCategories.forEach(newCat => {
+            if (newCat.tatami) {
+                newCat.tatami = newCat.tatami.replace(/T/ig, '').trim();
+            }
+        });
+        
+        // 2. Se avevamo già delle categorie caricate, controlliamo i cambiamenti per l'animazione
+        if (this.categories && this.categories.length > 0) {
+            newCategories.forEach(newCat => {
+                // Troviamo la stessa categoria nei dati vecchi
+                const oldCat = this.categories.find(c => c.id === newCat.id);
+                
+                // Se la categoria ha un tatami e questo è diverso da prima (o prima non c'era)
+                if (oldCat && newCat.tatami && newCat.tatami !== oldCat.tatami) {
+                    newCat.isNewTatami = true; // Attiva il lampeggio
+                    
+                    // Rimuove la classe dopo 5 secondi (il tempo dell'animazione CSS)
+                    setTimeout(() => {
+                        newCat.isNewTatami = false;
+                    }, 5000);
+                }
+            });
+        }
+        
+        this.categories = newCategories;
+        this.tabelloni = response.result.data.tabs;       
     });
   }
 

@@ -10,18 +10,6 @@ export class CompetitorsInCategoriesService {
         return this.http.post(environment.BASEAPPURL + "competitions/getTabelloni", request);
     }
 
-
-    /*getAthletesInCategories(request){
-        return this.http.post(environment.BASEAPPURL + "competitions/getAthletesInCategories", request);
-    }
-
-    getCategories()
-     {
-        console.log('entra');
-         return this.http.post(environment.BASEAPPURL + 'competitions/getCategories', {});
-                 
-    }*/
-
     getAthleteList(request){
         return this.http.post(environment.BASEAPPURL + 'athleteInscriptions/getAthletesByCategory', request);
     }

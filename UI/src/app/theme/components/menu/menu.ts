@@ -10,8 +10,9 @@ export const verticalMenuItems = [
     new Menu (2, 'Iscrizione atleti', '/membership', null, 'users', null, false, 0, [UserRole.Authenticated], false),
     new Menu (3, 'Gestione squadre', '/teams', null, 'users', null, false, 0, [UserRole.Authenticated], false),
     new Menu (4, 'Riepilogo', '/riepilogo', null, 'file-text-o', null, false, 0, [UserRole.Authenticated], false),
-    new Menu (5, 'Area personale', '/personal', null, 'user', null, false, 0, [UserRole.Authenticated], false),
-    new Menu (6, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, [UserRole.Authenticated, UserRole.Public], false)
+    new Menu (5, 'I miei Atleti', '/my-athletes', null, 'file-text-o', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (6, 'Area personale', '/personal', null, 'user', null, false, 0, [UserRole.Authenticated], false),
+    new Menu (7, 'Atleti in categoria', '/competitors-in-categories', null, 'user', null, false, 0, [UserRole.Authenticated, UserRole.Public], false)
 
     /*new Menu (1, 'ADMIN_NAV.DASHBOARD', '/', null, 'tachometer', null, false, 0),
     new Menu (2, 'ADMIN_NAV.MEMBERSHIP', '/membership', null, 'users', null, false, 0), 

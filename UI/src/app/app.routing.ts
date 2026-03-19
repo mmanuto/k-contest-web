@@ -19,6 +19,7 @@ export const routes: Routes = [
       { path: 'competitionDetails/:id', loadChildren: () => import('./pages/competitionDetails/competitionDetails.module').then(m => m.CompetitionDetailsModule) },
       { path: 'teams', loadChildren: () => import('./pages/teams/teams.module').then(m => m.TeamsModule), data: { breadcrumb: 'Squadre' } },
       { path: 'riepilogo', loadChildren: () => import('./pages/riepilogo/riepilogo.module').then(m => m.RiepilogoModule), data: { breadcrumb: 'Riepilogo' } },
+      { path: 'my-athletes', loadChildren: () => import('./pages/my-athletes/my-athletes.module').then(m => m.MyAthletesModule), data: { breadcrumb: 'I miei atleti' } },
       { path: 'settings', loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule), data: { breadcrumb: 'Settings' } },
       { path: 'personal', loadChildren: () => import('./pages/personal/personal.module').then(m => m.PersonalModule), data: { breadcrumb: 'Personal' } },
       { path: 'competitors-in-categories', loadChildren: () => import('./pages/competitorsInCategories/competitors-categories.module').then(m => m.CompetitorsInCategoriesModule), data: { breadcrumb: 'Atleti in categoria' } },

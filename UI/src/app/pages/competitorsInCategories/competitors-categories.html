@@ -1,155 +1,176 @@
 <h2>Totale Iscritti: {{athletestNumber}}</h2>
 <br/>
 <div widget class="card border-0 box-shadow mt-3">
-  <div class="card-header transparent border-0 text-muted" style="background-color: #202F40; ">
-    <h5 class="mb-0" style="color:white">Elenco categorie</h5>
-</div>
-  <div class="card-body pt-0 widget-body">
-    <div class="row">
 
-            <div class="col-lg-12 mb-4">
+  <div class="card-body pt-0 widget-body px-2 px-md-4"> <div class="row">
+      <div class="col-lg-12 mb-4 mt-3">
 
+        <div *ngIf="datiGara.type == CONST.EventType.Competition && !dettaglio">
+          
+          <div class="d-flex justify-content-end align-items-center mb-2 text-muted">
+            <span class="mr-3"><i class="fa fa-clock-o text-warning mr-1"></i> Assegnata</span>
+            <span class="mr-3"><i class="fa fa-play-circle text-success mr-1"></i> In corso</span>
+            <span><i class="fa fa-check-circle text-info mr-1"></i> Conclusa</span>
+          </div>
 
+          <div class="d-none d-md-flex text-muted font-weight-bold px-3 pb-2 mb-3 border-bottom text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+              <div class="col-md-5">Categoria & Dettagli</div>
+              <div class="col-md-2 text-center">Iscritti</div>
+              <div class="col-md-2 text-center">Stato Tatami</div>
+              <div class="col-md-3 text-right pr-4">Azioni</div>
+          </div>
 
- <!--              <div *ngIf="!tabelloni" class="card-body pt-0 widget-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                            
-                                <th>Specialità</th>
-                                <th>Categoria</th>
-                                <th>Cintura</th>
-                                <th>Genere</th>
-                                <th>Atleti</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngIf="categories.length == 0">
-                                <td>Nessun atleta iscritto alla manifestazione</td>
-                            </tr>
-                            <tr *ngFor="let item of categories" class="col-xl-6 col-lg-6 mb-4">
-                     
-                                <td>{{item.specialita}}</td>
-                                <td>{{item.categoria}}</td>
-                                <td>{{item.grado}}</td>
-                                <td>{{item.sesso}}</td>
-                                <td>{{item.n_athletes}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+          <div class="category-list">
+            <div class="category-card shadow-sm mb-3 bg-white rounded-lg transition-all"
+                 *ngFor="let category of categories | paginate: { itemsPerPage: 25, currentPage: p }"
+                 [ngClass]="{
+                    'tatami-todo': category.tatami && (category.tatami_status == 'CAT_TODO' || category.tatami_status == 'CAT_OPEN'),
+                    'tatami-doing': category.tatami && category.tatami_status == 'CAT_DOING',
+                    'tatami-done': category.tatami && (category.tatami_status == 'CAT_DONE' || category.tatami_status == 'CAT_CLOSED')
+                 }">
+              
+              <div class="row align-items-center m-0 py-3 px-2 w-100">
+                
+                <div class="col-12 col-md-5 mb-3 mb-md-0 border-md-right">
+                  <h6 class="font-weight-bold text-dark mb-1" style="font-size: 1.05rem;">
+                    {{category.categoria}}
+                  </h6>
+                  <div class="text-muted d-flex flex-wrap align-items-center" style="font-size: 0.85rem;">
+                    <span class="badge badge-light border mr-2 py-1 px-2 text-uppercase">{{category.specialita}}</span>
+                    <span class="mr-2"><i class="fa fa-bookmark-o mr-1"></i>{{category.grado}}</span>
+                    <span class="mr-2"> &bull; {{category.sesso}} </span>
+                    <span *ngIf="category.cat_peso"><i class="fa fa-balance-scale mr-1"></i>{{category.cat_peso}}</span>
+                  </div>
                 </div>
---> 
-                <div *ngIf="datiGara.type == CONST.EventType.Competition && !dettaglio" >
-                    <div class="table-responsive  bg-white">
-                        <table datatable class="table dataTable table-sm table-striped">
-                            <thead>
-                              <tr>
-                                <th>Specialità</th>
-                                <th>Categoria</th>
-                                <th>Genere</th>
-                                <th>N. Atleti</th>
-                                <th>Apri</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let category of categories | paginate: { itemsPerPage: 25, currentPage: p }">                        
-                                  <td class="align-middle">{{category.specialita}}</td>
-                                  <td class="align-middle">{{category.categoria}} - {{category.grado}} {{category.cat_peso}}</td>
-                                  <td class="align-middle">{{category.sesso}}</td>
-                                  <td class="align-middle">{{category.n_athletes}}</td>
-                                  <td class="align-middle">
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Visualizza categoria" class="btn btn-primary btn-sm tt mr-1" data-animation="false" (click)="openCategory(category)">
-                                      Elenco
-                                    </button>
-                                    <button type="button" data-toggle="tooltip"  class="btn btn-primary btn-sm tt mr-1" 
-                                    *ngIf="tabelloni && category.id.includes('KU')" (click)="openKumiteBrackets(category)">
-                                      Tabellone
-                                    </button>
-                                  </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="bg-white text-center">
-                                <pagination-controls autoHide="true" (pageChange)="p = $event" maxSize="3"></pagination-controls>
-                            </div>        
-                        </div>
-                      </div>
-
-
+                <div class="col-6 col-md-2 text-left text-md-center border-md-right">
+                  <div class="text-dark font-weight-bold" style="font-size: 1.1rem;">
+                    {{category.n_athletes}}
+                  </div>
+                  <div class="text-muted small text-uppercase">
+                    <i class="fa fa-users mr-1"></i>Atleti 
+                  </div>
                 </div>
-                <div *ngIf="dettaglio">
-                  <div class="col-lg-12 text-center">
-                    <h2>{{selectedCategory.specialita}} {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.cat_peso}} {{selectedCategory.sesso}}</h2>
+
+                <div class="col-6 col-md-2 text-right text-md-center">
                     
-                    <button type="button" data-toggle="tooltip" data-placement="top" class="btn btn-outline-primary tt mt-4" data-animation="false" (click)="backTocategory()">
-                      Torna all'elenco categorie
+                    <ng-container *ngIf="category.tatami">
+                        <span *ngIf="category.tatami_status == 'CAT_TODO' || category.tatami_status == 'CAT_OPEN'" class="badge badge-warning text-dark px-3 py-2 shadow-sm" [ngClass]="{'blink-animation': category.isNewTatami}" style="font-size: 14px; border-radius: 20px;">
+                            <i class="fa fa-clock-o mr-1"></i>Tatami {{category.tatami}}
+                        </span>
+                        
+                        <span *ngIf="category.tatami_status == 'CAT_DOING'" class="badge badge-success px-3 py-2 shadow-sm" [ngClass]="{'blink-animation': category.isNewTatami}" style="font-size: 14px; border-radius: 20px;">
+                            <i class="fa fa-play-circle mr-1"></i>Tatami {{category.tatami}}
+                        </span>
+
+                        <span *ngIf="category.tatami_status == 'CAT_DONE' || category.tatami_status == 'CAT_CLOSED'" class="badge badge-info text-white px-3 py-2 shadow-sm" [ngClass]="{'blink-animation': category.isNewTatami}" style="font-size: 14px; border-radius: 20px;">
+                            <i class="fa fa-check-circle mr-1"></i>Tatami {{category.tatami}}
+                        </span>
+
+                        <span *ngIf="category.tatami_status != 'CAT_TODO' && category.tatami_status != 'CAT_OPEN' && category.tatami_status != 'CAT_DOING' && category.tatami_status != 'CAT_DONE' && category.tatami_status != 'CAT_CLOSED'" class="badge badge-primary px-3 py-2 shadow-sm" [ngClass]="{'blink-animation': category.isNewTatami}" style="font-size: 14px; border-radius: 20px;">
+                            Tatami {{category.tatami}}
+                        </span>
+                    </ng-container>
+
+                    <span *ngIf="!category.tatami" class="badge badge-light text-muted px-2 py-1 border" style="font-size: 12px;">
+                      In attesa
+                    </span>
+
+                </div>
+
+                <div class="col-12 col-md-3 mt-3 mt-md-0 text-center text-md-right">
+                  <div class="d-flex flex-row justify-content-center justify-content-md-end w-100">
+                    
+                    <button type="button" data-toggle="tooltip" title="Elenco iscritti" 
+                            class="btn btn-outline-primary btn-sm mr-2 flex-grow-1 flex-md-grow-0" 
+                            data-animation="false" (click)="openCategory(category)">
+                      <i class="fa fa-list"></i>
+                      <span class="ml-1 d-md-none d-lg-inline">Elenco</span>
                     </button>
-      
-                    </div>
-                  
 
-                <div class="row">
+                    <button type="button" data-toggle="tooltip" title="Apri Tabellone" 
+                            class="btn btn-outline-warning btn-sm text-dark flex-grow-1 flex-md-grow-0" 
+                            *ngIf="tabelloni && category.id.includes('KU')" (click)="openKumiteBrackets(category)">
+                      <i class="fa fa-sitemap"></i>
+                      <span class="ml-1 d-md-none d-lg-inline">Tabellone</span>
+                    </button>
 
-                <div class="bg-white mt-4" style="margin: 0 auto;">
-                  <div id="minimal"></div>
-
-                  <div id="girone-2"></div>
-
-                  <div id="girone-3"></div>
+                  </div>
                 </div>
+
               </div>
-                </div>
+            </div>
+          </div>
 
+          <div class="row mt-4 mb-2">
+            <div class="col-12">
+              <div class="bg-transparent text-center d-flex justify-content-center">
+                <pagination-controls autoHide="true" responsive="true" (pageChange)="p = $event" maxSize="5" previousLabel="Prec" nextLabel="Succ"></pagination-controls>
+              </div>        
+            </div>
+          </div>
         </div>
 
+        
+
+        <div *ngIf="dettaglio">
+          <div class="col-lg-12 text-center">
+            <h4 class="mt-2">{{selectedCategory.specialita}} {{selectedCategory.categoria}}</h4>
+            <h5 class="text-muted">{{selectedCategory.grado}} {{selectedCategory.cat_peso}} {{selectedCategory.sesso}}</h5>
+            
+            <button type="button" class="btn btn-outline-primary mt-4 mb-3 w-100 w-md-auto" (click)="backTocategory()">
+              <i class="fa fa-arrow-left"></i> Torna alle categorie
+            </button>
+          </div>
+          
+          <div class="row">
+            <div class="col-12">
+              <div class="bg-white mt-4 bracket-wrapper shadow-sm p-3">
+                <div id="minimal" class="bracket-container"></div>
+                <div id="girone-2" class="bracket-container mt-4"></div>
+                <div id="girone-3" class="bracket-container mt-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
 
-<div bsModal #listModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-primary modal-lg" role="document">
-      <div class="modal-content">
-        <div *ngIf="selectedCategory" class="modal-header">
-          <h4 class="modal-title">
-            {{selectedCategory.specialita}} {{selectedCategory.categoria}} - {{selectedCategory.grado}} {{selectedCategory.cat_peso}} {{selectedCategory.sesso}}
-          </h4>
-          <button type="button" class="close" (click)="listModal.hide()" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<div bsModal #listModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-primary modal-lg" role="document">
+    <div class="modal-content">
+      <div *ngIf="selectedCategory" class="modal-header">
+        <h5 class="modal-title">
+          {{selectedCategory.categoria}} - {{selectedCategory.grado}}
+        </h5>
+        <button type="button" class="close" (click)="listModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0 p-md-3">
+        <div class="table-responsive">
+          <table datatable class="table table-sm dataTable table-striped mb-0">
+            <thead>
+              <tr role="row">  
+                <th>Nome</th>
+                <th>Società</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let athlete of athleteList">
+                <td>{{athlete.athlete.cognome}} {{athlete.athlete.nome}}</td>
+                <td>{{athlete.athlete.club.club_name}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-lg-12">
-                  <table datatable class="table dataTable table-striped hover">
-                    <thead>
-                      <tr role="row">  
-                        <th>Nome</th>
-                        <th>Società</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let athlete of athleteList">
-                        <td>{{athlete.athlete.cognome}} {{athlete.athlete.nome}}</td>
-                        <td>{{athlete.athlete.club.club_name}}</td>
-                    </tbody>
-                  </table>
-
-            </div>
-            <!--/.col-->
-        
-          </div>
-  
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-sm btn-danger" (click)="listModal.hide()"><i class="fa fa-ban"></i> Chiudi</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-
-
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger w-100 w-md-auto" (click)="listModal.hide()">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>

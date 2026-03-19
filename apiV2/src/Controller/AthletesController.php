@@ -145,11 +145,25 @@ class AthletesController extends ApiController
         $this->loadModel('Categorycodes');
 
         $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT * FROM athlete_inscriptions 
+        $sql = "SELECT
+                                    athlete_inscriptions.*, 
+                                    athletes.*, 
+                                    categorycodes.*, 
+                                    tatami_assignments.tatami,
+                                    tatami_assignments.status AS tatami_status 
+                                FROM athlete_inscriptions 
                                 JOIN athletes ON athletes.id = athlete_inscriptions.athlete_id 
                                 JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
-                                 WHERE athlete_inscriptions.competition_id = '" . $data['competition_id'] . "' AND athletes.club_id = '" . $data['club_id']."'");
+                                LEFT JOIN tatami_assignments ON categorycodes.id = tatami_assignments.categorycode_id AND tatami_assignments.competition_id = :comp_id
+                                WHERE athlete_inscriptions.competition_id = :comp_id 
+                                    AND athletes.club_id = :club_id";
 
+        // Esecuzione della query con il passaggio sicuro dei parametri
+        $stmt = $conn->execute($sql, [
+            'comp_id' => $data['competition_id'],
+            'club_id' => $data['club_id']
+        ]);        
+        
         $listaIscritti = $stmt->fetchAll('assoc');
 
         if ($listaIscritti) {

@@ -115,6 +115,10 @@ class AthleteInscriptionsTable extends Table
             ->dateTime('modified_date')
             ->notEmptyDateTime('modified_date');
 
+        $validator
+            ->integer('final_ranking')
+            ->allowEmptyString('final_ranking');
+
         return $validator;
     }
 

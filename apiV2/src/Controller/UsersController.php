@@ -149,4 +149,74 @@ class UsersController extends ApiController
                 
         }
 
+        /** =========================================================================================================
+         * ASSEGNAZIONE TATAMI - Aggiornamento da locale
+         * ==========================================================================================================
+         */
+        public function addTatamiAssignments(){
+            
+            $this->loadModel('TatamiAssignments');
+            $data = $this->request->getData();
+
+           //controllo che non sia già assegnata ad un altro tatami
+            $categoryStatus = $this->TatamiAssignments->find()
+            ->where([
+                'categorycode_id' => $data['categorycode_id'],
+                'competition_id' => $data['competition_id']
+            ])->first();
+
+            
+
+            //se è già su un altro tatami la sposto mantenendo lo stato
+            if ($categoryStatus){
+                $categoryStatus->tatami =  $data['tatami'];
+                if ($this->TatamiAssignments->save($categoryStatus)) {
+                    $this->apiResponse['success'] = true;
+                }else{
+                    $this->apiResponse['message'] = 'The user category could not be saved. Please, try again.';
+                    $this->apiResponse['success'] = false;
+                }
+            }else{ //Altrimenti creo un nunovo record
+                
+                $userCategory = $this->TatamiAssignments->newEmptyEntity();
+                $userCategory = $this->TatamiAssignments->patchEntity($userCategory, $data);
+
+                if ($this->TatamiAssignments->save($userCategory)) {
+                    $this->apiResponse['success'] = true;
+                }else{
+                    $this->apiResponse['message'] = 'The user category could not be saved. Please, try again.';
+                    $this->apiResponse['success'] = false;
+                }
+            }
+
+        }
+
+
+        /** =========================================================================================================
+         * AGGIORNAMENTO STATO TATAMI - Aggiornamento da locale
+         * ==========================================================================================================
+         */
+
+        public function updateCategoryStatus(){
+            
+            $this->loadModel('TatamiAssignments');
+            $data = $this->request->getData();
+
+            $usersCategorycode = $this->TatamiAssignments->find()
+                                    ->where([
+                                        'categorycode_id' => $data['categorycode_id'],
+                                        'competition_id' => $data['competition_id'],
+                                        'tatami' => $data['tatami']
+                                    ])->first();
+            $usersCategorycode->status = $data['status'];
+            if ($this->TatamiAssignments->save($usersCategorycode)) {
+                $this->apiResponse['success'] = true;
+            }else{
+                $this->apiResponse['message'] = 'The user category could not be saved. Please, try again.';
+                $this->apiResponse['success'] = false;
+            }
+
+
+        }
+
 }
