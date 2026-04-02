@@ -32,35 +32,22 @@ class CompetitionsController extends ApiController
         $data = $this->request->getData();
         $competition = $this->Competitions->newEmptyEntity();
 
-
-        $richieste = array(
-            'referee' => true,
-            'competitionManagement' => true,
-            'tabsManagement' => true
-        );
-
         $record = array(
+            'id' => $data['id'],
+            'type' => 'CPM',
             'responsabile' => $data['name'],
             'club_name' => $data['companyName'],
-            'logo' => null,
+            'place' => $data['place'],
             'email' => $data['email'],
             'telephone' => $data['telefono'],
             'nome_gara' => $data['competitionName'],
             'chiusura_iscrizioni' => $data['registrationClose'],
-            'apertura_iscrizioni' => null,
+            'apertura_iscrizioni' => $data['registrationOpen'],
             'data_gara' => $data['competitionDate'],
             'nr_atleti' => $data['n_athletes'],
-            'richieste' => json_encode($richieste),
-            'stato' => '0'
+            'comp_status' => 'DRAFT'
         );
 
-        if ($data['logo']) {
-            $info = pathinfo($data['logo']['filename']);
-            if (file_put_contents('resources/' . str_replace(" ", '_', $data['competitionName']) . '_logo.' . $info['extension'], base64_decode($data['logo']['value']))) {
-                $record['logo'] = str_replace(" ", '_', $data['competitionName']) . '_logo.' . $info['extension'];
-            }
-
-        }
         if ($data['locandina']) {
             $info = pathinfo($data['locandina']['filename']);
             if (file_put_contents('resources/' . str_replace(" ", '_', $data['competitionName']) . '_locandina.' . $info['extension'], base64_decode($data['locandina']['value']))) {
@@ -78,22 +65,13 @@ class CompetitionsController extends ApiController
 
         $competition = $this->Competitions->patchEntity($competition, $record);
 
+        $competition['id'] = $data['id'];
+
         if ($this->Competitions->save($competition)) {
-
-            $dataGara = explode('-', $data['competitionDate']);
-            $dataChiusura = explode('-', $data['registrationClose']);
-
-            $testoMail = "Buongiorno, \r la sua richiesta � stata presa in carico e sar� elaborata nei prossimi giorni. Di seguito i dati comunicati: \r\r Societa: " . $data['companyName'] . "\r Responsabile: " . $data['name'] . "\r Telefono: " . $data['telefono'] . "\r Email: " . $data['email'] . "\r Nome manifestazione: " . $data['competitionName'] . "\r\r Data manifestazione: " . $dataGara[2] . '/' . $dataGara[1] . '/' . $dataGara[0] . "\r\r Chiusura iscrizioni: " . $dataChiusura[2] . '/' . $dataChiusura[1] . '/' . $dataChiusura[0];
-
-            $Email = new Email();
-            $Email->setFrom(['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'])
-                ->setBcc(['info@iscrizionicsenveneto.it', $data['email']])
-                ->subject('Richiesta inserimento gara')
-                ->send($testoMail);
 
             $this->apiResponse['success'] = true;
         } else {
-            /* debug($competition->errors()); */
+            debug($competition->errors());
             $this->apiResponse['success'] = false;
         }
     }
@@ -216,6 +194,19 @@ public function getAllCompetitions()
 
     }
 
+    public function getCompetitionList(){
+        
+        Configure::load('constants');
+        $this->loadModel('Categorycodes');
+        $competitions = $this->Competitions->find()
+            ->where(['comp_status NOT IN' => [Configure::read('DRAFT')]])
+            ->order(['data_gara' => 'DESC'])
+            ->toArray();
+
+        $this->apiResponse['data'] = $competitions;
+        $this->apiResponse['success'] = true;
+    }
+
     public function update()
     {
         Configure::load('constants');
@@ -279,28 +270,9 @@ public function getAllCompetitions()
 
     public function updateDatiGara()
     {
-        $data = $this->request->getData();
+        $dataCompetition = $this->request->getData();
 
-        $dataCompetition = $data['competition'];
-
-        $dataCompetition['richieste'] = json_encode($dataCompetition['richieste']);
-        /* print_r($data); */
-        $competition = $this->Competitions->get($dataCompetition['id'], [
-            'contain' => []
-        ]);
-
-        if (isset($data['circolare'])) {
-            $info = pathinfo($data['circolare']['filename']);
-            if (file_put_contents($dataCompetition['nome_gara'] . '_circolare.' . $info['extension'], base64_decode($data['circolare']['value']))) {
-                $dataCompetition['circolare'] = $dataCompetition['nome_gara'] . '_circolare.' . $info['extension'];
-            }
-        }
-        if (isset($data['categorie'])) {
-            $result = $this->caricaCategorie($data['categorie']);
-            if ($result['success']) {
-                $dataCompetition['codiceTipoCategorie'] = $result['id'];
-            }
-        }
+        $competition = $this->Competitions->get($dataCompetition['id']);
 
         $competition = $this->Competitions->patchEntity($competition, $dataCompetition);
 
@@ -310,78 +282,6 @@ public function getAllCompetitions()
             $this->apiResponse['success'] = false;
         }
 
-
-    }
-
-    //========================================================================================================================================================                                                                                                                                                                           
-    //  CATEGORIE                                                                                                                                                                                                                                                                                                                                   
-    //========================================================================================================================================================
-
-    //TODO: da verificare
-    public function caricaCategorie($categorie)
-    {
-
-        $this->loadModel('Categorycodes');
-
-        $conn = ConnectionManager::get('default');
-        $stmt = $conn->execute("SELECT MAX(codiceTipoCategorie) as codice FROM categorycodes");
-
-        $result = $stmt->fetchAll('assoc');
-
-        $codiceCategoria = $result[0]['codice'] + 1;
-
-        $dataRecords = array();
-        $row = 1;
-        $lines = explode("\n", base64_decode($categorie['value']));
-        $array = array_map('str_getcsv', $lines);
-        array_shift($array);
-        foreach ($array as $riga) {
-
-            $recordTemp = $this->buildRecord($riga[0], $codiceCategoria);
-            if ($recordTemp != null) {
-                $dataRecords[] = $recordTemp;
-            }
-
-        }
-
-        $categories = $this->Categorycodes->newEntities($dataRecords);
-
-        foreach ($categories as $entity) {
-            $this->Categorycodes->save($entity);
-        }
-
-        return array(
-            'success' => true,
-            'id' => $codiceCategoria
-        );
-
-    }
-
-    private function buildRecord($line, $codiceCategoria)
-    {
-
-        $data = explode(';', $line);
-
-        if ($data[0] != "") {
-            $record = array(
-                'id' => $data[0],
-                'categoria' => $data[1],
-                'anno_min' => $data[2],
-                'anno_max' => $data[3],
-                'sesso' => $data[4],
-                'grado' => $data[5],
-                'cat_peso' => $data[6],
-                'peso_min' => $data[7],
-                'peso_max' => $data[8],
-                'specialita' => $data[9],
-                'costo_intero' => 0,
-                'costo_scontato' => 0,
-                'codiceTipoCategorie' => $codiceCategoria
-            );
-            return $record;
-        } else {
-            return null;
-        }
 
     }
 

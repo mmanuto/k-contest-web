@@ -17,6 +17,7 @@ export const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     CustomFormsModule,
+    NgbModule,
     RouterModule.forChild(routes)
   ],
   declarations: [

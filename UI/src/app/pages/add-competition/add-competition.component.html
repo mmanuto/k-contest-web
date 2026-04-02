@@ -1,174 +1,174 @@
-
-    <div class="card-body pt-0 widget-body">
-        <div class="row w-100 text-center mb-3 mt-2">
-            <h2 class="mb-2 mt-2 w-100 text-center">Aggiungi nuova competizione</h2>           
+<div class="p-4" style="background-color: #f8f9fa; min-height: 100vh;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="font-weight-bold text-dark mb-0">Nuova Competizione</h3>
+            <p class="text-muted small">Inserisci i dettagli per pubblicare un nuovo evento</p>
         </div>
-
-        <form [formGroup]="requestForm" (ngSubmit)="onSubmit(requestForm.value)" class="text-left mt-5">
-
-            <div widget class="card mb-4 pt-3 pl-3 pb-3 border-0 box-shadow">
-                <div class="card-body pt-0 mt-3 ml-3 widget-body">
-                    <div class="row">
-                        <h4 class="mb-5">
-                            <i class="fa fa-user"></i> Informazioni personali</h4>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4">
-                            <label class="form-control-label">Nome e Cognome Responsabile</label>
-                            <input formControlName="name" class="form-control validation-field" type="text">
-                            <small class="text-danger" *ngIf="requestForm.get('name').touched">
-                                <span *ngIf="requestForm.get('name').hasError('required')">Campo obbligatorio</span>
-                            </small>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="form-control-label">Società</label>
-                            <input formControlName="companyName" class="form-control validation-field" type="text">
-                            <small class="text-danger" *ngIf="requestForm.get('companyName').touched">
-                                <span *ngIf="requestForm.get('companyName').hasError('required')">Campo Obbligatorio</span>
-                            </small>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="form-group col-md-4">
-                            <label class="form-control-label">Email</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="fa fa-envelope"></i>
-                                    </span>
-                                </div>
-                                <input formControlName="email" class="form-control validation-field" type="text">
-                            </div>
-                            <small class="text-danger" *ngIf="requestForm.get('email').touched">
-                                <span *ngIf="requestForm.get('email').hasError('required')">Campo obbligatorio</span>
-                                <span *ngIf="requestForm.get('email').hasError('invalidEmail')">Inserire una mail
-                                    valida</span>
-                            </small>
-                        </div>
-
-                        <div class="form-group col-md-4">
-                            <label class="form-control-label">Nr. Telefono</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="fa fa-phone"></i>
-                                    </span>
-                                </div>
-                                <input formControlName="telefono" class="form-control validation-field" type="number">
-                            </div>
-                            <small class="text-danger" *ngIf="requestForm.get('telefono').touched">
-                                <span *ngIf="requestForm.get('telefono').hasError('required')">Campo obbligatorio</span>
-                            </small>
-                        </div>
-                    </div>
-                </div>
-        </div>
-
-        <div widget class="card mb-4 pt-3 pl-3 pb-3 border-0 box-shadow">
-            <div class="card-body pt-0 mt-3 ml-3 widget-body">
-                <div class="row">
-                    <h4 class="mb-5">
-                        <i class="fa fa-trophy"></i> Informazioni Gara</h4>
-                </div>
-
-                <div class="row">
-                    <div class="form-group col-md-5">
-                        <label class="form-control-label">Nome Gara</label>
-                        <input formControlName="competitionName" class="form-control validation-field" type="text">
-                        <small class="text-danger" *ngIf="requestForm.get('competitionName').touched">
-                            <span *ngIf="requestForm.get('competitionName').hasError('required')">Campo
-                                obbligatorio</span>
-                        </small>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="form-control-label">Data Gara</label>
-                        <input formControlName="competitionDate" placeholder="GG/MM/AAAA" class="form-control validation-field" type="text">
-                        <small class="text-danger" *ngIf="requestForm.get('competitionDate').touched">
-                            <span *ngIf="requestForm.get('competitionDate').hasError('required')">Campo Obbligatorio</span>
-                            <small class="text-danger" *ngIf="requestForm.get('competitionDate').hasError('pattern')">Formato errato</small>
-
-                        </small>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="form-control-label">Data chiusura iscrizioni</label>
-                        <input formControlName="registrationClose" placeholder="GG/MM/AAAA" class="form-control validation-field" type="text">
-                        <small class="text-danger" *ngIf="requestForm.get('registrationClose').touched">
-                            <span *ngIf="requestForm.get('registrationClose').hasError('required')">Campo Obbligatorio</span>
-                            <small class="text-danger" *ngIf="requestForm.get('registrationClose').hasError('pattern')">Formato errato</small>
-                        </small>
-                    </div>
-                </div>
-                <div class="row">
-
-                    <div class="form-group col-md-2">
-                        <label class="form-control-label">Nr. Atleti stimato</label>
-                        <input formControlName="n_athletes" class="form-control validation-field" type="number">
-                        <small class="text-danger" *ngIf="requestForm.get('n_athletes').touched">
-                            <span *ngIf="requestForm.get('n_athletes').hasError('required')">Campo obbligatorio</span>
-                        </small>
-                    </div>
-
-
-                   
-
-                </div>
-            </div>
-        </div>
-        <div widget class="card pt-3 pl-3 pb-3 border-0 box-shadow">
-            <div class="card-body pt-0 mt-3 ml-3 widget-body">
-                <div class="row mt-3">
-                    <h4 class="ml-3" style="margin-bottom: 25px !important; margin-top: 30px !important;">
-                        <i class="fa fa-file-text"></i> Upload file e Richieste Aggiuntive</h4>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-5">
-                        <label class="form-control-label">Locandina</label>
-                        <div class="input-group file-upload">
-                            <input type="file" (change)="locandinaChange($event)" #inputLoc class="file-upload-btn" />
-                            <i class="fa fa-times delete-file" (click)="removeLocandina()" *ngIf="locandina"></i> 
-                        </div>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label class="form-control-label">Circolare di gara</label>
-                        <div class="input-group file-upload">
-                            <input type="file" (change)="circolareChange($event)" #inputCirc class="file-upload-btn" />
-                            <i class="fa fa-times delete-file" (click)="removeCircolare()" *ngIf="circolare"></i>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="form-group" style="float: right;">
-                    <button [disabled]="!requestForm.valid" class="btn btn-primary pull-right" (click)="openModal(modalContent)" type="submit">Invia
-                        Richiesta</button>
-                </div>
-                </div>
-                </div>
-        </form>
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" routerLink="/competitions">
+            <i class="fa fa-arrow-left mr-1"></i> Torna alla lista
+        </button>
     </div>
 
-
-<ng-template #modalContent>
-
-    <div class="row">
-        <div class="col-12 vertical-tabs">
-            <div widget class="card border-0 box-shadow">
-                <div class="card-header border-0 text-muted modal-header state modal-info">
-                    <!--  <h5 class="mb-0">INSERISCI ATLETA</h5> -->
-                    <h4 class="modal-title" style=" color:white" id="modal-info-label">RICHIESTA INVIATA</h4>
+    <form [formGroup]="requestForm" (ngSubmit)="onSubmit(requestForm.value)">
+        <div class="row">
+            
+            <div class="col-lg-8">
+                
+                <div class="card border-0 box-shadow-sm rounded-lg mb-4">
+                    <div class="card-header bg-white border-0 pt-4 pb-0">
+                        <h5 class="font-weight-bold"><i class="fa fa-user text-primary mr-2"></i>Informazioni Responsabile</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="small font-weight-bold text-muted text-uppercase">Nome e Cognome</label>
+                                <input formControlName="name" class="form-control form-control-modern" type="text" placeholder="Es: Mario Rossi">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="small font-weight-bold text-muted text-uppercase">Società Organizzatrice</label>
+                                <input formControlName="companyName" class="form-control form-control-modern" type="text" placeholder="Nome ASD">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="small font-weight-bold text-muted text-uppercase">Email di Contatto</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-light border-0"><i class="fa fa-envelope-o"></i></span>
+                                    </div>
+                                    <input formControlName="email" class="form-control form-control-modern" type="email">
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="small font-weight-bold text-muted text-uppercase">Telefono</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-light border-0"><i class="fa fa-phone"></i></span>
+                                    </div>
+                                    <input formControlName="telefono" class="form-control form-control-modern" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-body">
 
-                    Richiesta inviata con successo, a breve riceverà una mail riepilogativa con i dati inseriti.
-                    Entro qualche giorno riceverà una mail di conferma da parte dell'amministrazione per la corretta
-                    registrazione della manifestazione.
+                <div class="card border-0 box-shadow-sm rounded-lg mb-4">
+                    <div class="card-header bg-white border-0 pt-4 pb-0">
+                        <h5 class="font-weight-bold"><i class="fa fa-trophy text-warning mr-2"></i>Dettagli Gara</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">ID Gara</label>
+                                <input formControlName="id" class="form-control form-control-modern font-weight-bold" type="text">
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label class="small font-weight-bold text-muted text-uppercase">Titolo Manifestazione</label>
+                                <input formControlName="competitionName" class="form-control form-control-modern font-weight-bold" type="text">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">Luogo</label>
+                                <input formControlName="place" class="form-control form-control-modern" type="text">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">Atleti Stimati</label>
+                                <input formControlName="n_athletes" class="form-control form-control-modern" type="number">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">Data Evento</label>
+                                <div class="input-group">
+                                    <input class="form-control form-control-modern" placeholder="GG-MM-AAAA"
+                                        name="dpGara" formControlName="competitionDate" ngbDatepicker #dG="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary border-0 bg-light" (click)="dG.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">Apertura Iscrizioni</label>
+                                <div class="input-group">
+                                    <input class="form-control form-control-modern" placeholder="GG-MM-AAAA"
+                                        name="dpApertura" formControlName="registrationOpen" ngbDatepicker #dA="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary border-0 bg-light" (click)="dA.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label class="small font-weight-bold text-muted text-uppercase">Chiusura Iscrizioni</label>
+                                <div class="input-group">
+                                    <input class="form-control form-control-modern" placeholder="GG-MM-AAAA"
+                                        name="dpChiusura" formControlName="registrationClose" ngbDatepicker #dC="ngbDatepicker">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary border-0 bg-light" (click)="dC.toggle()" type="button">
+                                            <i class="fa fa-calendar"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-info" (click)="closeModal()"
-                        data-dismiss="modal">Ok</button>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 box-shadow-sm rounded-lg mb-4">
+                    <div class="card-header bg-white border-0 pt-4 pb-0">
+                        <h5 class="font-weight-bold"><i class="fa fa-cloud-upload text-info mr-2"></i>Documentazione</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-box mb-3" [class.has-file]="locandina">
+                            <label class="small font-weight-bold text-muted text-uppercase d-block">Locandina (Immagine)</label>
+                            <div class="drop-zone p-3 text-center border rounded">
+                                <input type="file" (change)="locandinaChange($event)" #inputLoc class="file-input" />
+                                <div *ngIf="!locandina">
+                                    <i class="fa fa-image fa-2x text-light mb-2"></i>
+                                    <p class="small text-muted m-0">Trascina o clicca per caricare</p>
+                                </div>
+                                <div *ngIf="locandina" class="d-flex align-items-center justify-content-between">
+                                    <span class="small text-truncate mr-2">{{locandina}}</span>
+                                    <i class="fa fa-times text-danger cursor-pointer" (click)="removeLocandina()"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="upload-box mb-4" [class.has-file]="circolare">
+                            <label class="small font-weight-bold text-muted text-uppercase d-block">Circolare (PDF)</label>
+                            <div class="drop-zone p-3 text-center border rounded">
+                                <input type="file" (change)="circolareChange($event)" #inputCirc class="file-input" />
+                                <div *ngIf="!circolare">
+                                    <i class="fa fa-file-pdf-o fa-2x text-light mb-2"></i>
+                                    <p class="small text-muted m-0">Trascina o clicca per caricare</p>
+                                </div>
+                                <div *ngIf="circolare" class="d-flex align-items-center justify-content-between">
+                                    <span class="small text-truncate mr-2">{{circolare}}</span>
+                                    <i class="fa fa-times text-danger cursor-pointer" (click)="removeCircolare()"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <button [disabled]="!requestForm.valid" class="btn btn-primary btn-block btn-lg rounded-pill shadow hover-lift mt-3 py-3 font-weight-bold" type="submit">
+                            PUBBLICA GARA <i class="fa fa-paper-plane ml-2"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+    </form>
+</div>
+
+<ng-template #modalContent>
+    <div class="modal-body text-center p-5">
+        <div class="mb-4">
+            <i class="fa fa-check-circle fa-5x text-success"></i>
+        </div>
+        
+        <p class="text-muted">Gara inserita correttamente.</p>
+        <button type="button" class="btn btn-success btn-lg rounded-pill px-5 mt-3" (click)="closeModal()">Chiudi</button>
     </div>
 </ng-template>

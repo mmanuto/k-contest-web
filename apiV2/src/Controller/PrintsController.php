@@ -35,7 +35,8 @@ public function downloadCoverPages()
             ->innerJoinWith('AthleteInscriptions')
             ->where([
                 'Categorycodes.codiceTipoCategorie' => 3, // O $competitionData['codiceTipoCategorie']
-                'AthleteInscriptions.deleted' => 0
+                'AthleteInscriptions.deleted' => 0,
+                'AthleteInscriptions.competition_id' => $competitionId
             ])
             ->group(['Categorycodes.id'])    
             ->order(['Categorycodes.order_number' => 'ASC'])    
@@ -133,7 +134,7 @@ public function downloadCoverPages()
             if ($count == 0) {
             continue; // Salta questa categoria, non crea la pagina
         }
-            $headerText = $category->categoria . ' ' . 
+            $headerText = $category->id.' - '.$category->categoria . ' ' . 
                         $category->sesso . ' ' . 
                         $category->grado . ' ' . 
                         $category->cat_peso;
@@ -458,7 +459,6 @@ public function downloadCoverPages()
                         'categorycode_id IN' => $categoryIds,
                         'deleted' => 0
                     ])
-                    ->group(['Athletes.id'])
                     ->order(['Clubs.id' => 'ASC'])
                     ->toArray();
 
@@ -467,9 +467,19 @@ public function downloadCoverPages()
 
                 // C. Genera il contenuto del PDF per questa combinazione
                 // Passiamo un titolo personalizzato per il file
+
+                // Raggruppiamo le iscrizioni per Atleta per evitare duplicati di pass
+                $athletesData = [];
+                foreach ($inscriptions as $ins) {
+                    $athletesData[$ins->athlete_id]['info'] = $ins; // Dati generali (nome, club)
+                    // Salviamo il codice della specialità (es. 'PERCORSO' => 'PER11')
+                    $specName = strtoupper($ins->categorycode->specialita);
+                    $athletesData[$ins->athlete_id]['codes'][$specName] = $ins->categorycode->id; 
+                }
+
                 $pdfTitle = "$age - $belt";
                 $logoPath = WWW_ROOT . 'resources' . DS . 'logoCsen.jpg';
-                $pdfContent = PassPdf::generatePdfForPass($inscriptions, $pdfTitle, $logoPath);
+                $pdfContent = PassPdf::generatePdfForPass($athletesData, $pdfTitle, $logoPath);
 
                 // D. Aggiungi il file allo ZIP
                 // Puliamo il nome file da caratteri strani (es. / diventa -)

@@ -1,18 +1,45 @@
-import { Component, ViewEncapsulation, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, ViewChild, Injectable } from '@angular/core';
 import { FormGroup, FormControl, AbstractControl, FormBuilder, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CustomValidators } from 'ng2-validation';
 import { AddCompeetitionService } from './add-competition.service';
 import { DatePipe } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
+
+
+@Injectable()
+export class CustomDateParserFormatter extends NgbDateParserFormatter {
+  readonly DELIMITER = '/';
+
+  parse(value: string): NgbDateStruct | null {
+    if (value) {
+      const date = value.split(this.DELIMITER);
+      return {
+        day: parseInt(date[0], 10),
+        month: parseInt(date[1], 10),
+        year: parseInt(date[2], 10),
+      };
+    }
+    return null;
+  }
+
+  format(date: NgbDateStruct | null): string {
+    return date
+      ? date.day + this.DELIMITER + ('0' + date.month).slice(-2) + this.DELIMITER + date.year
+      : '';
+  }
+}
 
 @Component({
     selector: 'add-competition',
     templateUrl: './add-competition.component.html',
     styleUrls: ['./add-competition.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    providers: [
+        // Aggiungi questa riga per "istruire" il componente a usare il nuovo formato
+        { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }
+    ]
 })
 
 export class AddCompeetitionComponent {
@@ -33,16 +60,22 @@ export class AddCompeetitionComponent {
     //Datepicker in a popup
     public modelPopup: NgbDateStruct = { year: new Date().getFullYear(), month: new Date().getMonth() + 1, day: new Date().getDate() - 3 };
 
-    constructor(private formBuilder: FormBuilder, private addCompetitionService: AddCompeetitionService, public modalService: NgbModal) {
+    constructor(private formBuilder: FormBuilder, 
+        private addCompetitionService: AddCompeetitionService, 
+        public modalService: NgbModal,
+        public toastrService: ToastrService) {
 
         this.requestForm = this.formBuilder.group({
+            'id': ['', Validators.required],
             'name': ['', Validators.required],
             'companyName': ['', Validators.required],
+            'place': ['', Validators.required],
             'email': ['', Validators.compose([Validators.required, CustomValidators.email])],
             'telefono': ['', Validators.required],
             'competitionName': ['', Validators.required],
-            'competitionDate': ['', Validators.compose([Validators.required, Validators.pattern('^(0?[1-9]|[12][0-9]|3[01])[/.](0?[1-9]|1[012])[/.](19|20)\\d\\d$')])],
-            'registrationClose': ['', Validators.compose([Validators.required, Validators.pattern('^(0?[1-9]|[12][0-9]|3[01])[/.](0?[1-9]|1[012])[/.](19|20)\\d\\d$')])],
+            'competitionDate': [null, Validators.required],
+            'registrationOpen': [null, Validators.required],
+            'registrationClose': [null, Validators.required],
             'n_athletes': ['', Validators.required],
             'referee': [false],
             'competitionManagement': [false],
@@ -63,17 +96,23 @@ export class AddCompeetitionComponent {
     public onSubmit(values: Object): void {
         if (this.requestForm.valid) {
             console.log(this.requestForm.value);
-            let dataGara = this.requestForm.value.competitionDate.split('/');
-            let dataChiusura = this.requestForm.value.registrationClose.split('/');
-            values['competitionDate'] =  dataGara[2] + '-' + dataGara[1] + '-' + dataGara[0];
-            values['registrationClose'] =  dataChiusura[2] + '-' + dataChiusura[1] + '-' + dataChiusura[0];
-            console.log(this.requestForm.value);
-            this.addCompetitionService.saveRequest(this.requestForm.value).subscribe((response: any) => {
+            const formVal = this.requestForm.value;
+
+            const formatNGDate = (d: NgbDateStruct) => 
+                d ? `${d.year}-${('0' + d.month).slice(-2)}-${('0' + d.day).slice(-2)}` : null;
+
+            const payload = {
+                ...formVal,
+                registrationOpen: formatNGDate(formVal.registrationOpen),
+                registrationClose: formatNGDate(formVal.registrationClose),
+                competitionDate: formatNGDate(formVal.competitionDate)
+            };
+            this.addCompetitionService.saveRequest(payload).subscribe((response: any) => {
                 console.log(response);
-                /*                 if(response.result.success){
-                                    this.toastrService.success('Richiesta inviata con successo, a breve riceverà una mail riepilogativa.');
+                if(response.result.success){
+                    this.toastrService.success('Richiesta inviata con successo.');
                                     
-                                } */
+                } 
 
             });
         }
@@ -85,7 +124,7 @@ export class AddCompeetitionComponent {
 
     public closeModal() {
         this.modalRef.close();
-        window.location.reload();
+        //window.location.reload();
     }
 
 
@@ -105,12 +144,6 @@ export class AddCompeetitionComponent {
             /* this.inputLogo.nativeElement.value = file.name; */
             this.logo = file.name;
         }
-    }
-
-    removeLogo(): void {
-        this.requestForm.get('logo').setValue(null);
-        this.inputLogo.nativeElement.value = '';
-        this.logo = '';
     }
 
     locandinaChange(event) {

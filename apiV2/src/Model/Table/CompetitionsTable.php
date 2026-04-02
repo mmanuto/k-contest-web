@@ -52,6 +52,12 @@ class CompetitionsTable extends Table
         $this->hasMany('ClubInscriptions', [
             'foreignKey' => 'competition_id',
         ]);
+        $this->hasMany('CompetitionClubRankings', [
+            'foreignKey' => 'competition_id',
+        ]);
+        $this->hasMany('TatamiAssignments', [
+            'foreignKey' => 'competition_id',
+        ]);
         $this->hasMany('Teams', [
             'foreignKey' => 'competition_id',
         ]);
@@ -141,12 +147,6 @@ class CompetitionsTable extends Table
             ->integer('nr_atleti')
             ->requirePresence('nr_atleti', 'create')
             ->notEmptyString('nr_atleti');
-
-        $validator
-            ->scalar('richieste')
-            ->maxLength('richieste', 500)
-            ->requirePresence('richieste', 'create')
-            ->notEmptyString('richieste');
 
         $validator
             ->allowEmptyString('codiceTipoCategorie');

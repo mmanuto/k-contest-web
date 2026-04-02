@@ -1,50 +1,47 @@
-.request-container{
-    position: absolute;
-    margin-top: 130px;
-    margin-bottom: 50px;
-    
-/*     .card{
-        .card-header{
-            width: 80px;
-            height: 130px;
-            margin: 0 auto;
-            margin-top: -50px;
-        }
-    } */
+.form-control-modern {
+    background-color: #f1f3f5 !important;
+    border: 2px solid transparent !important;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.2s ease;
 
-    .labelField{
-        color: black;
-    }
-
-.confirmed-content{
-    .fa-check{
-        font-size: 120px;        
-    }
-    .fa-print{
-        font-size: 24px;
+    &:focus {
+        background-color: #fff !important;
+        border-color: #007bff !important;
+        box-shadow: 0 4px 12px rgba(0,123,255,0.1) !important;
     }
 }
 
-.file-upload{
-    .file-upload-btn{
+.drop-zone {
+    border: 2px dashed #dee2e6 !important;
+    position: relative;
+    transition: all 0.3s ease;
+    background: #fafafa;
+
+    &:hover {
+        border-color: #007bff !important;
+        background: #f0f7ff;
+    }
+
+    .file-input {
         position: absolute;
-        width: 100%;
-        height: 35px;
-        z-index: 9;
+        top: 0; left: 0; width: 100%; height: 100%;
         opacity: 0;
-    }
-    .delete-file{
-        position: absolute;
-        right: 50px;
-        top: 8px;
-        font-size: 16px;
-        opacity: .8;
         cursor: pointer;
-        z-index: 99;
-        visibility: hidden;
-    }
-    &:hover .delete-file{
-        visibility: visible;
     }
 }
+
+.box-shadow-sm {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05) !important;
+}
+
+.hover-lift {
+    transition: transform 0.2s ease;
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }

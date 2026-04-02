@@ -153,7 +153,7 @@ export class MembershipComponent implements OnInit {
         for (let item of response.result.data) {
           let index = this.iscritti.findIndex(x => x.id === item.athlete_id);
           if (index >= 0) {
-            this.iscritti[index].prove += ' - ' + item.specialita;
+            this.iscritti[index].prove += ' - ' + item.specialita + ' (' + item.id + ')';
           } else {
             let iscritto = {
               id: item.athlete_id,
@@ -164,7 +164,7 @@ export class MembershipComponent implements OnInit {
               grado: item.grado,
               sesso: item.sesso,
               peso: item.peso,
-              prove: item.specialita
+              prove: item.specialita + ' (' + item.id + ')'
             };
             this.iscritti.push(iscritto);
           }

@@ -33,13 +33,13 @@
                 
                 <div class="col-12 col-md-5 mb-3 mb-md-0 border-md-right">
                   <h6 class="font-weight-bold text-dark mb-1" style="font-size: 1.05rem;">
-                    {{category.categoria}}
+                    {{category.id}} - {{category.specialita}} {{category.categoria}}
                   </h6>
-                  <div class="text-muted d-flex flex-wrap align-items-center" style="font-size: 0.85rem;">
-                    <span class="badge badge-light border mr-2 py-1 px-2 text-uppercase">{{category.specialita}}</span>
+                  <div class="text-muted d-flex flex-wrap align-items-center" style="font-size: 0.95rem;">
+                   <!-- <span class="badge badge-light border mr-2 py-1 px-2 text-uppercase">{{category.specialita}}</span> -->
                     <span class="mr-2"><i class="fa fa-bookmark-o mr-1"></i>{{category.grado}}</span>
                     <span class="mr-2"> &bull; {{category.sesso}} </span>
-                    <span *ngIf="category.cat_peso"><i class="fa fa-balance-scale mr-1"></i>{{category.cat_peso}}</span>
+                    <span *ngIf="category.cat_peso">{{category.cat_peso}}</span>
                   </div>
                 </div>
 

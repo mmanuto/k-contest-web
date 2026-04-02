@@ -1,242 +1,211 @@
+<div class="p-4 bg-light" style="min-height: 100vh;" *ngIf="currentCompetition">
+  
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="font-weight-bold text-dark mb-0">{{currentCompetition.nome_gara}}</h2>
+      <span class="badge badge-dark">ID GARA: #{{currentCompetition.id}}</span>
+    </div>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-sm mr-2" [ngClass]="editMode ? 'btn-success shadow' : 'btn-outline-primary'" (click)="toggleEdit()">
+        <i class="fa" [ngClass]="editMode ? 'fa-save' : 'fa-pencil'"></i> 
+        {{ editMode ? 'Salva Modifiche' : 'Modifica Dati' }}
+      </button>
+      <button class="btn btn-outline-secondary btn-sm rounded-pill" routerLink="/competitions">
+        <i class="fa fa-arrow-left"></i> Torna alla lista
+      </button>
+    </div>
+  </div>
 
-<div *ngIf="currentCompetition" widget class="card border-0 box-shadow">
-    <h2 class="m-4">{{currentCompetition.nome_gara}}</h2>
+  <div class="card border-0 shadow-sm rounded-lg mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-9">
+            <div class="row">
 
-    <div class="card-body pt-0 widget-body">
-        <div class="col-md-12 mb-4 ml-4 row">
-            <div class="col-md-6">
-                                    
-                <div class="row " >
-                        <h6 class="card-title mr-3">Responsabile: </h6>
-                        <p class="card-text">{{currentCompetition.responsabile}}</p>
-                    <!-- <label class="form-control-label">Nome e Cognome Responsabile</label>
-                    <span class="form-control validation-field" type="text" >{{item.responsabile}}</span> -->
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Titolo Manifestazione</label>
+                    <input type="text" [(ngModel)]="currentCompetition.nome_gara" [disabled]="!editMode" class="form-control form-control-modern">
                 </div>
-                <div class="row">
-                        <h6 class="card-title mr-3">Società: </h6>
-                        <p class="card-text">{{currentCompetition.club_name}}</p>
-                    <!-- <label class="form-control-label">Società</label>
-                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
-                  
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Società Organizzatrice</label>
+                    <input type="text" [(ngModel)]="currentCompetition.club_name" [disabled]="!editMode" class="form-control form-control-modern">
                 </div>
-                <div class="row">
-                        <h6 class="card-title mr-3">Email:</h6>
-                        <p class="card-text">{{currentCompetition.email}} </p>
-                    <!-- <label class="form-control-label">Società</label>
-                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
-                  
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Località</label>
+                    <input type="text" [(ngModel)]="currentCompetition.place" [disabled]="!editMode" class="form-control form-control-modern">
                 </div>
-                <div class="row">
-                        <h6 class="card-title mr-3">Telefono:</h6>
-                        <p class="card-text">{{currentCompetition.telephone}}</p>
-                    <!-- <label class="form-control-label">Società</label>
-                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
-                  
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Apertura Iscrizioni</label>
+                    <div class="input-group">
+                        <input class="form-control form-control-modern" placeholder="DD-MM-YYYY"
+                            name="dpA" [(ngModel)]="currentCompetition.data_apertura_dp" 
+                            ngbDatepicker #dA="ngbDatepicker" [disabled]="!editMode">
+                        <div class="input-group-append" *ngIf="editMode">
+                            <button class="btn btn-outline-secondary border-0 bg-light" (click)="dA.toggle()" type="button">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                        <h6 class="card-title mr-3">Nr Atleti stimato</h6>
-                        <p class="card-text ">{{currentCompetition.nr_atleti}}</p>
-                    <!-- <label class="form-control-label">Società</label>
-                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
-                  
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Chiusura Iscrizioni</label>
+                    <div class="input-group">
+                        <input class="form-control form-control-modern" placeholder="DD-MM-YYYY"
+                            name="dpC" [(ngModel)]="currentCompetition.chiusura_iscrizioni_dp" 
+                            ngbDatepicker #dC="ngbDatepicker" [disabled]="!editMode">
+                        <div class="input-group-append" *ngIf="editMode">
+                            <button class="btn btn-outline-secondary border-0 bg-light" (click)="dC.toggle()" type="button">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                        <h6 class="card-title mr-3">Data gara: </h6>
-                        <p class="card-text">{{currentCompetition.data_gara | date: 'dd/MM/yyyy' }} </p>
-                    <!-- <label class="form-control-label">Società</label>
-                    <input class="form-control validation-field" type="text" [value]="item.club_name"> -->
-                  
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Data Evento</label>
+                    <div class="input-group">
+                        <input class="form-control form-control-modern" placeholder="DD-MM-YYYY"
+                            name="dpG" [(ngModel)]="currentCompetition.data_gara_dp" 
+                            ngbDatepicker #dG="ngbDatepicker" [disabled]="!editMode">
+                        <div class="input-group-append" *ngIf="editMode">
+                            <button class="btn btn-outline-secondary border-0 bg-light" (click)="dG.toggle()" type="button">
+                                <i class="fa fa-calendar"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <h6 class="card-title mt-2">Data chiusura iscrizioni</h6>
-                    <p class="card-text">{{currentCompetition.chiusura_iscrizioni | date: 'dd/MM/yyyy' }} </p>
-                                 
+
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Responsabile</label>
+                    <input type="text" [(ngModel)]="currentCompetition.responsabile" [disabled]="!editMode" class="form-control form-control-modern">
                 </div>
-                 
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Email</label>
+                    <input type="email" [(ngModel)]="currentCompetition.email" [disabled]="!editMode" class="form-control form-control-modern">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="small text-muted font-weight-bold text-uppercase">Telefono</label>
+                    <input type="text" [(ngModel)]="currentCompetition.telephone" [disabled]="!editMode" class="form-control form-control-modern">
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="small text-muted font-weight-bold text-uppercase">Atleti Stimati</label>
+                    <input [(ngModel)]="currentCompetition.nr_atleti" [disabled]="!editMode" class="form-control form-control-modern" type="number">
+                </div>
             </div>
+        </div>
 
-            <div class="col-md-6">
-               
-                <h5 class="card-title mt-2">Allegati</h5>
-                <div class="col mt-3">
-                        <i class="fa fa-file-image-o"><a *ngIf="currentCompetition.circolare" target="blank" [href]="imgUrl + currentCompetition.circolare" class="documents text-primary"> Circolare di Gara</a></i><br/>
-                        <i class="fa fa-file-image-o"><a *ngIf="currentCompetition.locandina" [href]="imgUrl + currentCompetition.locandina" class="documents text-primary">  Locandina</a></i>
-                </div>
-
-                
+        <div class="col-lg-3 border-left pl-4">
+          <label class="small text-muted font-weight-bold text-uppercase d-block mb-3">Allegati</label>
+          
+          <div class="file-box-modern mb-3" [class.editable]="editMode">
+            <div class="d-flex justify-content-between align-items-center p-2">
+              <span class="small font-weight-bold text-dark"><i class="fa fa-image mr-1"></i> Locandina</span>
+              <a *ngIf="currentCompetition.locandina" [href]="imgUrl + currentCompetition.locandina" target="_blank" class="badge badge-primary px-2 py-1">Vedi</a>
             </div>
+            <div class="px-2 pb-2">
+              <input *ngIf="editMode" type="file" (change)="onFileChange($event, 'locandina')" class="form-control-file small">
+              <div *ngIf="!editMode" class="small text-truncate text-muted italic">{{currentCompetition.locandina || 'Nessun file'}}</div>
+            </div>
+          </div>
+
+          <div class="file-box-modern" [class.editable]="editMode">
+            <div class="d-flex justify-content-between align-items-center p-2">
+              <span class="small font-weight-bold text-dark"><i class="fa fa-file-pdf-o mr-1"></i> Circolare</span>
+              <a *ngIf="currentCompetition.circolare" [href]="imgUrl + currentCompetition.circolare" target="_blank" class="badge badge-primary px-2 py-1">Vedi</a>
+            </div>
+            <div class="px-2 pb-2">
+              <input *ngIf="editMode" type="file" (change)="onFileChange($event, 'circolare')" class="form-control-file small">
+              <div *ngIf="!editMode" class="small text-truncate text-muted italic">{{currentCompetition.circolare || 'Nessun file'}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12 mt-4 border-top pt-4">
+        <h5 class="font-weight-bold text-dark mb-4 text-uppercase" style="font-size: 0.9rem; letter-spacing: 1px;">Configurazione Set Categorie</h5>
+        
+        <div class="row align-items-end mb-4">
+          <div class="col-md-5">
+            <label class="small text-muted font-weight-bold">Seleziona Set Esistente</label>
+            <select [(ngModel)]="selectedSetCode" class="form-control form-control-modern select-full-text" (change)="previewSet()">
+              <option [ngValue]="null">Scegli un set dalle gare precedenti...</option>
+              <option *ngFor="let set of categorySets" [value]="set.codiceTipoCategorie">{{set.codiceTipoCategorie}}</option>
+            </select>
+          </div>
+          <div class="col-md-7 d-flex align-items-center gap-2" *ngIf="selectedSetCode">
+            <button class="btn btn-success btn-sm rounded-pill shadow-sm" (click)="assignExistingSet()">
+              <i class="fa fa-link mr-1"></i> Assegna Set
+            </button>
+            <button class="btn btn-outline-primary btn-sm rounded-pill shadow-sm" (click)="downloadCsvTemplate()">
+              <i class="fa fa-download mr-1"></i> Scarica CSV
+            </button>
+            <div class="upload-wrapper">
+              <button class="btn btn-warning btn-sm rounded-pill shadow-sm text-white">
+                <i class="fa fa-upload mr-1"></i> Carica Nuovo Set
+              </button>
+              <input type="file" (change)="uploadNewSetCsv($event)" accept=".csv">
+            </div>
+          </div>
         </div>
 
+        <div class="table-container-modern shadow-sm" *ngIf="previewCategories.length > 0">
+          <div class="table-header-modern row no-gutters text-uppercase">
+            <div class="col-md-2 px-3">Codice</div>
+            <div class="col-md-3">Categoria</div>
+            <div class="col-md-2">Grado</div>
+            <div class="col-md-1 text-center">Sesso</div>
+            <div class="col-md-4 px-3">Specialità</div>
+          </div>
+          <div class="table-body-modern" style="max-height: 400px; overflow-y: auto;">
+            <div class="row no-gutters table-row-modern align-items-center" *ngFor="let cat of previewCategories">
+              <div class="col-md-2 px-3 font-weight-bold text-primary">{{cat.id}}</div>
+              <div class="col-md-3 text-dark">{{cat.categoria}}</div>
+              <div class="col-md-2 small text-muted">{{cat.grado}}</div>
+              <div class="col-md-1 text-center"><span class="badge badge-light border">{{cat.sesso}}</span></div>
+              <div class="col-md-4 px-3 italic text-muted small">{{cat.specialita}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="clearfix">            
-        <ul class="nav nav-tabs custom top tabs-nav">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#actions">Panoramica</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#athletes">Atleti</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#categories">Categorie</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#clubs">Società</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#timetable">Timetable</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#blacklist">Blacklist</a>
-            </li>
-                        
-        </ul>
-    </div>
+  <div class="tabs-container">
+    <ul class="nav nav-pills custom-pills mb-4" id="pills-tab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="pills-panoramica-tab" data-toggle="pill" href="#pills-panoramica" role="tab">Panoramica</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pills-atleti-tab" data-toggle="pill" href="#pills-atleti" role="tab">Atleti</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pills-categorie-tab" data-toggle="pill" href="#pills-categorie" role="tab">Categorie</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pills-societa-tab" data-toggle="pill" href="#pills-societa" role="tab">Società</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pills-timetable-tab" data-toggle="pill" href="#pills-timetable" role="tab">Timetable</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="pills-blacklist-tab" data-toggle="pill" href="#pills-blacklist" role="tab">Blacklist</a>
+      </li>
+    </ul>
 
-    <div class="tab-content top">
-        <div class="tab-pane active" id="actions">
-            <admin-panel [competitionData] = "currentCompetition"></admin-panel>
-        </div>
-        <div class="tab-pane" id="athletes">
-            <athletes-panel [competitionData] = "currentCompetition"></athletes-panel>
-        </div>
-        <div class="tab-pane" id="categories">
-            <categories-panel [competitionData] = "currentCompetition"></categories-panel>
-        </div>
-        <div class="tab-pane" id="clubs">
-            
-        </div>
-        <div class="tab-pane" id="timetable">
-            
-        </div>
-        <div class="tab-pane" id="Blacklist">
-            
-        </div>
-    </div>
-
+    <div class="tab-content border-top pt-4" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-panoramica" role="tabpanel">
+        <admin-panel [competitionData]="currentCompetition"></admin-panel>
+      </div>
+      <div class="tab-pane fade" id="pills-atleti" role="tabpanel">
+        <athletes-panel [competitionData]="currentCompetition"></athletes-panel>
+      </div>
+      <div class="tab-pane fade" id="pills-categorie" role="tabpanel">
+        <categories-panel [competitionData]="currentCompetition"></categories-panel>
+      </div>
+      </div>
+  </div>
 </div>
-
-
-<!-- <p class="text-muted">A card is a flexible and extensible content container. It includes options for headers and footers, a wide variety of content, contextual background colors, and powerful display options. Cards require a small amount of markup and classes to provide you with as much control as possible. These classes and markup are flexible though and can typically be remixed and extended with ease. For example, if your card has no flush content like images, feel free to put the <code>.card-body</code> class on the <code>.card</code> element to consolidate your markup.</p> -->
-<!--
-<div *ngFor="let item of competitions; let i = index" class="row mb-4">
-    <div class="col">
-        <div widget class="card border-0 box-shadow">
-            <div class="card-header transparent border-0 text-muted">
-                <div class="row">
-                    <img *ngIf="item.logo" class="ml-2 mr-2" [src]="imgUrl + item.logo"
-                        style="width: 35px; height: 35px">
-                    <h4 class="mb-0">{{item.nome_gara}}</h4>
-                </div>
-                <div class="widget-controls">
-                    <a data-widgster="expand" href="#" class="transition"><i class="fa fa-chevron-down"></i></a>
-                    <a data-widgster="collapse" href="#" class="transition"><i class="fa fa-chevron-up"></i></a>
-                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fa fa-expand"></i></a>
-                    <a data-widgster="restore" href="#" class="transition"><i class="fa fa-compress"></i></a>
-                </div>
-            </div>
-            <div class="card-body pt-0 widget-body">
-                <div class="col-md-12 mb-4">
-                    <div class="mt-4 w-100-p row">
-
-                        <div class="col-md-6">
-
-                            <div class="row ">
-                                <h6 class="card-title mr-3">Responsabile: </h6>
-                                <p class="card-text">{{item.responsabile}}</p>
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mr-3">Società: </h6>
-                                <p class="card-text">{{item.club_name}}</p>
-
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mr-3">Email:</h6>
-                                <p class="card-text">{{item.email}} </p>
-
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mr-3">Telefono:</h6>
-                                <p class="card-text">{{item.telephone}}</p>
-
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mr-3">Nr Atleti stimato</h6>
-                                <p class="card-text ">{{item.nr_atleti}}</p>
-
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mr-3">Data gara: </h6>
-                                <p class="card-text">{{item.data_gara | date: 'dd/MM/yyyy' }} </p>
-
-                            </div>
-                            <div class="row">
-                                <h6 class="card-title mt-2">Data chiusura iscrizioni</h6>
-                                <input class="form-control col-md-4 ml-3" type="date" name="chiusuraIscrizioni" [(ngModel)]="item.chiusura_iscrizioni">
-
-                            </div>
-
-                            <h5 class="card-title  mt-4">Richieste Aggiuntive</h5>
-                            <div class="row mt-3">
-                                <div class="form-group col-md-2">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input checkbox-primary" [id]="'arbitri' + i" [(checked)]="item.richieste.referee">
-                                        <label class="custom-control-label" [for]="'arbitri' + i">Arbitri</label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <div class="custom-control custom-checkbox">
-                                        <input [(checked)]="item.richieste.competitionManagement" type="checkbox" class="custom-control-input checkbox-primary" [id]="'gestioneGara'+i">
-                                        <label class="custom-control-label" [for]="'gestioneGara'+i">Gestione gara</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <div class="custom-control custom-checkbox">
-                                        <input [(checked)]="item.richieste.tabsManagement" type="checkbox" class="custom-control-input checkbox-primary" [id]="'tabsManagement' + i">
-                                        <label class="custom-control-label" [for]="'tabsManagement' + i">Creazione Tabelloni</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <h5 class="card-title mt-2">Allegati</h5>
-                            <div class="col mt-3 mb-4">
-                                <i class="fa fa-file-image-o"><a *ngIf="item.circolare" target="blank" [href]="imgUrl + item.circolare"
-                                        class="documents text-primary"> Circolare di Gara</a></i><br/>
-                                <i class="fa fa-file-image-o"><a *ngIf="item.locandina" target="blank" [href]="imgUrl + item.locandina"
-                                        class="documents text-primary"> Locandina</a></i>
-                            </div>
-                            <div class="row" style="margin-top: 55px;">
-                                    <div class="col-md-4 ">
-                                    <h5 class="card-title ">Nuova circolare</h5>
-                                </div>
-                                    <div class="form-group col-md-3">
-                                        <div class="input-group file-upload">
-                                            <input type="file" id="logo" (change)="editCircolare($event)" #inputLogo class="file-upload-btn" />
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="row mt-1" >
-                                <div class="col-md-4 ">
-                                <h5 class="card-title ">Carica categorie</h5>
-                            </div>
-                                <div class="form-group col-md-3">
-                                    <div class="input-group file-upload">
-                                        <input type="file" id="logo" (change)="editCategorie($event)" #inputLogo class="file-upload-btn" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="form-group">
-
-                        <button class="btn btn-primary pull-right" (click)="updateDatiGara(item, true)">Salva e Attiva</button>
-                        <button class="btn btn-primary pull-right mr-3" (click)="updateDatiGara(item)">Salva</button>
-                    </div>
-
-                </div> -->

@@ -10,6 +10,30 @@ export class CompetitionDetailsService
     {
     }
 
+    getDatiGara(idGara)
+    {
+        console.log(idGara);
+        return this.http.post(environment.BASEAPPURL + 'competitions/getDatiGara', {idGara: idGara});
+                
+   }
+
+    updateGara(request)
+    {
+        return this.http.post(environment.BASEAPPURL + 'competitions/updateDatiGara', request);                    
+    }
+
+    getAvailableCategorySets(){
+        return this.http.post(environment.BASEAPPURL + 'competitions/getCompetitionList', {});
+    }
+
+    getCategoriesBySet(selectedSetCode){
+        return this.http.post(environment.BASEAPPURL + 'categorycodes/getCategoriesBySet', {selectedSetCode: selectedSetCode});
+    }
+
+    uploadCategoryCsv(formData: FormData) {
+        return this.http.post(environment.BASEAPPURL + 'categorycodes/uploadCategoryCsv', formData);
+    }
+    
     // ====================================================================================================
     // @ ADMIN PANEL
     // =====================================================================================================

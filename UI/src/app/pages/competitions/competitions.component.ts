@@ -21,104 +21,13 @@ export class CompetitionsComponent implements OnInit {
   public data = [];
   public router: Router;
 
-  public settings = {
-    selectMode: 'single',  //single|multi
-    hideHeader: false,
-    hideSubHeader: false,
+  public filteredCompetitions: any[] = [];
+  public filterTerm: string = '';
+  public statusFilter: string = 'all';
+  public sortAsc: boolean = false; // Partiamo dalla più recente
+  public CONST = Constants;
 
-    actions: {
-      columnTitle: 'Actions',
-      add: false,
-      edit: false,
-      delete: false,
-      custom: [{
-        name: 'edit-category',
-        title: '<i class="fa fa-pencil mr-3 text-primary"></i>'
-      }],
-      position: 'right' // left|right
-    },
-    noDataMessage: 'No data found',
-    rowClassFunction: (row) =>{
-      if(row.data.deleted){
-        return 'red-background';
-      }else if(row.data.modified){
-        return 'orange-background'
-      }else{
-        return 'none-background';
-      }
-    },
-    columns: {     
-      id: {
-        title: 'ID',
-        editable: false,
-        type: 'html',
-        width: '60px',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }       
-      },
-      name: {
-        title: 'Nome',
-        type: 'string',
-        filter: true,
-        width: '260px',
-      },
-      leader: {
-        title: 'Responsabile',
-        type: 'string'
-      },
-      competitionDate: {
-        title: 'Data gara',
-        type: 'html',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      closeDate: {
-        title: 'Chiusura inscrizioni',
-        type: 'html',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      inscriptions: {
-        title: 'N. Iscritti',
-        type: 'html',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      status: {
-        title: 'Stato',
-        type: 'html',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      tabs: {
-        title: 'Tabelloni',
-        type: 'html',
-        width: '60px',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      timetable: {
-        title: 'Orari',
-        type: 'html',
-        width: '60px',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      classifications: {
-        title: 'CLassifiche',
-        type: 'html',
-        width: '60px',
-        valuePrepareFunction: (value) => { return '<div class="text-center">' + value + '</div>'; }
-      },
-      locandina: {
-        title: 'Locandina',
-        type: 'html',
-        width: '70px',
-      },
-      circolare: {
-        title: 'Circolare',
-        type: 'html',
-        width: '70px',
-      }
-    },
-    pager: {
-      display: true,
-      perPage: 25
-    }
-  };
+
 
 competitions: any[];
   constructor(private competitionService: CompetitionService, 
@@ -129,39 +38,54 @@ competitions: any[];
   }
 
   ngOnInit() {
-    
-
     this.competitionService.getCompetitions().subscribe((response: any) => {
-      this.competitions = response.result.data;
-      this.buildTable();
+        this.competitions = response.result.data;
+        this.applyFilters(); // Inizializza la lista filtrata
     });
   }
 
-  buildTable(){
-    this.data = [];
-    console.log(this.competitions);
+  // Logica di Filtro e Ordinamento
+  applyFilters() {
+      let temp = [...this.competitions];
 
-    this.competitions.forEach(element => {
-      this.data.push({
-        id: element.id,
-        name: element.nome_gara,
-        leader: element.responsabile,
-        competitionDate: this.datePipe.transform(element.data_gara, 'dd/MM/yyyy'),
-        closeDate: this.datePipe.transform(element.chiusura_iscrizioni, 'dd/MM/yyyy'),
-        inscriptions: element.inscriptions + '/' + element.nr_atleti,
-        status: element.comp_status,
-        tabs: element.flag_tabs ? "<i class='fa fa-check text-success'></i>" : "<i class='fa fa-close text-danger'></i>",
-        timetable: element.flag_timetable ? "<i class='fa fa-check text-success'></i>" : "<i class='fa fa-close text-danger'></i>",
-        classifications: element.flag_classifications ? "<i class='fa fa-check text-success'></i>" : "<i class='fa fa-close text-danger'></i>",
-        locandina: "<a target='blank' href='"+ this.imgUrl + element.locandina +"' class='documents text-primary'><i class='fa fa-file-image-o'></i></a>",
-        circolare: "<a target='blank' href='"+ this.imgUrl + element.circolare +"' class='documents text-primary'><i class='fa fa-file-image-o'></i></a>"
-        
-      })
+      // Filtro Testuale
+      if (this.filterTerm) {
+          temp = temp.filter(c => 
+              c.nome_gara.toLowerCase().includes(this.filterTerm.toLowerCase()) ||
+              c.responsabile.toLowerCase().includes(this.filterTerm.toLowerCase())
+          );
+      }
 
-      
-                                            
-    });
+      // Filtro Stato
+      if (this.statusFilter !== 'all') {
+          temp = temp.filter(c => c.comp_status == this.statusFilter);
+      }
+
+      // Ordinamento
+      temp.sort((a, b) => {
+          const dateA = new Date(a.data_gara).getTime();
+          const dateB = new Date(b.data_gara).getTime();
+          return this.sortAsc ? dateA - dateB : dateB - dateA;
+      });
+
+      this.filteredCompetitions = temp;
   }
+
+  toggleSort() {
+      this.sortAsc = !this.sortAsc;
+      this.applyFilters();
+  }
+
+  getStatusLabel(status) {
+      switch(status) {
+          case this.CONST.CompetitionState.RegistrationOpen: return 'Aperta';
+          case this.CONST.CompetitionState.Published: return 'Pre-gara';
+          case this.CONST.CompetitionState.RegistrationClosedTime: return 'Chiusa';
+          default: return status;
+      }
+  }
+
+
 
   public onCustom(event) {
     this.competitionService.getDatiGara(event.data.id).subscribe((response:any) => {
@@ -170,33 +94,6 @@ competitions: any[];
     });
     
   }
-
-  /*
-  //TODO: Test this function
-  editTabelloni(event) {
-    console.log(event);
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-        let file = event.target.files[0];
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          this.zipFile = {
-                filename: file.name,
-                filetype: file.type,
-                value: reader.result
-            };
-        };
-    }
-  }
-  
-  uploadTabelloni(nomeGara){
-    console.log(this.zipFile);
-    
-      this.competitionService.uploadTabelloni({nomeGara: nomeGara, zipFile: this.zipFile}).subscribe((response: any) => {
-        console.log(response);
-      });
-  }
-*/
 
   addCompetition(){
     this.router.navigate(['/add-competition']);

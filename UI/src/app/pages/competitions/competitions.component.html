@@ -1,25 +1,129 @@
+<div class="p-4" style="background-color: #f8f9fa; min-height: 100vh;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="font-weight-bold text-dark mb-0">Gestione Gare</h3>
+            <span class="badge badge-light text-muted border">{{filteredCompetitions?.length}} eventi in totale</span>
+        </div>
+        <button class="btn btn-primary rounded-pill shadow-sm btn-sm px-4" (click)="addCompetition()">
+            <i class="fa fa-plus mr-1"></i> Nuova Gara
+        </button>
+    </div>
 
-<!-- <p class="text-muted">A card is a flexible and extensible content container. It includes options for headers and footers, a wide variety of content, contextual background colors, and powerful display options. Cards require a small amount of markup and classes to provide you with as much control as possible. These classes and markup are flexible though and can typically be remixed and extended with ease. For example, if your card has no flush content like images, feel free to put the <code>.card-body</code> class on the <code>.card</code> element to consolidate your markup.</p> -->
-<div class="row w-100 text-center">
-    <h2 class="mb-2 mt-2 w-100 text-center">Elenco Gare CSEN Veneto</h2>           
-</div>
+    <div class="card border-0 box-shadow mb-3 rounded-lg">
+        <div class="card-body py-2 px-3">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text bg-transparent border-0"><i class="fa fa-search text-muted"></i></span>
+                        </div>
+                        <input type="text" class="form-control border-0 bg-light" placeholder="Cerca gara..." [(ngModel)]="filterTerm" (ngModelChange)="applyFilters()">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-control form-control-sm bg-light border-0" [(ngModel)]="statusFilter" (change)="applyFilters()">
+                        <option value="all">Tutti gli stati</option>
+                        <option [value]="CONST.CompetitionState.RegistrationOpen">Iscrizioni Aperte</option>
+                        <option [value]="CONST.CompetitionState.Published">Pre-gara</option>
+                        <option [value]="CONST.CompetitionState.RegistrationClosedTime">Chiuse</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-link btn-sm text-dark text-decoration-none w-100 text-left" (click)="toggleSort()">
+                        <i class="fa fa-calendar-o mr-2"></i> Ordina per Data 
+                        <i class="fa ml-1" [ngClass]="sortAsc ? 'fa-angle-up' : 'fa-angle-down'"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="row mb-3 mt-3">
-    <button class="btn btn-primary box-shadow mb-3 ml-3" (click)="addCompetition()">
-        <i class="fa fa-plus mr-2"></i>
-        Aggiungi Competizione
-    </button>
-           
-</div>
-<div widget class="card border-0 box-shadow mt-3">
+    <div class="table-container box-shadow-sm">
+        <div class="row no-gutters table-header d-none d-md-flex text-uppercase font-weight-bold text-muted">
+            <div class="col-md-1 text-center border-right">ID</div>
+            <div class="col-md-2 text-center border-right">Gara / Responsabile</div>
+            <div class="col-md-1 text-center border-right">Data Gara</div>
+            <div class="col-md-1 text-center border-right">Chiusura</div>
+            <div class="col-md-2 text-center border-right">Iscritti</div>
+            <div class="col-md-2 text-center border-right">Checklist</div>
+            <div class="col-md-2 text-center border-right">Stato</div>
+            <div class="col-md-1 text-center">Azioni</div>
+        </div>
 
-    <div class="card-body widget-body">
-        <div class="table-responsive">
-            <ng2-smart-table  class="table table-hover"
-                              [settings]="settings" 
-                              [source]="data" 
-                              (custom)="onCustom($event)"></ng2-smart-table>
-        </div>          
+        <div *ngIf="filteredCompetitions?.length > 0; else noData">
+            <div *ngFor="let item of filteredCompetitions; let last = last; let even = even" 
+                 class="row no-gutters thin-event-row align-items-center"
+                 [ngClass]="{'bg-white': even, 'bg-light-row': !even, 'border-bottom-0': last}">
+                
+                <div class="col-md-1 px-3 py-2 border-right text-center">
+                    <span class="text-primary font-weight-bold" style="font-size: 0.75rem;">#{{item.id}}</span>
+                </div>
+
+                <div class="col-md-2 px-3 py-2 border-right text-center">
+                    <div class="text-truncate ml-2">
+                        <div class="font-weight-bold text-dark text-truncate" style="font-size: 0.85rem;">{{item.nome_gara}}</div>
+                        <div class="text-muted" style="font-size: 0.75rem;">{{item.responsabile}}</div>
+                    </div>
+                </div>
+
+                <div class="col-md-1 text-center py-2 border-right small font-weight-bold">
+                    {{item.data_gara | date:'dd/MM/yyyy'}}
+                </div>
+
+                <div class="col-md-1 text-center py-2 border-right small text-danger font-weight-bold">
+                    {{item.chiusura_iscrizioni | date:'dd/MM/yyyy'}}
+                </div>
+
+                <div class="col-md-2 px-3 py-2 border-right">
+                    <div class="d-flex justify-content-between mb-1" style="font-size: 0.7rem;">
+                        <span class="text-muted">Totale</span>
+                        <span class="font-weight-bold">{{item.inscriptions}}/{{item.nr_atleti}}</span>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-info" [style.width.%]="(item.inscriptions / item.nr_atleti) * 100"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-flex justify-content-around py-2 border-right">
+                    <div class="text-center">
+                        <i class="fa" [ngClass]="item.flag_tabs ? 'fa-check text-success' : 'fa-times text-danger'"></i>
+                        <div class="flag-label">TABS</div>
+                    </div>
+                    <div class="text-center">
+                        <i class="fa" [ngClass]="item.flag_timetable ? 'fa-check text-success' : 'fa-times text-danger'"></i>
+                        <div class="flag-label">TIME</div>
+                    </div>
+                    <div class="text-center">
+                        <i class="fa" [ngClass]="item.flag_classifications ? 'fa-check text-success' : 'fa-times text-danger'"></i>
+                        <div class="flag-label">RANK</div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-center justify-content-center border-right py-2">
+                    <span class="badge px-2 py-1" 
+                        [ngClass]="{
+                            'badge-success-light': item.comp_status == CONST.CompetitionState.RegistrationOpen,
+                            'badge-warning-light': item.comp_status == CONST.CompetitionState.Published,
+                            'badge-danger-light': item.comp_status.toString().includes('Closed')
+                        }" style="font-size: 0.65rem; min-width: 80px;">
+                        {{ getStatusLabel(item.comp_status) }}
+                    </span>
+                </div>
+
+                <div class="col-md-1 d-flex align-items-center justify-content-center py-2">
+                    <button class="btn btn-outline-primary btn-xs rounded-pill" (click)="onCustom({data: item})" style="padding: 1px 10px;">
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
 
+<ng-template #noData>
+    <div class="text-center p-5 bg-white border">
+        <i class="fa fa-folder-open-o fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Nessuna gara trovata</h4>
+    </div>
+</ng-template>

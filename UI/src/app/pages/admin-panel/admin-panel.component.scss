@@ -1,0 +1,30 @@
+/* Da aggiungere nel file scss del componente o globale */
+.box-shadow-sm {
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05) !important;
+}
+
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,123,255,0.2) !important;
+    }
+}
+
+.hover-shadow {
+    transition: all 0.2s ease-in-out;
+    &:hover {
+        background-color: #f8f9fa !important;
+        border-color: #007bff !important;
+        transform: scale(1.02);
+    }
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+.rounded-lg {
+    border-radius: 0.75rem !important;
+}

@@ -23,7 +23,6 @@ use Cake\ORM\Entity;
  * @property string|null $locandina
  * @property string|null $circolare
  * @property int $nr_atleti
- * @property string $richieste
  * @property int|null $codiceTipoCategorie
  * @property string $comp_status
  * @property int $flag_tabs
@@ -61,7 +60,6 @@ class Competition extends Entity
         'locandina' => true,
         'circolare' => true,
         'nr_atleti' => true,
-        'richieste' => true,
         'codiceTipoCategorie' => true,
         'comp_status' => true,
         'flag_tabs' => true,

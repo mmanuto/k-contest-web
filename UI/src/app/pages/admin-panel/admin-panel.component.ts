@@ -1,8 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, ViewChild, Input } from '@angular/core';
 
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
-
 import { LocalStorageService } from 'angular-2-local-storage';
 import { AdminPanelService } from './admin-panel.service';
 import { CompetitionDetailsService } from '../competitionDetails/competitionDetails.service';
@@ -18,6 +15,7 @@ declare global {
 @Component({
   selector: 'admin-panel',
   templateUrl: './admin-panel.component.html',
+  styleUrls: ['./admin-panel.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -27,8 +25,6 @@ export class AdminPanleComponent {
   @ViewChild('download', {read: HTMLElement})
   download: HTMLElement;
 
-  tabelloni = new jsPDF("p", "mm", "a4");
-  frontespizi = new jsPDF("p", "mm", "a4");
   matchList;
   gironiList;
 

@@ -87,7 +87,7 @@ export class MyAthletesComponent {
         for (let item of iscritti) {
           
           // Costruiamo il nome completo della categoria per il raggruppamento
-          let groupTitle = `${item.specialita} - ${item.categoria} ${item.grado}`;
+          let groupTitle = `${item.id} - ${item.specialita} - ${item.categoria} ${item.grado}`;
           if (item.sesso) groupTitle += ` ${item.sesso}`;
           if (item.cat_peso) groupTitle += ` ${item.cat_peso}`;
 

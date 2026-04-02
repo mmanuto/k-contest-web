@@ -45,7 +45,6 @@ export class RiepilogoComponent {
 
     this.datiSocieta = this.storageService.get('currentUser');
     this.competition = this.storageService.get('currentCompetition');
-    this.competition.richieste = JSON.parse(this.competition.richieste);
   }
 
 
@@ -71,7 +70,7 @@ export class RiepilogoComponent {
           let index = this.listaIscritti.findIndex(x => x.id === item.athlete_id);
           if (index >= 0) {
             //this.listaIscritti[index].prove += ' - ' + item.specialita + ' ' + item.categoria + ' ' + item.grado;
-            this.listaIscritti[index].prove += ' - ' + item.specialita;
+            this.listaIscritti[index].prove += ' - ' + item.specialita + ' (' + item.id + ')';
             this.listaIscritti[index].prezzo += item.costo_intero;
             this.listaIscritti[index].codiciProve.push(item.id);
           } else {
@@ -86,7 +85,7 @@ export class RiepilogoComponent {
               grado: item.grado,
               sesso: item.sesso,
               peso: item.peso,
-              prove: item.specialita,
+              prove: item.specialita + ' (' + item.id + ')',
               codiciProve:[item.id],
               prezzo: item.costo_intero
             };

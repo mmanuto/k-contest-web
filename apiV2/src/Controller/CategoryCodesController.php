@@ -179,6 +179,16 @@ class CategorycodesController extends ApiController
 	    $this->apiResponse['success'] = true;
     }
 
+    public function getCategoriesBySet(){
+        $request = $this->request->getData();
+
+        $categoryList = $this->Categorycodes->find()
+        ->where(['codiceTipoCategorie' => $request['selectedSetCode']])->toArray();
+
+        $this->apiResponse['data'] = $categoryList;
+	    $this->apiResponse['success'] = true;
+    }
+
     public function updateCategories(){
 
         $this->Categorycodes->deleteAll(['id IN' => ['PAL22', 'PER22']]);
