@@ -9,7 +9,7 @@ class BracketPdf extends TCPDF {
     private $startX = 10;
     private $startY = 20;
     private $boxHeight = 7;  // Altezza riga nome
-    private $boxWidth = 35;  // Larghezza riga nome
+    private $boxWidth = 50;  // Larghezza riga nome
     public $headerTitle = '';
     public $matchGap = 4;
 
@@ -30,45 +30,49 @@ class BracketPdf extends TCPDF {
      * Disegna un singolo incontro e ritorna la coordinata Y del centro (per il connettore)
      */
     public function drawMatch($x, $y, $akaName, $aoName) {
-        
-        $this->SetFont('helvetica', '', 9);
-        $this->SetLineWidth(0.3); 
-        $this->SetLineStyle(array('width' => 0.3, 'color' => array(0, 0, 0)));
+        $this->SetLineWidth(0.2);
+        $this->SetFont('helvetica', '', 8);
 
-        // --- BOX AKA (Sopra) ---
+        // --- Atleta AKA ---
         $this->SetXY($x, $y);
-        $textAka = substr($akaName, 0, 25);
-        $this->Cell($this->boxWidth, $this->boxHeight, $textAka, 'B', 0, 'L');
+        $this->Cell($this->boxWidth, $this->boxHeight, substr($akaName, 0, 30), 0, 0, 'L');
+        $yL1 = $y + $this->boxHeight;
+        $this->Line($x, $yL1, $x + $this->boxWidth, $yL1); // Linea sotto nome AKA
 
-        // --- BOX AO (Sotto) ---
-        $yAo = $y + $this->boxHeight + $this->matchGap; 
-        $this->SetXY($x, $yAo); 
-        $textAo = substr($aoName, 0, 25);
-        $this->Cell($this->boxWidth, $this->boxHeight, $textAo, 'B', 0, 'L');
+        // --- Atleta AO ---
+        $yAo = $y + $this->boxHeight + $this->matchGap;
+        $this->SetXY($x, $yAo);
+        $this->Cell($this->boxWidth, $this->boxHeight, substr($aoName, 0, 30), 0, 0, 'L');
+        $yL2 = $yAo + $this->boxHeight;
+        $this->Line($x, $yL2, $x + $this->boxWidth, $yL2); // Linea sotto nome AO
 
-        // --- CONNETTORE (Linea verticale per il turno successivo) ---
-        // Disegna una linea verticale alla fine dei nomi che unisce il nome sopra e quello sotto
-        $lineX = $x + $this->boxWidth;
-        $yTop = $y + $this->boxHeight;       // Livello riga sopra
-        $yBottom = $yAo + $this->boxHeight;  // Fine riga sotto
-        
-        $this->Line($lineX, $yTop, $lineX, $yBottom);
-        
-        // Centro geometrico del gancetto
-        $centerY = ($yTop + $yBottom) / 2;
-        
-        return ['x' => $lineX, 'y' => $centerY];
+        // --- BARRA VERTICALE (Unisce Aka e Ao) ---
+        $barX = $x + $this->boxWidth;
+        $this->Line($barX, $yL1, $barX, $yL2);
+
+        // --- BRACCETTO DI USCITA (Orizzontale dal centro) ---
+        $midY = ($yL1 + $yL2) / 2;
+        $stemLength = 40; // Lunghezza del braccetto che "esce" dall'incontro
+        $this->Line($barX, $midY, $barX + $stemLength, $midY);
+
+        // Ritorniamo il punto finale del braccetto per il collegamento successivo
+        return ['x' => $barX + $stemLength, 'y' => $midY];
     }
 
     /**
      * Disegna una linea di connessione tra due match e il loro vincitore
      */
     public function drawConnection($pTop, $pBottom, $nextRoundX) {
-        $this->SetLineWidth(0.3);
+        $this->SetLineWidth(0.2);
         
-        $this->Line($pTop['x'], $pTop['y'], $pTop['x'], $pBottom['y']); // Linea verticale che unisce i due match precedenti
+        // 1. Barra verticale che unisce i due braccetti precedenti
+        $this->Line($pTop['x'], $pTop['y'], $pTop['x'], $pBottom['y']); 
+        
+        // 2. Braccetto orizzontale verso il prossimo turno
         $midY = ($pTop['y'] + $pBottom['y']) / 2;
-        $this->Line($pTop['x'], $midY, $nextRoundX, $midY); // Linea orizzontale verso il match del prossimo round
+        $this->Line($pTop['x'], $midY, $nextRoundX, $midY);
+
+        return ['x' => $nextRoundX, 'y' => $midY];
     }
 
     /**
@@ -78,11 +82,10 @@ class BracketPdf extends TCPDF {
     public function drawWinnerLine($coords) {
         $this->SetLineWidth(0.3);
         $this->SetLineStyle(array('width' => 0.3, 'color' => array(0, 0, 0))); // Linea solida
-        
-        $length = 20; // Lunghezza della riga per il vincitore
+    
         
         // Disegna la linea orizzontale che parte dal centro del gancetto
-        $this->Line($coords['x'], $coords['y'], $coords['x'] + $length, $coords['y']);
+        $this->Line($coords['x'], $coords['y'], $coords['x'], $coords['y']);
         
         // (Opzionale) Aggiunge la scritta "1° Classificato" piccola sopra la riga
         $this->SetFont('helvetica', '', 7);

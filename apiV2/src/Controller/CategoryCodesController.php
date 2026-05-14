@@ -132,7 +132,7 @@ class CategorycodesController extends ApiController
                                 FROM athlete_inscriptions 
                                 JOIN categorycodes ON categorycodes.id = athlete_inscriptions.categorycode_id 
                                 WHERE categorycodes.codiceTipoCategorie = 3 AND athlete_inscriptions.deleted = 0 
-                                AND athlete_inscriptions.competition_id = '".$request['competition_id']."' GROUP BY categorycodes.id");
+                                AND athlete_inscriptions.competition_id = '".$request['competition_id']."' GROUP BY categorycodes.id ORDER BY categorycodes.order_number");
 
         $categories = $stmt->fetchAll('assoc');
 

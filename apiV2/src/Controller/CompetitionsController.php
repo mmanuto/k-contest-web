@@ -214,13 +214,13 @@ public function getAllCompetitions()
         
         $competition = $this->Competitions->find()
             ->where([
-                'id' => 'DKKC-2025'
+                'id' => 'SCCSC-2026'
             ])
             ->first();
 	
 	    $competition->comp_status = Configure::read('REG_OPEN');
 	
-	    $competition->chiusura_iscrizioni = FrozenTime::now()->i18nFormat('yyyy-MM-dd HH:mm:ss');
+	    $competition->chiusura_iscrizioni = FrozenTime::now()->addDay(1)->i18nFormat('yyyy-MM-dd HH:mm:ss');
 	    $this->Competitions->save($competition);
 
         $this->apiResponse['data'] = $competition;
@@ -251,7 +251,7 @@ public function getAllCompetitions()
                     $competition->comp_status = Configure::read('REG_OPEN');
                     $this->Competitions->save($competition);
 
-                }else if($competition->comp_status == Configure::read('REG_OPEN') && $data_chiusura <= $today){
+                }else if($competition->comp_status == Configure::read('REG_OPEN') && $data_chiusura < $today){
                     $competition->comp_status = Configure::read('REG_CLOSED_TIME');
                     $this->Competitions->save($competition);
                 }

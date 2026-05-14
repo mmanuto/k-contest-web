@@ -196,7 +196,7 @@ public function downloadCoverPages()
         $usableWidth = $pageWidth - $margins;
         $maxRound = max(array_keys($brackets));
         $colWidth = $usableWidth / $maxRound; 
-        if ($colWidth > 60) $colWidth = 60;
+        if ($colWidth > 50) $colWidth = 50;
 
         $boxWidth = $colWidth - 17; 
         $pdf->setBoxWidth($boxWidth);
@@ -250,7 +250,7 @@ public function downloadCoverPages()
                     $p1 = $coordinates[$r-1][$prev1];
                     $p2 = $coordinates[$r-1][$prev2];
                     
-                    $newX = $xStart + (($r - 1) * $colWidth);
+                    $nextX = $xStart + ($r * $colWidth);
                     
                     // CALCOLO CENTRATURA PERFETTA
                     // Vogliamo che la linea orizzontale (a midY) colpisca esattamente
@@ -261,14 +261,14 @@ public function downloadCoverPages()
                     // BoxHeight (7) + HalfGap (1) = 8mm
                     $newY = $midY - (($boxHeight * 1.5) + ($internalGap / 2)); 
                 
-                    $coords = $pdf->drawMatch($newX, $newY, $match['aka_name'], $match['ao_name']);
+                    $coords = $pdf->drawConnection($p1, $p2, $nextX);
                     $coordinates[$r][$matchNum] = $coords;
                     
                     // Disegna connessione
                     // Ordina i punti per avere pTop (alto) e pBottom (basso)
                     $pTop = ($p1['y'] < $p2['y']) ? $p1 : $p2;
                     $pBottom = ($p1['y'] < $p2['y']) ? $p2 : $p1;
-                    $pdf->drawConnection($pTop, $pBottom, $newX);
+                    $pdf->drawConnection($pTop, $pBottom, $nextX);
 
                     if ($r == $maxRound) {
                     $pdf->drawWinnerLine($coords);

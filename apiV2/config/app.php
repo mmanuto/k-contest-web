@@ -4,7 +4,6 @@ use Cake\Cache\Engine\FileEngine;
 use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Log\Engine\FileLog;
-use Cake\Mailer\Transport\MailTransport;
 
 return [
     /*
@@ -18,15 +17,6 @@ return [
      */
     'debug' => false,
 
-	// Email
-	'Config' => [
-		'systemEmail' => 'azzurrodigitale@gmail.com',
-		'systemName' => '[Sygmund] AzzurroDigitale',
-		'adminEmail' => 'azzurrodigitale@gmail.com',
-		'adminName' => 'AzzurroDigitale',
-		'xMailer' => '',
-		'live' => false,
-	],
     'Queue' => [
         //'sleeptime' => 10,
         //'gcprob' => 10,
@@ -248,22 +238,15 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'className' => MailTransport::class,
-            /*
-             * The keys host, port, timeout, username, password, client and tls
-             * are used in SMTP transports
-             */
-            'host' => 'localhost',
-            'port' => 25,
+            'className' => 'Smtp',
+            'host' => 'mail.iscrizionicsenveneto.it',
+            'port' => 587,
             'timeout' => 30,
-            /*
-             * It is recommended to set these options through your environment or app_local.php
-             */
-            //'username' => null,
-            //'password' => null,
+            'username' => 'info@iscrizionicsenveneto.it',
+            'password' => 'Lyu)Xd*&6m@hw_y',
             'client' => null,
-            'tls' => false,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+            'tls' => true,
+            'ssl' => false
         ],
     ],
 
@@ -277,16 +260,13 @@ return [
      * for more information.
      */
     'Email' => [
-        'default' => [
+    	'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
-            /*
-             * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
-             */
-            //'charset' => 'utf-8',
-            //'headerCharset' => 'utf-8',
-        ],
-    ],
+            'from' => ['info@iscrizionicsenveneto.it' => 'Iscrizioni CSEN Veneto'],
+            'charset' => 'utf-8',
+            'headerCharset' => 'utf-8',
+    	],
+     ],
 
     /*
      * Connection information used by the ORM to connect
@@ -333,7 +313,7 @@ return [
             'password' => '',
             'database' => 'kcontest-web',
             'encoding' => 'utf8',
-	    'flags' => [],
+	        'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
 

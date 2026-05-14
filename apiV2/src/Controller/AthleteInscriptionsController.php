@@ -194,6 +194,26 @@ class AthleteInscriptionsController extends ApiController
 	    $this->apiResponse['success'] = true;
     }
 
+    //-------------------------------------------- Add Inscription -------------------------------------------------------------------
+
+    public function addInscription(){
+        $data = $this->request->getData(); 
+        $athleteInscription = $this->AthleteInscriptions->get($data['inscription_id']);
+
+        $newInscription = $this->AthleteInscriptions->newEmptyEntity();
+        $newInscription->athlete_id = $athleteInscription->athlete_id;
+        $newInscription->competition_id = $athleteInscription->competition_id;
+        $newInscription->categorycode_id = $data['categorycode_id'];
+
+        if ($this->AthleteInscriptions->save($newInscription)) {
+
+            $this->apiResponse['success'] = true;
+        } else {
+            $this->apiResponse['success'] = false;
+        }
+
+    }
+
     //-------------------------------------------- Elimina iscrizione -----------------------------------------------------------------
 
     //TODO: controllare se va gestitita la divisione maschile/Femminile
@@ -815,5 +835,184 @@ class AthleteInscriptionsController extends ApiController
 
         // Ritorna il PDF come stringa grezza ('S')
         return $pdf->Output('doc.pdf', 'S');
+    }
+
+
+    public function getRiepilogoMedaglieDettagliato()
+    {
+        $data = $this->request->getData();
+        $competitionId = $data['competition_id'] ?? 'SCCSC-2026'; // ID competizione
+
+        // 1. Recupera il conteggio degli atleti raggruppati per categoria
+        $categorieConConteggio = $this->AthleteInscriptions->find()
+            ->select([
+                'categorycode_id', 
+                'count' => $this->AthleteInscriptions->find()->func()->count('id')
+            ])
+            ->where([
+                'competition_id' => $competitionId,
+                'deleted' => 0 // Considera solo iscritti attivi
+            ])
+            ->group(['categorycode_id'])
+            ->all();
+
+        // 2. Inizializza i contatori
+        $totOro = 0;
+        $totArgento = 0;
+        $totBronzo = 0;
+        $totCategorie = 0;
+
+        // 3. Applica la logica condizionale per ogni categoria
+        foreach ($categorieConConteggio as $cat) {
+            $n = $cat->count;
+            $totCategorie++;
+
+            if ($n >= 1) {
+                $totOro++; // Tutte le categorie con almeno 1 atleta hanno l'oro
+            }
+            
+            if ($n >= 2) {
+                $totArgento++; // Se sono in 2 o più, c'è l'argento
+            }
+
+            if ($n == 3) {
+                $totBronzo += 1; // Se sono esattamente 3, un solo bronzo
+            } elseif ($n >= 4) {
+                $totBronzo += 2; // Se sono 4 o più, due bronzi (come nel Kumite standard)
+            }
+        }
+
+        // 4. Prepara la risposta
+        $riepilogo = [
+            'totale_categorie_attive' => $totCategorie,
+            'oro' => $totOro,
+            'argento' => $totArgento,
+            'bronzo' => $totBronzo,
+            'totale_medaglie' => ($totOro + $totArgento + $totBronzo)
+        ];
+
+        $this->apiResponse['success'] = true;
+        $this->apiResponse['data'] = $riepilogo;
+    }
+
+    /**
+     * Calcola statistiche iscritti e prove con output mappato per età e specialità
+     */
+    public function getStatisticheDettagliate()
+    {
+        $this->loadModel('Categorycodes');
+        $competitionId = $this->request->getData('competition_id') ?? 'SCCSC-2026';
+
+        // 1. Inizializzazione struttura come richiesto
+        $stats = [
+            'PERCORSO_UNDER6' => ['iscritti' => 0, 'prove' => 0],
+            'PERCORSO_UNDER8' => ['iscritti' => 0, 'prove' => 0],
+            'PERCORSO_UNDER10' => ['iscritti' => 0, 'prove' => 0],
+            'PERCORSO_UNDER12' => ['iscritti' => 0, 'prove' => 0],
+            'PALLONCINO_UNDER6' => ['iscritti' => 0, 'prove' => 0],
+            'PALLONCINO_UNDER8' => ['iscritti' => 0, 'prove' => 0],
+            'PALLONCINO_UNDER10' => ['iscritti' => 0, 'prove' => 0],
+            'PALLONCINO_UNDER12' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_UNDER6' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_UNDER8' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_UNDER10' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_UNDER12' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_ESORDIENTI' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_CADETTI' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_JUNIORES' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_SENIORES' => ['iscritti' => 0, 'prove' => 0],
+            'KATA_MASTER' => ['iscritti' => 0, 'prove' => 0],
+            'KUMITE_UNDER12' => ['iscritti' => 0, 'prove' => 0],
+            'KUMITE_ESORDIENTI' => ['iscritti' => 0, 'prove' => 0],
+            'KUMITE_CADETTI' => ['iscritti' => 0, 'prove' => 0],
+            'KUMITE_JUNIORES' => ['iscritti' => 0, 'prove' => 0],
+            'KUMITE_SENIORES' => ['iscritti' => 0, 'prove' => 0],
+        ];
+
+        // 2. Recupero categorie con iscritti filtrati per competizione
+        $categories = $this->Categorycodes->find()
+            ->contain(['AthleteInscriptions' => function($q) use ($competitionId) {
+                return $q->where(['AthleteInscriptions.competition_id' => $competitionId, 'AthleteInscriptions.deleted' => 0]);
+            }])
+            ->all();
+
+        foreach ($categories as $cat) {
+            $n = count($cat->athlete_inscriptions);
+            if ($n == 0) continue;
+
+            // Normalizzazione etichetta età per il match con le chiavi delle stats
+            $etaKey = strtoupper(str_replace(' ', '', $cat->categoria));
+            // Fix per allineamento JUNIOR/SENIOR -> JUNIORES/SENIORES
+            if ($etaKey == 'JUNIOR') $etaKey = 'JUNIORES';
+            if ($etaKey == 'SENIOR') $etaKey = 'SENIORES';
+            if (strpos($etaKey, 'MASTER') !== false) {
+                $etaKey = 'MASTER';
+            }
+
+            $idPrefix = substr($cat->id, 0, 3);
+            $fullKey = "";
+
+            // --- A. PERCORSO (PER) ---
+            if ($idPrefix == 'PER') {
+                $fullKey = "PERCORSO_" . $etaKey;
+                if (isset($stats[$fullKey])) {
+                    $stats[$fullKey]['iscritti'] += $n;
+                    $stats[$fullKey]['prove'] += $n;
+                }
+            }
+
+            // --- B. PALLONCINO (PAL) ---
+            elseif ($idPrefix == 'PAL') {
+                $fullKey = "PALLONCINO_" . $etaKey;
+                if (isset($stats[$fullKey])) {
+                    $stats[$fullKey]['iscritti'] += $n;
+                    $stats[$fullKey]['prove'] += ceil($n / 2); // Prove a coppie
+                }
+            }
+
+            // --- C. KATA BAMBINI (KAG) E ADULTI (KIA/KIB) ---
+            elseif ($idPrefix == 'KAG' || $idPrefix == 'KIA' || $idPrefix == 'KIB') {
+                $fullKey = "KATA_" . $etaKey;
+                if (isset($stats[$fullKey])) {
+                    $stats[$fullKey]['iscritti'] += $n;
+                    
+                    if ($idPrefix == 'KAG') {
+                        // Bambini: 1 prova a testa
+                        $stats[$fullKey]['prove'] += $n;
+                    } else {
+                        // Adulti: Punteggio per tutti + Tabellone eventuale
+                        $provePunteggio = $n;
+                        $proveTabellone = 0;
+
+                        if ($cat->grado == 'Marrone/Nera') {
+                            if ($n > 8) $proveTabellone = 7; // Top 8 (4+2+1)
+                            elseif ($n > 4) $proveTabellone = 3; // Top 4 (2+1)
+                            // Fino a 4: solo punteggio (0 prove tabellone)
+                        } else {
+                            // Bianca -> Blu
+                            if ($n >= 4) $proveTabellone = 3;
+                            elseif ($n >= 2) $proveTabellone = 1;
+                        }
+                        $stats[$fullKey]['prove'] += ($provePunteggio + $proveTabellone);
+                    }
+                }
+            }
+
+            // --- D. KUMITE (KUA/KUG) ---
+            elseif ($idPrefix == 'KUA' || $idPrefix == 'KUG') {
+                $fullKey = "KUMITE_" . $etaKey;
+                if (isset($stats[$fullKey])) {
+                    $stats[$fullKey]['iscritti'] += $n;
+                    if ($n == 3) {
+                        $stats[$fullKey]['prove'] += 3; // Girone all'italiana
+                    } elseif ($n >= 2) {
+                        $stats[$fullKey]['prove'] += ($n - 1); // Eliminazione diretta standard
+                    }
+                }
+            }
+        }
+
+        $this->apiResponse['success'] = true;
+        $this->apiResponse['data'] = $stats;
     }
 }

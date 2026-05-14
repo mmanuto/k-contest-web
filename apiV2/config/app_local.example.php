@@ -83,12 +83,14 @@ return [
      */
     'EmailTransport' => [
         'default' => [
-            'host' => 'localhost',
-            'port' => 25,
-            'username' => null,
-            'password' => null,
+            'host' => 'mail.iscrizionicsenveneto.it ',
+            'port' => 465,
+            'timeout' => 30,
+            'username' => 'info@iscrizionicsenveneto.it',
+            'password' => 'Lyu)Xd*&6m@hw_y',
             'client' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+            'tls' => false,
+            'ssl' => true
         ],
     ],
 ];
