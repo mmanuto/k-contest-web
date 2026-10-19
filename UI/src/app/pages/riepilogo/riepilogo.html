@@ -1,10 +1,14 @@
-<div class="row mb-4">
+<div class="row mb-4" *ngIf="!contextLoading && competition && datiSocieta">
 
     <div class="col-12 mb-4 mt-4">
         <h3 class="font-weight-bold text-dark mb-1">
             <i class="fa fa-check-square-o text-primary mr-2"></i>Revisione e Conferma Iscrizioni
         </h3>
         <p class="text-muted">Verifica i dati degli atleti e delle squadre. Quando sei pronto, procedi con l'invio ufficiale.</p>
+        <div *ngIf="adminSubmission" class="alert alert-info">
+            Invio dalla gestione gara per <strong>{{ datiSocieta.club_name }}</strong>.
+            Verifica i dati e la documentazione della società prima di confermare.
+        </div>
 
         <div *ngIf="competition.comp_status != CONST.CompetitionState.RegistrationOpen" class="alert alert-warning border-warning mt-3 shadow-sm d-flex align-items-center">
             <i class="fa fa-lock fa-2x mr-3 text-warning"></i>
@@ -137,7 +141,7 @@
 
         <div class="card-footer bg-light p-3 border-top d-flex justify-content-end">
             <button type="button" class="btn btn-outline-secondary px-4 rounded-pill mr-2" (click)="closeModal()">Annulla</button>
-            <button type="button" class="btn btn-danger px-5 rounded-pill box-shadow" [disabled]="!dichiarazione" (click)="inviaDati()">
+            <button type="button" class="btn btn-danger px-5 rounded-pill box-shadow" [disabled]="!dichiarazione || sending" (click)="inviaDati()">
                 <i class="fa fa-check mr-2"></i> Conferma e Invia
             </button>
         </div>

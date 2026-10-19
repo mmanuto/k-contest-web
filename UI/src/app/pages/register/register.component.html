@@ -73,7 +73,7 @@
                                                             <button *ngIf="item.flag_tabs" class="btn btn-outline-secondary flex-grow-1 mt-1" style="font-size: 1.1rem; padding: 0.6rem;" (click)="showTabsClassifications(item, '/competitors-in-categories')" title="Tabelloni">
                                                                 <i class="fa fa-sitemap"></i> Tabelloni
                                                             </button>
-                                                            <button *ngIf="item.flag_classifications" class="btn btn-outline-success flex-grow-1 mt-1" style="font-size: 1.1rem; padding: 0.6rem;" (click)="showTabsClassifications(item, '/home')" title="Classifiche">
+                                                            <button *ngIf="item.has_classifications" class="btn btn-outline-success flex-grow-1 mt-1" style="font-size: 1.1rem; padding: 0.6rem;" [routerLink]="['/classifications']" [queryParams]="{competition_id: item.id}" title="Classifiche">
                                                                 <i class="fa fa-trophy"></i> Classifiche
                                                             </button>
                                                         </div>

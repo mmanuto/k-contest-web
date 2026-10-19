@@ -88,7 +88,14 @@
                       <span class="ml-1 d-md-none d-lg-inline">Elenco</span>
                     </button>
 
-                    <button type="button" data-toggle="tooltip" title="Apri Tabellone" 
+                    <a *ngIf="category.tatami_status === 'CAT_AWARD'"
+                       class="btn btn-outline-success btn-sm mr-2"
+                       [routerLink]="['/classifications']"
+                       [queryParams]="{competition_id: datiGara.id, categorycode_id: category.id}">
+                      <i class="fa fa-trophy"></i> Classifica
+                    </a>
+
+                    <button type="button" data-toggle="tooltip" title="Apri Tabellone"
                             class="btn btn-outline-warning btn-sm text-dark flex-grow-1 flex-md-grow-0" 
                             *ngIf="tabelloni && category.id.includes('KU')" (click)="openKumiteBrackets(category)">
                       <i class="fa fa-sitemap"></i>

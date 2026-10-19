@@ -153,42 +153,67 @@ class UsersController extends ApiController
          * ASSEGNAZIONE TATAMI - Aggiornamento da locale
          * ==========================================================================================================
          */
-        public function addTatamiAssignments(){
-            
+        public function addTatamiAssignments()
+        {
             $this->loadModel('TatamiAssignments');
+
             $data = $this->request->getData();
 
-           //controllo che non sia già assegnata ad un altro tatami
-            $categoryStatus = $this->TatamiAssignments->find()
-            ->where([
-                'categorycode_id' => $data['categorycode_id'],
-                'competition_id' => $data['competition_id']
-            ])->first();
+            if (
+                empty($data['categorycode_id']) ||
+                empty($data['competition_id']) ||
+                empty($data['tatami']) ||
+                !isset($data['status'])
+            ) {
+                $this->apiResponse['success'] = false;
+                $this->apiResponse['message'] =
+                    'Dati obbligatori mancanti.';
 
-            
-
-            //se è già su un altro tatami la sposto mantenendo lo stato
-            if ($categoryStatus){
-                $categoryStatus->tatami =  $data['tatami'];
-                if ($this->TatamiAssignments->save($categoryStatus)) {
-                    $this->apiResponse['success'] = true;
-                }else{
-                    $this->apiResponse['message'] = 'The user category could not be saved. Please, try again.';
-                    $this->apiResponse['success'] = false;
-                }
-            }else{ //Altrimenti creo un nunovo record
-                
-                $userCategory = $this->TatamiAssignments->newEmptyEntity();
-                $userCategory = $this->TatamiAssignments->patchEntity($userCategory, $data);
-
-                if ($this->TatamiAssignments->save($userCategory)) {
-                    $this->apiResponse['success'] = true;
-                }else{
-                    $this->apiResponse['message'] = 'The user category could not be saved. Please, try again.';
-                    $this->apiResponse['success'] = false;
-                }
+                return;
             }
 
+            try {
+                $assignment = $this->TatamiAssignments
+                    ->find()
+                    ->where([
+                        'categorycode_id' => $data['categorycode_id'],
+                        'competition_id' => $data['competition_id'],
+                    ])
+                    ->first();
+
+                if ($assignment) {
+                    /*
+                    * Se esiste già, aggiorniamo solamente il tatami.
+                    * Non tocchiamo lo stato perché potrebbe essere già
+                    * avanzato rispetto all'evento ADD ritentato.
+                    */
+                    $assignment->tatami = $data['tatami'];
+
+                    $this->TatamiAssignments->saveOrFail($assignment);
+
+                    $this->apiResponse['success'] = true;
+                    $this->apiResponse['already_exists'] = true;
+
+                    return;
+                }
+
+                $assignment = $this->TatamiAssignments->newEntity($data);
+
+                $this->TatamiAssignments->saveOrFail($assignment);
+
+                $this->apiResponse['success'] = true;
+                $this->apiResponse['already_exists'] = false;
+            } catch (\Throwable $exception) {
+                $this->log(
+                    'Errore addTatamiAssignments: ' .
+                    $exception->getMessage(),
+                    'error'
+                );
+
+                $this->apiResponse['success'] = false;
+                $this->apiResponse['message'] =
+                    'Impossibile salvare l’assegnazione.';
+            }
         }
 
 

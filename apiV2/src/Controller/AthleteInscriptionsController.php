@@ -14,6 +14,54 @@ use Cake\Core\Configure;
  */
 class AthleteInscriptionsController extends ApiController
 {
+    public function updateCategoryRanking()
+    {
+        $this->request->allowMethod(['post']);
+        $data = $this->request->getData();
+        $this->loadModel('TatamiAssignments');
+        try {
+            if (empty($data['competition_id']) || empty($data['categorycode_id']) ||
+                empty($data['rankings']) || !is_array($data['rankings'])) {
+                throw new \RuntimeException('Gara, categoria e classifica obbligatorie.');
+            }
+            $this->AthleteInscriptions->getConnection()->transactional(function () use ($data) {
+                $scope = [
+                    'competition_id' => $data['competition_id'],
+                    'categorycode_id' => $data['categorycode_id'],
+                ];
+                $validated = [];
+                foreach ($data['rankings'] as $row) {
+                    if (!isset($row['id'], $row['final_ranking']) ||
+                        filter_var($row['final_ranking'], FILTER_VALIDATE_INT) === false ||
+                        (int)$row['final_ranking'] < 1 || isset($validated[(string)$row['id']])) {
+                        throw new \RuntimeException('Classifica non valida o iscrizione duplicata.');
+                    }
+                    $entity = $this->AthleteInscriptions->find()->where($scope + ['id' => $row['id'], 'deleted' => 0])->first();
+                    if (!$entity) {
+                        throw new \RuntimeException('Iscrizione non trovata nella gara e categoria indicate: ' . $row['id']);
+                    }
+                    $validated[(string)$row['id']] = [$entity, (int)$row['final_ranking']];
+                }
+                $assignment = $this->TatamiAssignments->find()->where($scope)->first();
+                if (!$assignment) {
+                    throw new \RuntimeException('Assegnazione categoria non presente online.');
+                }
+                $this->AthleteInscriptions->updateAll(['final_ranking' => null], $scope);
+                foreach ($validated as [$entity, $rank]) {
+                    $entity->final_ranking = $rank;
+                    $entity->setDirty('final_ranking', true);
+                    $this->AthleteInscriptions->saveOrFail($entity);
+                }
+                $assignment->status = 'CAT_AWARD';
+                $this->TatamiAssignments->saveOrFail($assignment);
+            });
+            $this->apiResponse['success'] = true;
+        } catch (\Throwable $exception) {
+            $this->apiResponse['success'] = false;
+            $this->apiResponse['message'] = $exception->getMessage();
+        }
+    }
+
     /**
      * Index method
      *

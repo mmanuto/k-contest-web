@@ -5,6 +5,9 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class RiepilogoService {
     constructor(public http:HttpClient) { }
+    getSubmissionContext(competitionId, clubId){
+        return this.http.post(environment.BASEAPPURL + 'competitions/getClubSubmissionContext', {competition_id: competitionId, club_id: clubId});
+    }
 
 
     getDatiGara(idGara)
@@ -31,4 +34,4 @@ export class RiepilogoService {
         
     }
 
-} 
+}

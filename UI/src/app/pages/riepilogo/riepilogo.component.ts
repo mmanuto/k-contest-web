@@ -5,7 +5,7 @@ import { RiepilogoService } from './riepilogo.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
 import { HomeService } from '../home/home.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as Constants from '../../constants';
 
 import jsPDF from 'jspdf'
@@ -33,6 +33,9 @@ export class RiepilogoComponent {
   public note = '';
   public atletiSpaiati: boolean = false;
   public CONST = Constants;
+  public adminSubmission = false;
+  public contextLoading = false;
+  public sending = false;
 
   constructor(
     public toastrService: ToastrService,
@@ -41,6 +44,7 @@ export class RiepilogoComponent {
     public homeService: HomeService,
     public modalService: NgbModal,
     public router: Router
+    , private route: ActivatedRoute
   ) {
 
     this.datiSocieta = this.storageService.get('currentUser');
@@ -54,11 +58,36 @@ export class RiepilogoComponent {
   //=========================================================================================================================================================
 
   ngOnInit() {
+    const competitionId = this.route.snapshot.queryParamMap.get('competition_id');
+    const clubId = this.route.snapshot.queryParamMap.get('club_id');
+    if (competitionId && clubId) {
+      this.adminSubmission = true;
+      this.contextLoading = true;
+      this.riepilogoService.getSubmissionContext(competitionId, clubId).subscribe({
+        next: (response: any) => {
+          if (!response.result?.success) {
+            this.toastrService.error(response.result?.message || 'Società non disponibile.');
+            this.router.navigate(['/competitionDetails', competitionId]);
+            return;
+          }
+          this.datiSocieta = response.result.data.club;
+          this.competition = response.result.data.competition;
+          this.contextLoading = false;
+          this.loadSubmissionData();
+        },
+        error: () => { this.toastrService.error('Impossibile recuperare il riepilogo.'); this.router.navigate(['/competitionDetails', competitionId]); }
+      });
+      return;
+    }
+    this.loadSubmissionData();
+  }
+
+  loadSubmissionData() {
 
     this.homeService.getDatiGara(this.competition.id).subscribe((response:any) => {
       this.competition = response.result.data;
       
-      this.storageService.set('currentCompetition', this.competition);
+      if (!this.adminSubmission) { this.storageService.set('currentCompetition', this.competition); }
     });
 
     this.riepilogoService.getListaIscritti({ club_id: this.datiSocieta.id, competition_id: this.competition.id }).subscribe((response: any) => {
@@ -145,6 +174,8 @@ export class RiepilogoComponent {
   //=========================================
 
   inviaDati() {
+    if (this.sending) { return; }
+    this.sending = true;
 
 
     let pdf = this.creaPdfIscrizioni();
@@ -160,13 +191,22 @@ export class RiepilogoComponent {
       'note': this.note
     };
 
-    this.riepilogoService.inviaDati(params).subscribe((response: any) => {
-
+    this.riepilogoService.inviaDati(params).subscribe({
+      next: (response: any) => {
+        this.sending = false;
+        if (!response.result?.success) {
+          this.toastrService.error(response.result?.message || 'Invio non riuscito.');
+          return;
+        }
+        this.closeModal();
+        this.toastrService.success('Dati inviati con successo');
+        this.router.navigate(this.adminSubmission ? ['/competitionDetails', this.competition.id] : ['/home']);
+      },
+      error: () => {
+        this.sending = false;
+        this.toastrService.error('Invio non riuscito. Verifica prima di riprovare.');
+      }
     });
-
-    this.closeModal();
-    this.toastrService.success('Dati inviati con successo');
-    this.router.navigate(['/home']);
 
   }
 

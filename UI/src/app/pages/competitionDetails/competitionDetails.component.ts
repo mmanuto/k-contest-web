@@ -34,6 +34,25 @@ export class CompetitionDetailsComponent implements OnInit {
   public imgUrl: string = environment.IMAGES_WEBROOT;
   public competitionId: number;
   public currentCompetition: any = null;
+  public registeredClubs: any[] = [];
+  public clubsLoading = false;
+  public clubsError = '';
+
+  loadRegisteredClubs(){
+    this.clubsLoading = true;
+    this.clubsError = '';
+    this.competitionDetailsService.getRegisteredClubs(this.currentCompetition.id).subscribe({
+      next: (response: any) => {
+        this.clubsLoading = false;
+        if (response.result?.success) {
+          this.registeredClubs = response.result.data;
+        } else {
+          this.clubsError = 'Impossibile caricare le società.';
+        }
+      },
+      error: () => { this.clubsLoading = false; this.clubsError = 'Errore nel caricamento delle società.'; }
+    });
+  }
   public editMode: boolean = false;
   public selectedSetCode: string = null;
   public previewCategories: any[] = [];
@@ -70,6 +89,7 @@ export class CompetitionDetailsComponent implements OnInit {
   getDatiGara() {
     this.competitionDetailsService.getDatiGara(this.competitionId).subscribe((res: any) => {
       this.currentCompetition = res.result.data;
+      this.loadRegisteredClubs();
 
       this.currentCompetition.data_apertura_dp = this.stringToNgbDate(res.result.data.apertura_iscrizioni);
       this.currentCompetition.data_gara_dp = this.stringToNgbDate(res.result.data.data_gara);

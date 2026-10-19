@@ -7,6 +7,7 @@ import { NotFoundComponent } from './pages/errors/not-found/not-found.component'
 
 export const routes: Routes = [
   { path: '', redirectTo: 'register', pathMatch: 'full' },
+  { path: 'classifications', loadChildren: () => import('./pages/classifications/classifications.module').then(m => m.ClassificationsModule) },
   {
     path: '', 
     component: PagesComponent,

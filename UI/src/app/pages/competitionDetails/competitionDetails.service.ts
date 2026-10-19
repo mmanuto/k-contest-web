@@ -17,6 +17,10 @@ export class CompetitionDetailsService
                 
    }
 
+    getRegisteredClubs(competitionId){
+        return this.http.post(environment.BASEAPPURL + 'competitions/getRegisteredClubs', {competition_id: competitionId});
+    }
+
     updateGara(request)
     {
         return this.http.post(environment.BASEAPPURL + 'competitions/updateDatiGara', request);                    

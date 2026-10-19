@@ -1,0 +1,85 @@
+<main class="rankings-page">
+  <a routerLink="/register" class="btn btn-outline-primary rounded-pill mb-4">
+    <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Torna alle gare
+  </a>
+  <header class="card border-0 box-shadow rounded-lg mb-4">
+    <div class="card-body p-4 d-flex align-items-center">
+      <div class="hero-icon mr-3"><i class="fa fa-trophy" aria-hidden="true"></i></div>
+      <div>
+        <span class="text-muted small text-uppercase font-weight-bold">Risultati di gara</span>
+        <h1 class="h3 font-weight-bold text-dark mb-1">Classifiche</h1>
+        <h2 *ngIf="competition" class="h5 mb-2">{{ competition.nome_gara }}</h2>
+        <span *ngIf="competition" class="text-muted small">
+          <i class="fa fa-calendar mr-1" aria-hidden="true"></i>{{ competition.data_gara | date:'dd/MM/yyyy' }}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="loading" role="status" class="card border-0 box-shadow rounded-lg empty-state">
+    <i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+    <p class="mb-0 text-muted">Caricamento classifiche...</p>
+  </div>
+  <div *ngIf="error" role="alert" class="alert alert-warning">{{ error }}</div>
+
+  <ng-container *ngIf="competition">
+    <div class="card border-0 box-shadow rounded-lg mb-4">
+      <div class="card-body p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+          <h3 class="h6 font-weight-bold mb-2">Categorie confermate</h3>
+          <span class="badge badge-success rounded-pill px-3 py-2">{{ categories.length }} disponibili</span>
+        </div>
+        <label for="rankingSearch" class="sr-only">Cerca categoria</label>
+        <div class="search-box">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input id="rankingSearch" class="form-control" [(ngModel)]="search" placeholder="Cerca codice, specialità o categoria">
+        </div>
+        <label for="athleteSearch" class="sr-only">Cerca atleta</label>
+        <div class="search-box mt-2">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <input id="athleteSearch" class="form-control" [(ngModel)]="athleteSearch" placeholder="Cerca atleta per nome o cognome">
+        </div>
+        <button *ngIf="categoryId" class="btn btn-outline-primary rounded-pill mt-3" (click)="categoryId = ''">
+          Mostra tutte le categorie
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!categories.length || !visibleCategories.length" class="card border-0 box-shadow rounded-lg empty-state">
+      <i class="fa fa-trophy" aria-hidden="true"></i>
+      <h3 class="h5">{{ !categories.length ? 'Classifiche in arrivo' : 'Nessuna categoria trovata' }}</h3>
+      <p class="text-muted mb-0">
+        {{ !categories.length ? 'Le classifiche saranno disponibili dopo la conferma della segreteria.' : 'La categoria selezionata non è ancora confermata oppure non corrisponde alla ricerca.' }}
+      </p>
+    </div>
+
+    <div class="categories-grid">
+    <section *ngFor="let category of visibleCategories" class="card border-0 box-shadow rounded-lg overflow-hidden mb-4">
+      <div class="ranking-heading d-flex flex-wrap justify-content-between align-items-center">
+        <div>
+          <h3 class="font-weight-bold text-dark mb-2">{{ category.specialita }} · {{ category.categoria }}</h3>
+          <span class="text-muted small">{{ category.grado }} {{ category.sesso }} {{ category.cat_peso }}</span>
+        </div>
+        <span class="badge badge-light border rounded-pill px-3 py-2 mt-2">{{ category.id }}</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table ranking-table mb-0">
+          <caption class="sr-only">Classifica {{ category.id }}</caption>
+          <thead><tr><th scope="col">Posizione</th><th scope="col">Atleta</th><th scope="col">Società</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let row of category.rankings">
+              <td>
+                <span class="position" [ngClass]="{'gold': position(category, row.position) === 1, 'silver': position(category, row.position) === 2, 'bronze': position(category, row.position) === 3}">
+                  {{ position(category, row.position) }}°
+                </span>
+              </td>
+              <td class="font-weight-bold text-dark">{{ row.cognome }} {{ row.nome }}</td>
+              <td class="text-muted">{{ row.club }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    </div>
+  </ng-container>
+</main>

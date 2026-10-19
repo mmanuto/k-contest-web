@@ -189,6 +189,14 @@ public function getAllCompetitions()
             ->order(['data_gara'])
             ->toArray();
 
+        $this->loadModel('TatamiAssignments');
+        $awardedCompetitionIds = $this->TatamiAssignments->find()
+            ->select(['competition_id'])->distinct(['competition_id'])
+            ->where(['status' => 'CAT_AWARD'])
+            ->all()->extract('competition_id')->toArray();
+        foreach ($competition as $item) {
+            $item->has_classifications = in_array($item->id, $awardedCompetitionIds, true);
+        }
         $this->apiResponse['data'] = $competition;
         $this->apiResponse['success'] = true;
 
@@ -494,6 +502,94 @@ public function getAllCompetitions()
 
 
         return $categories;
+    }
+
+    public function getRegisteredClubs()
+    {
+        $id = $this->request->getData('competition_id');
+        $this->Competitions->get($id);
+        $conn = $this->Competitions->getConnection();
+        $rows = $conn->execute(
+            'SELECT c.id, c.club_name, c.club_manager, c.mail,
+             COUNT(DISTINCT ai.athlete_id) AS athletes_count, COUNT(ai.id) AS inscriptions_count
+             FROM clubs c
+             LEFT JOIN athletes a ON a.club_id = c.id
+             LEFT JOIN athlete_inscriptions ai ON ai.athlete_id = a.id AND ai.competition_id = :competition AND ai.deleted = 0
+             WHERE EXISTS (SELECT 1 FROM club_inscriptions ci WHERE ci.club_id = c.id AND ci.competition_id = :registered)
+             GROUP BY c.id, c.club_name, c.club_manager, c.mail ORDER BY c.club_name',
+            ['competition' => $id, 'registered' => $id]
+        )->fetchAll('assoc');
+        $this->apiResponse['success'] = true;
+        $this->apiResponse['data'] = $rows;
+    }
+
+    public function getClubSubmissionContext()
+    {
+        $this->loadModel('Clubs');
+        $this->loadModel('ClubInscriptions');
+        $competitionId = $this->request->getData('competition_id');
+        $clubId = $this->request->getData('club_id');
+        if (!$this->ClubInscriptions->exists(['competition_id' => $competitionId, 'club_id' => $clubId])) {
+            $this->apiResponse['success'] = false;
+            $this->apiResponse['message'] = 'Società non iscritta alla gara.';
+            return;
+        }
+        $club = $this->Clubs->get($clubId)->toArray();
+        unset($club['password']);
+        $this->apiResponse['success'] = true;
+        $this->apiResponse['data'] = [
+            'club' => $club, 'competition' => $this->Competitions->get($competitionId),
+        ];
+    }
+
+    public function getPublishedRankings()
+    {
+        $this->request->allowMethod(['post']);
+        $this->loadModel('AthleteInscriptions');
+        $this->loadModel('TatamiAssignments');
+        $this->loadModel('Categorycodes');
+        try {
+            $competition = $this->Competitions->get($this->request->getData('competition_id'));
+            $assignments = $this->TatamiAssignments->find()->where([
+                'competition_id' => $competition->id, 'status' => 'CAT_AWARD'
+            ])->toArray();
+            $categories = [];
+            foreach ($assignments as $assignment) {
+                $category = $this->Categorycodes->get($assignment->categorycode_id);
+                $rows = $this->AthleteInscriptions->find()->contain(['Athletes' => ['Clubs']])->where([
+                    'AthleteInscriptions.competition_id' => $competition->id,
+                    'AthleteInscriptions.categorycode_id' => $category->id,
+                    'AthleteInscriptions.deleted' => 0,
+                    'AthleteInscriptions.final_ranking >' => 0,
+                ])->order(['AthleteInscriptions.final_ranking' => 'ASC'])->toArray();
+                if (!$rows) {
+                    continue;
+                }
+                $rankings = [];
+                foreach ($rows as $row) {
+                    $rankings[] = [
+                        'position' => (int)$row->final_ranking,
+                        'nome' => $row->athlete->nome,
+                        'cognome' => $row->athlete->cognome,
+                        'club' => $row->athlete->club ? $row->athlete->club->club_name : '',
+                    ];
+                }
+                $categories[] = [
+                    'id' => $category->id, 'specialita' => $category->specialita,
+                    'categoria' => $category->categoria, 'grado' => $category->grado,
+                    'sesso' => $category->sesso, 'cat_peso' => $category->cat_peso,
+                    'rankings' => $rankings,
+                ];
+            }
+            $this->apiResponse['success'] = true;
+            $this->apiResponse['data'] = ['competition' => [
+                'id' => $competition->id, 'nome_gara' => $competition->nome_gara,
+                'data_gara' => $competition->data_gara,
+            ], 'categories' => $categories];
+        } catch (\Throwable $exception) {
+            $this->apiResponse['success'] = false;
+            $this->apiResponse['message'] = 'Impossibile recuperare le classifiche della gara.';
+        }
     }
 
     public function getTabelloni(){
